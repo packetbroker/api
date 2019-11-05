@@ -15,9 +15,9 @@ This repository contains the API for interacting with the Packet Broker Router a
 | Forwarder | Network that forwards traffic from its gateways to and from Packet Broker. Has an ID within the Member scope |
 | Home Network | Network where the device is registered and which manages the MAC state. Has a set of `DevAddr` prefixes |
 | Policy | Routing policy of Forwarder and Home Network. Contains whether routing is enabled, Uplink Policy and Downlink Policy |
-| Uplink Policy | Flags to indicate what uplink messages and metadata get forwarded and if downlink is allowed. Can be a combination of `NONE`, `MAC_DATA`, `APP_DATA`, `LOCALIZATION` (gateway location and fine timestamp if available), `SIGNAL_QUALITY` (gateway location, RSSI and SNR), `DOWNLINK_ALLOWED` |
+| Uplink Policy | Flags to indicate what uplink messages and metadata get forwarded and if downlink is allowed. Can be a combination of `NONE`, `MAC_DATA`, `APP_DATA`, `LOCALIZATION` (gateway antenna location, RSSI, SNR and fine timestamp if available), `SIGNAL_QUALITY` (gateway antenna RSSI and SNR), `DOWNLINK_ALLOWED` |
 | Downlink Policy | Flags to indicate what downlink messages can be forwarded. Can be a combination of `NONE`, `MAC_DATA`, `APP_DATA` |
-| Filter | Filter uplink messages optionally by Member, Forwarder ID, `DevAddr` prefix, `FPort`, `FCnt`, only confirmed uplink, `FPorts` available. There can be multiple filters; one must pass to forward |
+| Filter | Filter uplink messages optionally by Member, Forwarder ID, `DevAddr` prefix, `FPort`, `FCnt`, only confirmed uplink, `FOpts` available. There can be multiple filters; all filters that are set must pass to have the message forwarded to the Home Network |
 
 ## Concept
 
@@ -35,7 +35,7 @@ This repository contains the API for interacting with the Packet Broker Router a
 - Forwarders publish the encrypted message to Packet Broker Router. The message contains:
    - Encrypted payload (encrypted with the payload message key)
    - Encrypted payload message key (encrypted with the payload Key)
-   - Payload Key ID the pointer to the Key Exchange
+   - Payload Key ID and the pointer to the Key Exchange
    - Encrypted metadata (encrypted with the metadata message key)
    - Encrypted metadata message key (encrypted with the metadata Key)
    - Metadata Key ID and the pointer to the Key Exchange
@@ -100,3 +100,7 @@ This repository contains the API for interacting with the Packet Broker Router a
 
 2. **Balancer**
    Keeps track of messages from a Forwarder decrypted on request by a Home Network. Provides an overview of the balance. Members can offset the balance with a mutation that they both agree on, typically from an out-of-band transaction
+
+## License
+
+The API is distributed under [Apache License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0). See `LICENSE` for more information.

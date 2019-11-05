@@ -1,0 +1,56 @@
+// Copyright © 2019 The Things Industries B.V.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+syntax = "proto3";
+
+package org.packetbroker.v1alpha1;
+
+option go_package = "go.packetbroker.org/api/v1alpha1;packetbroker";
+
+// LoRaWAN region as defined in Regional Parameters.
+enum Region {
+  EU_863_870 = 0;
+  US_902_928 = 1;
+  CN_779_787 = 2;
+  EU_433 = 3;
+  AU_915_928 = 4;
+  CN_470_510 = 5;
+  AS_923 = 6;
+  KR_920_923 = 7;
+  IN_865_867 = 8;
+  RU_864_870 = 9;
+}
+
+// LoRaWAN class for transmitting downlink.
+enum DownlinkMessageClass {
+  A = 0;
+  B = 1;
+  C = 2;
+}
+
+// Priority of a downlink message.
+enum DownlinkMessagePriority {
+  // Lowest priority.
+  LOWEST = 0;
+  // Low priority.
+  LOW = 1;
+  // Normal priority.
+  NORMAL = 2;
+  // High priority.
+  // Sets the HiPriority flag in the LoRaWAN Backend Interfaces XmitDataReq message.
+  HIGH = 3;
+  // Highest priority.
+  // Sets the HiPriority flag in the LoRaWAN Backend Interfaces XmitDataReq message.
+  HIGHEST = 4;
+}
