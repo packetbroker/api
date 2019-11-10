@@ -54,3 +54,14 @@ enum DownlinkMessagePriority {
   // Sets the HiPriority flag in the LoRaWAN Backend Interfaces XmitDataReq message.
   HIGHEST = 4;
 }
+
+enum MessageDeliveryState {
+  // The message has been accepted for forwarding or delivery.
+  ACCEPTED = 0;
+  // The message has been forwarded to another host for delivery.
+  FORWARDED = 1;
+  // The message has been delivered to the receiver.
+  DELIVERED = 2;
+  // The message has been processed by the receiver.
+  PROCESSED = 3;
+}
