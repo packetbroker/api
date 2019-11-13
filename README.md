@@ -10,57 +10,76 @@ This repository contains the API for interacting with the Packet Broker Router a
 | --- | --- |
 | Router | Routes message from Forwarders to Home Networks according to the Forwarder's Policy and Home Network's Filters |
 | Key Exchange | Mechanism to transfer encryption Keys from Forwarders to Home Networks |
-| Key | Encryption key. Can expire on a time and/or on a number of usages. Has a price per Key or per use. Key expiration is enforced by Key Exchange |
+| KEK | Key encryption key. Can expire on a time and/or on a number of usages. Has a price per key or per use. Key expiration is enforced by Key Exchange |
+| DEK | Data encryption key. These are sent encrypted with the key encryption key |
 | Member | Authority of Home Networks and Forwarders. Manages its Home Networks with their `DevAddr` prefixes and its Forwarders. It must have a LoRa Alliance `NetID` |
 | Forwarder | Network that forwards traffic from its gateways to and from Packet Broker. Has an ID within the Member scope |
 | Home Network | Network where the device is registered and which manages the MAC state. Has a set of `DevAddr` prefixes |
-| Policy | Routing policy of Forwarder and Home Network. Contains whether routing is enabled, Uplink Policy and Downlink Policy |
-| Uplink Policy | Flags to indicate what uplink messages and metadata get forwarded and if downlink is allowed. Can be a combination of `NONE`, `MAC_DATA`, `APP_DATA`, `LOCALIZATION` (gateway location and fine timestamp if available), `SIGNAL_QUALITY` (gateway location, RSSI and SNR), `DOWNLINK_ALLOWED` |
-| Downlink Policy | Flags to indicate what downlink messages can be forwarded. Can be a combination of `NONE`, `MAC_DATA`, `APP_DATA` |
-| Filter | Filter uplink messages optionally by Member, Forwarder ID, `DevAddr` prefix, `FPort`, `FCnt`, only confirmed uplink, `FPorts` available. There can be multiple filters; one must pass to forward |
+| Routing Policy | Routing policy of Forwarder and Home Network. Contains whether routing is enabled, Uplink Policy and Downlink Policy |
+| Uplink Routing Policy | Flags to indicate what uplink messages and metadata get forwarded and if downlink is allowed. Can be a combination of MAC data, application data, signal quality (gateway antenna RSSI and SNR), localization (gateway antenna location, RSSI, SNR and fine timestamp if available), and whether downlink is allowed |
+| Downlink Routing Policy | Flags to indicate what downlink messages can be forwarded. Can be a combination of MAC data and application data |
+| Routing Filter | Filter uplink messages optionally by Member, Forwarder ID, confirmed yes/no, `DevAddr` prefix, `FOpts` yes/no, `FPort` ranges and whether or not gateway metadata is present. There can be multiple filters; any filter that passes has the message forwarded to the Home Network |
 
 ## Concept
 
 ### High level concept
 
-- Forwarders generate Keys along with a key ID. Forwarders can use any rotation and key sharding strategy (per message, per time unit, per Home Network `NetID`, a combination of those, etc)
-- Forwarders publish the Key and Key ID to a Key Exchange
-- Forwarders choose a payload Key and a metadata Key (can be the same)
-- Forwarders generate a random payload message key and metadata message key
-   - The payload gets encrypted with the payload message key
-   - The metadata gets encrypted with the metadata message key
-   - The message keys get encrypted with the concerning Keys that were chosen
-   - The encrypted keys are added to the message
-- Forwarders generate the payload hash in the message
-- Forwarders publish the encrypted message to Packet Broker Router. The message contains:
-   - Encrypted payload (encrypted with the payload message key)
-   - Encrypted payload message key (encrypted with the payload Key)
-   - Payload Key ID the pointer to the Key Exchange
-   - Encrypted metadata (encrypted with the metadata message key)
-   - Encrypted metadata message key (encrypted with the metadata Key)
-   - Metadata Key ID and the pointer to the Key Exchange
-   - Payload hash (SHA256)
-   - Payload length
-   - LoRaWAN public fields: confirmed uplink yes/no, `FCnt`, `FPort`, `DevAddr`, `FOpts` yes/no
-   - UL token
-- Packet Broker Router routes the encrypted message with the Forwarder ID to the Home Network according to the Policy
-- Home Network can buy the message, i.e. based on price(s) on Key Exchange(s) and payload hash (to check if the message has been received already)
-- If the Key Exchange provides Key, the Home Network can decrypt the message itself. Otherwise, Home Network requests the Key Exchange to decrypt the message. The Home Network may optionally provide the `FNwkSIntKey` or `NwkSKey` to validate the MIC before recording the transaction
-- Downlink works similar to stateless passive roaming
-   - See Backend Interfaces 1.x `XmitDataReq`
-   - Next to the Member's `NetID` (part of `XmitDataReq`), Home Networks need to copy the Forwarder ID along with the UL token
+On uplink:
+
+- Forwarders publish an uplink message with encrypted fields to the Home Network via Packet Broker Router
+- Forwarders generate one or multiple key encryption keys (KEKs) with a KEK label. Forwarders can use any rotation and key sharding strategy (per message, per time unit, per Home Network `NetID`, a combination of those, etc)
+- Forwarders publish the KEKs to Key Exchanges
+- Forwarders generate data encryption keys (DEKs) for `PHYPayload`, signal quality and localization metadata. The DEKs may be the same or may be different
+- Forwarders encrypt the uplink message
+   - The `PHYPayload` gets encrypted with the DEK for `PHYPayload`
+   - The signal quality gets encrypted with the DEK for signal quality
+   - The localization gets encrypted with the DEK for localization
+   - Forwarders choose which KEKs to use to encrypt the DEKs
+   - The encrypted DEKs are added to the message, referring to the KEK that encrypted the DEK
+   - All encryption uses AES-256-GCM
+- Forwarders generate the SHA-256 payload hash in the message
+- Forwarders publish the encrypted message to Packet Broker Router. The uplink message contains:
+   - Pointers to KEKs used for encrypting DEKs in the message. The pointers consist of the Key Exchange address and the KEK label
+   - Teaser of the `PHYPayload` to drive the decision to decrypt an encrypted DEK, containing:
+     - SHA-256 hash of the payload
+     - LoRaWAN public fields: confirmed uplink yes/no, `DevAddr`, `FOpts` yes/no, `FCnt`, `FPort` and `FRMPayload` length
+   - Encrypted `PHYPayload` and the DEK encrypted with one or multiple KEKs
+   - Teaser of the gateway metadata to drive the decision to decrypt an encrypted DEK, containing:
+     - Whether the gateway is terrestrial or a satellite
+     - Indication whether localization data contains a fine timestamp
+   - Encrypted signal quality and the DEK encrypted with one or multiple KEKs
+   - Encrypted localization and the DEK encrypted with one or multiple KEKs
+   - Forwarder and gateway uplink tokens
+   - Region of the gateway as defined in LoRaWAN Regional Parameters
+- Packet Broker Router routes the encrypted message with the Forwarder ID to the Home Network according to the Routing Policy and Routing Filter
+- Home Network can buy the message (i.e. decrypt a DEK) based the teasers, based on price(s) on Key Exchange(s) and payload hash (to check if the message has been received already via other means)
+- If the Key Exchange provides the KEK, the Home Network can decrypt the DEK itself. Otherwise, the Home Network requests the Key Exchange to decrypt the DEK
+  - Alternatively, the Home Network may optionally have the `PHYPayload` decrypted and pass the `FNwkSIntKey` or `NwkSKey` to validate the MIC before recording the transaction, if the Key Exchange supports this
+
+On downlink:
+
+- The Home Network publish a downlink message to a Forwarder via Packet Broker Router
+- The downlink message contains:
+  - `PHYPayload`
+  - RX1 and RX2 frequency and data rate index (in gateway region from the uplink message)
+  - RX1 delay
+  - Class (A, B or C)
+  - Forwarder and gateway uplink tokens copied from the uplink message
+
+Downlink is very similar to Stateless Passive Roaming as defined in LoRaWAN Backend Interfaces. The API is fully compatible with the `XmitDataReq` message.
 
 ### Components
 
 - Forwarder
    - Configures routing
-      - Policies per Home Network
-      - A default Policy (default is routing enabled with all uplink and downlink flags set)
-   - Generates Keys
-   - Publishes Keys to Key Exchanges
-   - Encrypts payload and metadata
-   - Publishes messages to its uplink topic on Packet Broker Routers
-   - Subscribes to its downlink topic on Packet Broker Routers
+      - Routing Policies per Home Network
+      - A default Routing Policy (default is routing enabled with all uplink and downlink flags set)
+   - Generates KEKs and DEKs
+   - Publishes KEKs to Key Exchanges
+   - Encrypts DEKs with one or multiple KEKs
+   - Encrypts `PHYPayload`, signal quality and localization metadata with DEKs
+   - Publishes messages to Packet Broker Router
+   - Subscribes for downlink on Packet Broker Router
 - Packet Broker Router to route traffic from Forwarders to Home Networks and back. Acts as a switchboard
    - Forwarder facing
       - Topic based messaging service
@@ -72,31 +91,37 @@ This repository contains the API for interacting with the Packet Broker Router a
       - Uplink
          - Acts on messages published on a Forwarder topic
          - Determines the Home Network by the `NetID` from `DevAddr`. Drops the message if not found
-         - Looks up the Uplink Policy of the concerning Forwarder and Home Network. Falls back to the default Policy. Drops the message if uplink routing is disabled
-         - Applies the Uplink Policy (i.e. drop if `FPort > 0` and there's no `APP_DATA`, unset metadata)
-         - Looks up the Home Network's Filters. If any, drop the message if any Filter doesn't pass
+         - Looks up the Uplink Routing Policy of the concerning Forwarder and Home Network. Falls back to the default Routing Uplink Policy. Drops the message if uplink routing is disabled
+         - Applies the Uplink Routing Policy
+         - Looks up the Home Network's Routing Filters. If any, drop the message if any Filter doesn't pass
          - Publishes the message to the Home Network's topic
       - Downlink
          - Acts on messages published on a Home Network topic
          - Determines the Forwarder by the `NetID` and Forwarder ID. Drops the message if not found
-         - Looks up the Downlink Policy of the concerning Forwarder and Home Network. Falls back to the default Policy. Drops the message if downlink routing is disabled
-         - Applies the Downlink Policy
+         - Looks up the Downlink Policy of the concerning Forwarder and Home Network. Falls back to the default Routing Policy. Drops the message if downlink routing is disabled
+         - Applies the Downlink Routing Policy
          - Publishes the message to the Forwarder's topic
 - Home Network
-   - Configures subscriptions
-      - A set of Filters (default is a catch-all Filter)
-   - Subscribes to its topic on Packet Broker Routers
-   - Makes consideration to buy the message
-   - Tries to obtain the Key from the Key Exchange
-   - If the Key Exchange provides the Key, decrypts the message itself. Otherwise, request Key Exchange to decrypt
+   - Publishes downlink messages to Packet Broker Router
+   - Subscribes to uplink on Packet Broker Router;
+      - A set of Routing Filters (if not specified, a catch-all Routing Filter applies)
+   - Makes consideration to buy `PHYPayload` or metadata
+   - On a positive decision, has the encrypted DEK decrypted
+   - If the Key Exchange provides the KEK, decrypts the DEK itself. Otherwise, request Key Exchange to decrypt the encrypted DEK
 - Packet Broker Key Exchange
-   - Sells the Key if it has a price. This allows Home Networks to decrypt messages offline. Forwarders are free to rotate Keys
-   - Decrypts on request by the Home Network, respecting the Key usage limit, charging the Key usage price, optionally checks MIC if session key is provided
+   - Sells the KEK if it has a price. This allows Home Networks to decrypt messages offline. Forwarders are free to rotate KEKs and use multiple KEKs at any time
+   - Decrypts on request by the Home Network, respecting the KEK usage limit, charging the KEK usage price, optionally checks MIC if session key is provided
 
 ### Types of Key Exchanges
 
+All Key Exchanges keep track of the usage of KEKs to decrypt DEKs on request by a Home Network. Forwarders and Home Networks can be the same Member if they play both roles.
+
 1. **Marketplace**
-   Keeps track of messages from a Forwarder decrypted on request by a Home Network. Members have one billing relationship with the Marketplace for debit and credit invoices
+   Members have one billing relationship with the Marketplace for debit and credit invoices
 
 2. **Balancer**
-   Keeps track of messages from a Forwarder decrypted on request by a Home Network. Provides an overview of the balance. Members can offset the balance with a mutation that they both agree on, typically from an out-of-band transaction
+   Members can offset the balance with a mutation that they both agree on, typically from an out-of-band monetary transaction
+
+## License
+
+The API is distributed under [Apache License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0). See `LICENSE` for more information.
