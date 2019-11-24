@@ -65,3 +65,19 @@ enum MessageDeliveryState {
   // The message has been processed by the receiver.
   PROCESSED = 3;
 }
+
+enum TerrestrialAntennaPlacement {
+  // Unknown antenna placement.
+  UNKNOWN = 0;
+  // Indoor antenna placement.
+  INDOOR = 1;
+  // Outdoor antenna placement.
+  OUTDOOR = 2;
+}
+
+enum Modulation {
+  // LoRa modulation.
+  LORA = 0;
+  // FSK modulation.
+  FSK = 1;
+}

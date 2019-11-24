@@ -121,7 +121,7 @@ message GatewayMetadataLocalization {
     repeated Antenna antennas = 1;
   }
   message Satellite {
-    // Ground location.
+    // Satellite location.
     Location location = 1;
   }
   oneof value {
