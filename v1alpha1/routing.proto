@@ -25,25 +25,29 @@ option go_package = "go.packetbroker.org/api/v1alpha1;packetbroker";
 // Routing policy between a Forwarder and a Home Network.
 message RoutingPolicy {
   message Uplink {
+    // Forward join-request messages.
+    bool join_request = 1;
     // Forward uplink messages with FPort of 0.
-    bool mac_data = 1;
+    bool mac_data = 2;
     // Forward uplink messages with FPort between 1 and 255.
-    bool application_data = 2;
+    bool application_data = 3;
     // Forward RSSI and SNR.
-    bool signal_quality = 3;
+    bool signal_quality = 4;
     // Forward gateway location, RSSI, SNR and fine timestamp.
-    bool localization = 4;
+    bool localization = 5;
     // Forward uplink token to enable downlink.
-    bool allow_downlink = 5;
+    bool allow_downlink = 6;
   }
   // Uplink policy.
   Uplink uplink = 1;
 
   message Downlink {
+    // Allow join-accept messages.
+    bool join_accept = 1;
     // Allow downlink messages with FPort of 0.
-    bool mac_data = 1;
+    bool mac_data = 2;
     // Allow downlink messages with FPort between 1 and 255.
-    bool application_data = 2;
+    bool application_data = 3;
   }
   // Downlink policy.
   Downlink downlink = 2;
@@ -61,31 +65,51 @@ message RoutingFilter {
   // Pass Forwarders. If empty, pass all Forwarders.
   repeated Forwarder forwarders = 1;
 
-  // Pass (un)confirmed uplink data messages.
-  google.protobuf.BoolValue confirmed = 2;
-
-  message DevAddrPrefix {
-    uint32 value = 1;
-    // Significant bits of value.
-    uint32 length = 2;
+  message JoinRequest {
+    message EUIPrefixes {
+      fixed64 join_eui = 1;
+      // Significant bits of join_eui.
+      uint32 join_eui_length = 2;
+      fixed64 dev_eui = 3;
+      // Significant bits of dev_eui.
+      uint32 dev_eui_length = 4;
+    }
+    // Pass join-request EUIs by prefix. If empty, allow all join-requests.
+    repeated EUIPrefixes eui_prefixes = 1;
   }
-  // Pass DevAddrs by prefix. If empty, allow all DevAddrs.
-  repeated DevAddrPrefix dev_addr_prefixes = 3;
 
-  // Pass messages with or without FOpts.
-  google.protobuf.BoolValue f_opts = 4;
+  message MACPayload {
+    // Pass (un)confirmed uplink data messages.
+    google.protobuf.BoolValue confirmed = 1;
 
-  message FPortRange {
-    // Inclusive start value of the range.
-    uint32 low = 1;
-    // Inclusive end value of the range.
-    uint32 high = 2;
+    message DevAddrPrefix {
+      uint32 value = 1;
+      // Significant bits of value.
+      uint32 length = 2;
+    }
+    // Pass DevAddrs by prefix. If empty, allow all DevAddrs.
+    repeated DevAddrPrefix dev_addr_prefixes = 2;
+
+    // Pass messages with or without FOpts.
+    google.protobuf.BoolValue f_opts = 3;
+
+    message FPortRange {
+      // Inclusive start value of the range.
+      uint32 low = 1;
+      // Inclusive end value of the range.
+      uint32 high = 2;
+    }
+    // Pass for FPort ranges. If empty, allow all FPorts.
+    repeated FPortRange f_port_ranges = 4;
   }
-  // Pass for FPort ranges. If empty, allow all FPorts.
-  repeated FPortRange f_port_ranges = 5;
+
+  oneof message {
+    JoinRequest join_request = 2;
+    MACPayload mac = 3;
+  }
 
   // Pass gateway metadata. If not set, pass gateway metadata if available.
-  google.protobuf.BoolValue gateway_metadata = 6;
+  google.protobuf.BoolValue gateway_metadata = 4;
 }
 
 message RouteHop {

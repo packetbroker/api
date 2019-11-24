@@ -28,6 +28,15 @@ message PHYPayloadTeaser {
   // SHA-256 hash of PHYPayload.
   bytes hash = 1;
 
+  message JoinRequestTeaser {
+    // JoinEUI of the join-request.
+    fixed64 join_eui = 1;
+    // DevEUI of the join-request.
+    fixed64 dev_eui = 2;
+    // DevNonce of the join-request.
+    uint32 dev_nonce = 3;
+  }
+
   message MACPayloadTeaser {
     // Indicates whether it is a confirmed or unconfirmed data uplink message.
     bool confirmed = 2;
@@ -42,9 +51,12 @@ message PHYPayloadTeaser {
     // Length of the FRMPayload.
     uint32 frm_payload_length = 7;
   }
+
   oneof payload {
+    // Teaser of a join-request.
+    JoinRequestTeaser join_request = 2;
     // Teaser of MACPayload.
-    MACPayloadTeaser mac = 2;
+    MACPayloadTeaser mac = 3;
   }
 }
 
