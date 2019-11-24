@@ -20,6 +20,7 @@ import "google/protobuf/duration.proto";
 import "google/protobuf/wrappers.proto";
 import "packetbroker/api/v1alpha1/enums.proto";
 import "packetbroker/api/v1alpha1/keys.proto";
+import "packetbroker/api/v1alpha1/location.proto";
 
 option go_package = "go.packetbroker.org/api/v1alpha1;packetbroker";
 
@@ -110,22 +111,18 @@ message GatewayMetadataLocalization {
   message Terrestrial {
     message Antenna {
       uint32 index = 1;
-      // The East-West position (degrees; -180 to +180), where 0 is the Prime Meridian (Greenwich), East is positive, West is negative.
-      double latitude = 2;
-      // The North–South position (degrees; -90 to +90), where 0 is the equator, North pole is positive, South pole is negative.
-      double longitude = 3;
-      // Altitude (meters), where 0 is the mean sea level.
-      float altitude = 4;
-      // Accuracy of the location (meters).
-      float accuracy = 5;
+      // Location of the antenna.
+      Location location = 2;
       // Fine timestamp.
-      google.protobuf.UInt64Value fine_timestamp = 6;
+      google.protobuf.UInt64Value fine_timestamp = 3;
       // Signal quality.
-      TerrestrialGatewayAntennaSignalQuality signal_quality = 7;
+      TerrestrialGatewayAntennaSignalQuality signal_quality = 4;
     }
     repeated Antenna antennas = 1;
   }
   message Satellite {
+    // Ground location.
+    Location location = 1;
   }
   oneof value {
     Terrestrial terrestrial = 1;
