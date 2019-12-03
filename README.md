@@ -16,9 +16,9 @@ This repository contains the API for interacting with the Packet Broker Router a
 | Forwarder | Network that forwards traffic from its gateways to and from Packet Broker. Has an ID within the Member scope |
 | Home Network | Network where the device is registered and which manages the MAC state. Has a set of `DevAddr` prefixes |
 | Routing Policy | Routing policy of Forwarder and Home Network. Contains whether routing is enabled, Uplink Policy and Downlink Policy |
-| Uplink Routing Policy | Flags to indicate what uplink messages and metadata get forwarded and if downlink is allowed. Can be a combination of MAC data, application data, signal quality (gateway antenna RSSI and SNR), localization (gateway antenna location, RSSI, SNR and fine timestamp if available), and whether downlink is allowed |
-| Downlink Routing Policy | Flags to indicate what downlink messages can be forwarded. Can be a combination of MAC data and application data |
-| Routing Filter | Filter uplink messages optionally by Member, Forwarder ID, confirmed yes/no, `DevAddr` prefix, `FOpts` yes/no, `FPort` ranges and whether or not gateway metadata is present. There can be multiple filters; any filter that passes has the message forwarded to the Home Network |
+| Uplink Routing Policy | Flags to indicate what uplink messages and metadata get forwarded and if downlink is allowed. Can be a combination of join-request, MAC data, application data, signal quality (gateway antenna RSSI and SNR), localization (gateway antenna location, RSSI, SNR and fine timestamp if available), and whether downlink is allowed |
+| Downlink Routing Policy | Flags to indicate what downlink messages can be forwarded. Can be a combination of join-accept, MAC data and application data |
+| Routing Filter | Filter uplink messages optionally by Member, Forwarder ID, join-request EUI prefixes, confirmed yes/no, `DevAddr` prefix, `FOpts` yes/no, `FPort` ranges and whether or not gateway metadata is present. There can be multiple filters; any filter that passes has the message forwarded to the Home Network |
 
 ## Concept
 
@@ -42,7 +42,9 @@ On uplink:
    - Pointers to KEKs used for encrypting DEKs in the message. The pointers consist of the Key Exchange address and the KEK label
    - Teaser of the `PHYPayload` to drive the decision to decrypt an encrypted DEK, containing:
      - SHA-256 hash of the payload
-     - LoRaWAN public fields: confirmed uplink yes/no, `DevAddr`, `FOpts` yes/no, `FCnt`, `FPort` and `FRMPayload` length
+     - LoRaWAN public fields
+       - Join-request: `JoinEUI`, `DevEUI` and `DevNonce`
+       - Data uplink: confirmed uplink yes/no, `DevAddr`, `FOpts` yes/no, `FCnt`, `FPort` and `FRMPayload` length
    - Encrypted `PHYPayload` and the DEK encrypted with one or multiple KEKs
    - Teaser of the gateway metadata to drive the decision to decrypt an encrypted DEK, containing:
      - Whether the gateway is terrestrial or a satellite
@@ -63,10 +65,10 @@ On downlink:
   - `PHYPayload`
   - RX1 and RX2 frequency and data rate index (in gateway region from the uplink message)
   - RX1 delay
-  - Class (A, B or C)
+  - Class (A or C)
   - Forwarder and gateway uplink tokens copied from the uplink message
 
-Downlink is very similar to Stateless Passive Roaming as defined in LoRaWAN Backend Interfaces. The API is fully compatible with the `XmitDataReq` message.
+Downlink is similar to Stateless Passive Roaming as defined in LoRaWAN Backend Interfaces. The API is compatible with the `XmitDataReq` message.
 
 ### Components
 
@@ -81,36 +83,33 @@ Downlink is very similar to Stateless Passive Roaming as defined in LoRaWAN Back
    - Publishes messages to Packet Broker Router
    - Subscribes for downlink on Packet Broker Router
 - Packet Broker Router to route traffic from Forwarders to Home Networks and back. Acts as a switchboard
-   - Forwarder facing
-      - Topic based messaging service
-      - Each forwarder has topics for uplink and downlink
-   - Home Network facing
-      - Topic based messaging service
-      - Each Home Network has topics for uplink and downlink
+   - Forwarder interface: rpcs for publishing uplink messages and subscribing to a stream of downlink messages
+   - Home Network interface: rpcs for publishing downlink messages and subscribing to a stream of uplink messages
    - Router
       - Uplink
-         - Acts on messages published on a Forwarder topic
-         - Determines the Home Network by the `NetID` from `DevAddr`. Drops the message if not found
-         - Looks up the Uplink Routing Policy of the concerning Forwarder and Home Network. Falls back to the default Routing Uplink Policy. Drops the message if uplink routing is disabled
+         - Acts on messages published by a Forwarder
+         - Depending on the message type:
+           - On join-request, determines the Home Networks by their configured `JoinEUI` and `DevEUI` prefixes of interest
+           - On data uplink, determines the Home Networks by the `NetID` from `DevAddr`. Drops the message if none found
+         - Looks up the Uplink Routing Policy of the concerning Forwarder and Home Network. Falls back to the default Routing Uplink Policy. Drops the message if uplink routing is disabled for the concerning Home Network
          - Applies the Uplink Routing Policy
-         - Looks up the Home Network's Routing Filters. If any, drop the message if any Filter doesn't pass
-         - Publishes the message to the Home Network's topic
+         - Looks up the Home Networks' Routing Filters. If any, drop the message if any Filter does not pass
+         - Delivers the message to the Home Networks
       - Downlink
-         - Acts on messages published on a Home Network topic
-         - Determines the Forwarder by the `NetID` and Forwarder ID. Drops the message if not found
+         - Acts on messages published by a Home Network
+         - Determines the Forwarder by the given `NetID` and Forwarder ID. Drops the message if not found
          - Looks up the Downlink Policy of the concerning Forwarder and Home Network. Falls back to the default Routing Policy. Drops the message if downlink routing is disabled
          - Applies the Downlink Routing Policy
-         - Publishes the message to the Forwarder's topic
+         - Delivers the message to the Forwarder
 - Home Network
    - Publishes downlink messages to Packet Broker Router
-   - Subscribes to uplink on Packet Broker Router;
-      - A set of Routing Filters (if not specified, a catch-all Routing Filter applies)
-   - Makes consideration to buy `PHYPayload` or metadata
+   - Subscribes to uplink on Packet Broker Router with a set of Routing Filters. If no Routing Filters specified, a catch-all Routing Filter applies
+   - Makes consideration to have `PHYPayload` or metadata decrypted
    - On a positive decision, has the encrypted DEK decrypted
-   - If the Key Exchange provides the KEK, decrypts the DEK itself. Otherwise, request Key Exchange to decrypt the encrypted DEK
+   - If the Key Exchange provides the KEK, the Home Network decrypts the DEK. Otherwise, the Home Network requests Key Exchange to decrypt the encrypted DEK
 - Packet Broker Key Exchange
-   - Sells the KEK if it has a price. This allows Home Networks to decrypt messages offline. Forwarders are free to rotate KEKs and use multiple KEKs at any time
-   - Decrypts on request by the Home Network, respecting the KEK usage limit, charging the KEK usage price, optionally checks MIC if session key is provided
+   - Provides the KEK and records the transaction. This allows Home Networks to decrypt messages offline. Forwarders are free to rotate KEKs and use multiple KEKs at any time
+   - Decrypts on request by the Home Network, respecting the KEK usage limit, recording the KEK transaction, and optionally checks MIC if session key `NwkSKey` or `FNwkSIntKey` is provided
 
 ### Types of Key Exchanges
 

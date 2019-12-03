@@ -20,23 +20,24 @@ option go_package = "go.packetbroker.org/api/v1alpha1;packetbroker";
 
 // LoRaWAN region as defined in Regional Parameters.
 enum Region {
-  EU_863_870 = 0;
-  US_902_928 = 1;
-  CN_779_787 = 2;
-  EU_433 = 3;
-  AU_915_928 = 4;
-  CN_470_510 = 5;
-  AS_923 = 6;
-  KR_920_923 = 7;
-  IN_865_867 = 8;
-  RU_864_870 = 9;
+  UNKNOWN_REGION = 0;
+  EU_863_870 = 1;
+  US_902_928 = 2;
+  CN_779_787 = 3;
+  EU_433 = 4;
+  AU_915_928 = 5;
+  CN_470_510 = 6;
+  AS_923 = 7;
+  KR_920_923 = 8;
+  IN_865_867 = 9;
+  RU_864_870 = 10;
 }
 
 // LoRaWAN class for transmitting downlink.
 enum DownlinkMessageClass {
-  A = 0;
-  B = 1;
-  C = 2;
+  CLASS_A = 0;
+  CLASS_B = 1;
+  CLSAS_C = 2;
 }
 
 // Priority of a downlink message.
@@ -53,4 +54,31 @@ enum DownlinkMessagePriority {
   // Highest priority.
   // Sets the HiPriority flag in the LoRaWAN Backend Interfaces XmitDataReq message.
   HIGHEST = 4;
+}
+
+enum MessageDeliveryState {
+  // The message has been accepted for forwarding or delivery.
+  ACCEPTED = 0;
+  // The message has been forwarded to another host for delivery.
+  FORWARDED = 1;
+  // The message has been delivered to the receiver.
+  DELIVERED = 2;
+  // The message has been processed by the receiver.
+  PROCESSED = 3;
+}
+
+enum TerrestrialAntennaPlacement {
+  // Unknown antenna placement.
+  UNKNOWN_PLACEMENT = 0;
+  // Indoor antenna placement.
+  INDOOR = 1;
+  // Outdoor antenna placement.
+  OUTDOOR = 2;
+}
+
+enum Modulation {
+  // LoRa modulation.
+  LORA = 0;
+  // FSK modulation.
+  FSK = 1;
 }
