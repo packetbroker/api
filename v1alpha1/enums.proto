@@ -20,23 +20,24 @@ option go_package = "go.packetbroker.org/api/v1alpha1;packetbroker";
 
 // LoRaWAN region as defined in Regional Parameters.
 enum Region {
-  EU_863_870 = 0;
-  US_902_928 = 1;
-  CN_779_787 = 2;
-  EU_433 = 3;
-  AU_915_928 = 4;
-  CN_470_510 = 5;
-  AS_923 = 6;
-  KR_920_923 = 7;
-  IN_865_867 = 8;
-  RU_864_870 = 9;
+  UNKNOWN_REGION = 0;
+  EU_863_870 = 1;
+  US_902_928 = 2;
+  CN_779_787 = 3;
+  EU_433 = 4;
+  AU_915_928 = 5;
+  CN_470_510 = 6;
+  AS_923 = 7;
+  KR_920_923 = 8;
+  IN_865_867 = 9;
+  RU_864_870 = 10;
 }
 
 // LoRaWAN class for transmitting downlink.
 enum DownlinkMessageClass {
-  A = 0;
-  B = 1;
-  C = 2;
+  CLASS_A = 0;
+  CLASS_B = 1;
+  CLSAS_C = 2;
 }
 
 // Priority of a downlink message.
@@ -68,7 +69,7 @@ enum MessageDeliveryState {
 
 enum TerrestrialAntennaPlacement {
   // Unknown antenna placement.
-  UNKNOWN = 0;
+  UNKNOWN_PLACEMENT = 0;
   // Indoor antenna placement.
   INDOOR = 1;
   // Outdoor antenna placement.
