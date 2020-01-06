@@ -37,7 +37,7 @@ enum Region {
 enum DownlinkMessageClass {
   CLASS_A = 0;
   CLASS_B = 1;
-  CLSAS_C = 2;
+  CLASS_C = 2;
 }
 
 // Priority of a downlink message.
