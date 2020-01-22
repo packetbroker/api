@@ -1,0 +1,84 @@
+// Copyright © 2019 The Things Industries B.V.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+syntax = "proto3";
+
+package org.packetbroker.v1beta1;
+
+option go_package = "go.packetbroker.org/api/v1beta1;packetbroker";
+
+// LoRaWAN region as defined in Regional Parameters.
+enum Region {
+  UNKNOWN_REGION = 0;
+  EU_863_870 = 1;
+  US_902_928 = 2;
+  CN_779_787 = 3;
+  EU_433 = 4;
+  AU_915_928 = 5;
+  CN_470_510 = 6;
+  AS_923 = 7;
+  KR_920_923 = 8;
+  IN_865_867 = 9;
+  RU_864_870 = 10;
+}
+
+// LoRaWAN class for transmitting downlink.
+enum DownlinkMessageClass {
+  CLASS_A = 0;
+  CLASS_B = 1;
+  CLASS_C = 2;
+}
+
+// Priority of a downlink message.
+enum DownlinkMessagePriority {
+  // Lowest priority.
+  LOWEST = 0;
+  // Low priority.
+  LOW = 1;
+  // Normal priority.
+  NORMAL = 2;
+  // High priority.
+  // Sets the HiPriority flag in the LoRaWAN Backend Interfaces XmitDataReq message.
+  HIGH = 3;
+  // Highest priority.
+  // Sets the HiPriority flag in the LoRaWAN Backend Interfaces XmitDataReq message.
+  HIGHEST = 4;
+}
+
+enum MessageDeliveryState {
+  // The message has been accepted for forwarding or delivery.
+  ACCEPTED = 0;
+  // The message has been forwarded to another host for delivery.
+  FORWARDED = 1;
+  // The message has been delivered to the receiver.
+  DELIVERED = 2;
+  // The message has been processed by the receiver.
+  PROCESSED = 3;
+}
+
+enum TerrestrialAntennaPlacement {
+  // Unknown antenna placement.
+  UNKNOWN_PLACEMENT = 0;
+  // Indoor antenna placement.
+  INDOOR = 1;
+  // Outdoor antenna placement.
+  OUTDOOR = 2;
+}
+
+enum Modulation {
+  // LoRa modulation.
+  LORA = 0;
+  // FSK modulation.
+  FSK = 1;
+}
