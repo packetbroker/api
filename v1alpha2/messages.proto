@@ -170,6 +170,10 @@ message UplinkMessage {
 
   // Region of the gateway.
   Region gateway_region = 6;
+  // Data rate index in the gateway's region.
+  uint32 data_rate_index = 7;
+  // Frequency (Hz).
+  uint64 frequency = 8;
 }
 
 // LoRaWAN downlink data message.
