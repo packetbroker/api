@@ -135,31 +135,42 @@ message UplinkMessage {
   // Key encryption keys with which data encryption keys are encrypted.
   map<string, KeyPointer> keks = 1;
 
-  message EncryptedPHYPayload {
+  message PHYPayload {
     // Teaser of the PHYPayload.
     PHYPayloadTeaser teaser = 1;
-    // Encrypted PHYPayload.
-    EncryptedData value = 2;
+    oneof value {
+      // Encrypted PHYPayload.
+      EncryptedData encrypted = 2;
+      bytes plain = 3;
+    }
   }
-  // Encrypted PHYPayload.
+  // LoRaWAN PHYPayload.
   // Subscribing Home Networks receive this value if the Uplink Routing Policy has mac_data or application_data set,
   // and if the PHYPayload passes the Routing Filter.
-  EncryptedPHYPayload phy_payload = 2;
+  PHYPayload phy_payload = 2;
 
-  message EncryptedGatewayMetadata {
+  message GatewayMetadata {
     // Teaser of the gateway metadata.
     GatewayMetadataTeaser teaser = 1;
-    // Encrypted GatewayMetadataSignalQuality message.
+    // Signal quality.
     // Subscribing Home Networks receive this value if the Uplink Routing Policy has signal_quality set.
-    EncryptedData signal_quality = 2;
-    // Encrypted GatewayMetadataLocalization message.
+    oneof signal_quality {
+      // Encrypted GatewayMetadataSignalQuality.
+      EncryptedData encrypted_signal_quality = 2;
+      GatewayMetadataSignalQuality plain_signal_quality = 3;
+    }
+    // Localization.
     // Subscribing Home Networks receive this value if the Uplink Routing Policy has localization set.
-    EncryptedData localization = 3;
+    oneof localization {
+      // Encrypted GatewayMetadataLocalization.
+      EncryptedData encrypted_localization = 4;
+      GatewayMetadataLocalization plain_localization = 5;
+    }
   }
-  // Encrypted gateway metadata.
+  // Gateway metadata.
   // Subscribing Home Networks receive this value if the Uplink Routing Policy has localization or signal_quality set,
   // and if the message passes the Routing Filter.
-  EncryptedGatewayMetadata gateway_metadata = 3;
+  GatewayMetadata gateway_metadata = 3;
 
   // Forwarder uplink token (optional).
   // Subscribing Home Networks receive this value if the Uplink Routing Policy has allow_downlink set.
