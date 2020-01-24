@@ -1,0 +1,224 @@
+// Copyright © 2020 The Things Industries B.V.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+syntax = "proto3";
+
+package org.packetbroker.v1beta2;
+
+import "google/protobuf/duration.proto";
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/wrappers.proto";
+import "packetbroker/api/v1beta2/enums.proto";
+import "packetbroker/api/v1beta2/keys.proto";
+import "packetbroker/api/v1beta2/location.proto";
+
+option go_package = "go.packetbroker.org/api/v1beta2;packetbroker";
+
+// Teaser of PHYPayload.
+message PHYPayloadTeaser {
+  // SHA-256 hash of PHYPayload.
+  bytes hash = 1;
+
+  message JoinRequestTeaser {
+    // JoinEUI of the join-request.
+    fixed64 join_eui = 1;
+    // DevEUI of the join-request.
+    fixed64 dev_eui = 2;
+    // DevNonce of the join-request.
+    uint32 dev_nonce = 3;
+  }
+
+  message MACPayloadTeaser {
+    // Indicates whether it is a confirmed or unconfirmed data uplink message.
+    bool confirmed = 2;
+    // DevAddr of the message.
+    uint32 dev_addr = 3;
+    // Indicates whether the PHYPayload contains FOpts.
+    bool f_opts = 4;
+    // FCnt of the message.
+    uint32 f_cnt = 5;
+    // FPort of the message.
+    uint32 f_port = 6;
+    // Length of the FRMPayload.
+    uint32 frm_payload_length = 7;
+  }
+
+  oneof payload {
+    // Teaser of a join-request.
+    JoinRequestTeaser join_request = 2;
+    // Teaser of MACPayload.
+    MACPayloadTeaser mac = 3;
+  }
+}
+
+// Teaser of gateway metadata.
+message GatewayMetadataTeaser {
+  message Terrestrial {
+    // Indicates whether the metadata contains a fine timestamp.
+    bool fine_timestamp = 2;
+  }
+  message Satellite {
+  }
+  oneof value {
+    Terrestrial terrestrial = 1;
+    Satellite satellite = 2;
+  }
+}
+
+// Terrestrial gateway antenna signal quality.
+message TerrestrialGatewayAntennaSignalQuality {
+  // Received signal strength indicator of the channel (dBm).
+  float channel_rssi = 1;
+  // Received signal strength indicator of the signal (dBm).
+  google.protobuf.FloatValue signal_rssi = 2;
+  // Standard deviation of the RSSI during preamble.
+  google.protobuf.FloatValue rssi_standard_deviation = 3;
+  // Signal-to-noise ratio (dB).
+  float snr = 4;
+  // Frequency offset (Hz).
+  int64 frequency_offset = 5;
+}
+
+// Gateway metadata signal quality.
+message GatewayMetadataSignalQuality {
+  message Terrestrial {
+    message Antenna {
+      uint32 index = 1;
+      TerrestrialGatewayAntennaSignalQuality value = 2;
+    }
+    repeated Antenna antennas = 1;
+  }
+  message Satellite {
+  }
+  oneof value {
+    Terrestrial terrestrial = 1;
+    Satellite satellite = 2;
+  }
+}
+
+// Gateway metadata for localization.
+message GatewayMetadataLocalization {
+  message Terrestrial {
+    message Antenna {
+      uint32 index = 1;
+      // Location of the antenna.
+      Location location = 2;
+      // Fine timestamp.
+      google.protobuf.UInt64Value fine_timestamp = 3;
+      // Signal quality.
+      TerrestrialGatewayAntennaSignalQuality signal_quality = 4;
+    }
+    repeated Antenna antennas = 1;
+  }
+  message Satellite {
+    // Satellite location.
+    Location location = 1;
+  }
+  oneof value {
+    Terrestrial terrestrial = 1;
+    Satellite satellite = 2;
+  }
+}
+
+// LoRaWAN uplink data message with encrypted PHYPayload and metadata.
+message UplinkMessage {
+  // Key encryption keys with which data encryption keys are encrypted.
+  map<string, KeyPointer> keks = 1;
+
+  message PHYPayload {
+    // Teaser of the PHYPayload.
+    PHYPayloadTeaser teaser = 1;
+    oneof value {
+      // Encrypted PHYPayload.
+      EncryptedData encrypted = 2;
+      bytes plain = 3;
+    }
+  }
+  // LoRaWAN PHYPayload.
+  // Subscribing Home Networks receive this value if the Uplink Routing Policy has mac_data or application_data set,
+  // and if the PHYPayload passes the Routing Filter.
+  PHYPayload phy_payload = 2;
+
+  // Timestamp of the packet arrival observed by the Forwarder.
+  google.protobuf.Timestamp forwarder_receive_time = 3;
+  // Timestamp of the packet arrival observed by the gateway.
+  google.protobuf.Timestamp gateway_receive_time = 4;
+  // Region of the gateway.
+  Region gateway_region = 5;
+  // Data rate index in the gateway's region.
+  uint32 data_rate_index = 6;
+  // Frequency (Hz).
+  uint64 frequency = 7;
+
+  message GatewayMetadata {
+    // Teaser of the gateway metadata.
+    GatewayMetadataTeaser teaser = 1;
+    // Signal quality.
+    // Subscribing Home Networks receive this value if the Uplink Routing Policy has signal_quality set.
+    oneof signal_quality {
+      // Encrypted GatewayMetadataSignalQuality.
+      EncryptedData encrypted_signal_quality = 2;
+      GatewayMetadataSignalQuality plain_signal_quality = 3;
+    }
+    // Localization.
+    // Subscribing Home Networks receive this value if the Uplink Routing Policy has localization set.
+    oneof localization {
+      // Encrypted GatewayMetadataLocalization.
+      EncryptedData encrypted_localization = 4;
+      GatewayMetadataLocalization plain_localization = 5;
+    }
+  }
+  // Gateway metadata.
+  // Subscribing Home Networks receive this value if the Uplink Routing Policy has localization or signal_quality set,
+  // and if the message passes the Routing Filter.
+  GatewayMetadata gateway_metadata = 8;
+
+  // Forwarder uplink token (optional).
+  // Subscribing Home Networks receive this value if the Uplink Routing Policy has allow_downlink set.
+  bytes forwarder_uplink_token = 9;
+  // Gateway uplink token (optional).
+  // Subscribing Home Networks receive this value if the Uplink Routing Policy has allow_downlink set.
+  bytes gateway_uplink_token = 10;
+}
+
+// LoRaWAN downlink data message.
+message DownlinkMessage {
+  // PHYPayload of the downlink message.
+  bytes phy_payload = 1;
+
+  message RXSettings {
+    // Frequency (Hz).
+    uint64 frequency = 1;
+    // Data rate index as defined in the gateway's LoRaWAN region.
+    uint32 data_rate_index = 2;
+  }
+  // RX1 settings.
+  RXSettings rx1 = 2;
+  // RX2 settings.
+  RXSettings rx2 = 3;
+  // RX1 delay.
+  google.protobuf.Duration rx1_delay = 4;
+  // Downlink message class.
+  DownlinkMessageClass class = 5;
+
+  // Forwarder uplink token, copied from UplinkMessage.
+  // If unset, gateway_uplink_token must be set.
+  bytes forwarder_uplink_token = 6;
+  // Gateway uplink token, copied from UplinkMessage.
+  // If unset, forwarder_uplink_token must be set.
+  bytes gateway_uplink_token = 7;
+
+  // Priority of the downlink message.
+  DownlinkMessagePriority priority = 8;
+}
