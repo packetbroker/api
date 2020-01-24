@@ -17,6 +17,7 @@ syntax = "proto3";
 package org.packetbroker.v1beta2;
 
 import "google/protobuf/duration.proto";
+import "google/protobuf/timestamp.proto";
 import "google/protobuf/wrappers.proto";
 import "packetbroker/api/v1beta2/enums.proto";
 import "packetbroker/api/v1beta2/keys.proto";
@@ -149,6 +150,17 @@ message UplinkMessage {
   // and if the PHYPayload passes the Routing Filter.
   PHYPayload phy_payload = 2;
 
+  // Timestamp of the packet arrival observed by the Forwarder.
+  google.protobuf.Timestamp forwarder_receive_time = 3;
+  // Timestamp of the packet arrival observed by the gateway.
+  google.protobuf.Timestamp gateway_receive_time = 4;
+  // Region of the gateway.
+  Region gateway_region = 5;
+  // Data rate index in the gateway's region.
+  uint32 data_rate_index = 6;
+  // Frequency (Hz).
+  uint64 frequency = 7;
+
   message GatewayMetadata {
     // Teaser of the gateway metadata.
     GatewayMetadataTeaser teaser = 1;
@@ -170,21 +182,14 @@ message UplinkMessage {
   // Gateway metadata.
   // Subscribing Home Networks receive this value if the Uplink Routing Policy has localization or signal_quality set,
   // and if the message passes the Routing Filter.
-  GatewayMetadata gateway_metadata = 3;
+  GatewayMetadata gateway_metadata = 8;
 
   // Forwarder uplink token (optional).
   // Subscribing Home Networks receive this value if the Uplink Routing Policy has allow_downlink set.
-  bytes forwarder_uplink_token = 4;
+  bytes forwarder_uplink_token = 9;
   // Gateway uplink token (optional).
   // Subscribing Home Networks receive this value if the Uplink Routing Policy has allow_downlink set.
-  bytes gateway_uplink_token = 5;
-
-  // Region of the gateway.
-  Region gateway_region = 6;
-  // Data rate index in the gateway's region.
-  uint32 data_rate_index = 7;
-  // Frequency (Hz).
-  uint64 frequency = 8;
+  bytes gateway_uplink_token = 10;
 }
 
 // LoRaWAN downlink data message.
