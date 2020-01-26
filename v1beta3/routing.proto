@@ -53,17 +53,26 @@ message RoutingPolicy {
   Downlink downlink = 2;
 }
 
+message ForwarderIdentifier {
+  // LoRa Alliance NetID of the Forwarder Member.
+  uint32 net_id = 1;
+  // Forwarder ID. If empty, consider NetID only.
+  // Forwarder IDs are assigned by the Member.
+  string forwarder_id = 2;
+}
+
+message ForwarderIdentifiers {
+  repeated ForwarderIdentifier list = 1;
+}
+
 // Filter for Home Networks to subscribe to forwarded messages.
 message RoutingFilter {
-  message Forwarder {
-    // LoRa Alliance NetID of the Forwarder Member.
-    uint32 net_id = 1;
-    // Allowed Forwarder IDs. If empty, allow all Forwarder IDs.
-    // Forwarder IDs are assigned by the Member.
-    repeated string forwarder_ids = 2;
+  oneof forwarders {
+    // Allow Forwarders. Cannot be empty if set.
+    ForwarderIdentifiers forwarder_whitelist = 1;
+    // Disallow Forwarders. Cannot be empty if set.
+    ForwarderIdentifiers forwarder_blacklist = 2;
   }
-  // Pass Forwarders. If empty, pass all Forwarders.
-  repeated Forwarder forwarders = 1;
 
   message JoinRequest {
     message EUIPrefixes {
@@ -104,12 +113,12 @@ message RoutingFilter {
   }
 
   oneof message {
-    JoinRequest join_request = 2;
-    MACPayload mac = 3;
+    JoinRequest join_request = 3;
+    MACPayload mac = 4;
   }
 
   // Pass gateway metadata. If not set, pass gateway metadata if available.
-  google.protobuf.BoolValue gateway_metadata = 4;
+  google.protobuf.BoolValue gateway_metadata = 5;
 }
 
 message RouteHop {
