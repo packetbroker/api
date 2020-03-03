@@ -26,15 +26,15 @@ option go_package = "go.packetbroker.org/api/v2beta1;packetbroker";
 message GetDefaultRoutingPolicyRequest {
   // LoRa Alliance NetID of the Forwarder Member.
   uint32 forwarder_net_id = 1;
-  // Forwarder identifier issued by the Forwarder Member.
-  string forwarder_id = 2;
+  // Tenant ID managed by the Forwarder Member.
+  string forwarder_tenant_id = 2;
 }
 
 message SetDefaultRoutingPolicyRequest {
   // LoRa Alliance NetID of the Forwarder Member.
   uint32 forwarder_net_id = 1;
-  // Forwarder identifier issued by the Forwarder Member.
-  string forwarder_id = 2;
+  // Tenant ID managed by the Forwarder Member.
+  string forwarder_tenant_id = 2;
   // New default Routing Policy.
   RoutingPolicy policy = 3;
 }
@@ -42,21 +42,25 @@ message SetDefaultRoutingPolicyRequest {
 message GetHomeNetworkRoutingPolicyRequest {
   // LoRa Alliance NetID of the Forwarder Member.
   uint32 forwarder_net_id = 1;
-  // Forwarder identifier issued by the Forwarder Member.
-  string forwarder_id = 2;
+  // Tenant ID managed by the Forwarder Member.
+  string forwarder_tenant_id = 2;
   // LoRa Alliance NetID of the Home Network Member.
   uint32 home_network_net_id = 3;
+  // Tenant ID managed by the Home Network Member.
+  string home_network_tenant_id = 4;
 }
 
 message SetHomeNetworkRoutingPolicyRequest {
   // LoRa Alliance NetID of the Forwarder Member.
   uint32 forwarder_net_id = 1;
-  // Forwarder identifier issued by the Forwarder Member.
-  string forwarder_id = 2;
+  // Tenant ID managed by the Forwarder Member.
+  string forwarder_tenant_id = 2;
   // LoRa Alliance NetID of the Home Network Member.
   uint32 home_network_net_id = 3;
+  // Tenant ID managed by the Home Network Member.
+  string home_network_tenant_id = 4;
   // New Routing Policy for the Home Network Member.
-  RoutingPolicy policy = 4;
+  RoutingPolicy policy = 5;
 }
 
 message GetRoutingPolicyResponse {
@@ -79,8 +83,10 @@ message PublishUplinkMessageRequest {
   uint32 forwarder_net_id = 1;
   // Forwarder identifier issued by the Forwarder Member.
   string forwarder_id = 2;
+  // Tenant ID managed by the Forwarder Member.
+  string forwarder_tenant_id = 3;
   // Uplink message to publish.
-  UplinkMessage message = 3;
+  UplinkMessage message = 4;
 }
 
 message PublishUplinkMessageResponse {
@@ -93,14 +99,20 @@ message PublishUplinkMessageResponse {
 message PublishDownlinkMessageRequest {
   // LoRa Alliance NetID of the Home Network Member.
   uint32 home_network_net_id = 1;
+  // Tenant ID managed by the Home Network Member.
+  string home_network_tenant_id = 2;
   // LoRa Alliance NetID of the Forwarder Member.
-  uint32 forwarder_net_id = 2;
+  uint32 forwarder_net_id = 3;
   // Forwarder identifier issued by the Forwarder Member.
   // In LoRaWAN Class A downlink, this value must be copied from the RoutedUplinkMessage.
-  // In LoRaWAN Class B or C downlink, this value is typically copied from a recent RoutedUplinkMessage.
-  string forwarder_id = 3;
+  // In LoRaWAN Class C downlink, this value is typically copied from a recent RoutedUplinkMessage.
+  string forwarder_id = 4;
+  // Tenant ID managed by the Forwarder Member.
+  // In LoRaWAN Class A downlink, this value must be copied from the RoutedUplinkMessage.
+  // In LoRaWAN Class C downlink, this value is typically copied from a recent RoutedUplinkMessage.
+  string forwarder_tenant_id = 5;
   // Downlink message to publish.
-  DownlinkMessage message = 4;
+  DownlinkMessage message = 6;
 }
 
 message PublishDownlinkMessageResponse {
