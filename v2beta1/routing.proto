@@ -39,6 +39,15 @@ message Tenant {
 
 // Routing policy between a Forwarder and a Home Network.
 message RoutingPolicy {
+  // LoRa Alliance NetID of the Forwarder Member.
+  uint32 forwarder_net_id = 1;
+  // Tenant ID managed by the Forwarder Member.
+  string forwarder_tenant_id = 2;
+  // LoRa Alliance NetID of the Home Network Member.
+  uint32 home_network_net_id = 3;
+  // Tenant ID managed by the Home Network Member.
+  string home_network_tenant_id = 4;
+
   message Uplink {
     // Forward join-request messages.
     bool join_request = 1;
@@ -54,7 +63,7 @@ message RoutingPolicy {
     bool allow_downlink = 6;
   }
   // Uplink policy.
-  Uplink uplink = 1;
+  Uplink uplink = 5;
 
   message Downlink {
     // Allow join-accept messages.
@@ -65,7 +74,7 @@ message RoutingPolicy {
     bool application_data = 3;
   }
   // Downlink policy.
-  Downlink downlink = 2;
+  Downlink downlink = 6;
 }
 
 message ForwarderIdentifier {

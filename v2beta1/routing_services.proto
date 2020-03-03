@@ -73,13 +73,15 @@ message GetDefaultRoutingPolicyRequest {
   string forwarder_tenant_id = 2;
 }
 
-message SetDefaultRoutingPolicyRequest {
+message ListHomeNetworkRoutingPoliciesRequest {
   // LoRa Alliance NetID of the Forwarder Member.
   uint32 forwarder_net_id = 1;
   // Tenant ID managed by the Forwarder Member.
   string forwarder_tenant_id = 2;
-  // New default Routing Policy.
-  RoutingPolicy policy = 3;
+}
+
+message ListHomeNetworkRoutingPoliciesResponse {
+  repeated RoutingPolicy policies = 1;
 }
 
 message GetHomeNetworkRoutingPolicyRequest {
@@ -93,17 +95,8 @@ message GetHomeNetworkRoutingPolicyRequest {
   string home_network_tenant_id = 4;
 }
 
-message SetHomeNetworkRoutingPolicyRequest {
-  // LoRa Alliance NetID of the Forwarder Member.
-  uint32 forwarder_net_id = 1;
-  // Tenant ID managed by the Forwarder Member.
-  string forwarder_tenant_id = 2;
-  // LoRa Alliance NetID of the Home Network Member.
-  uint32 home_network_net_id = 3;
-  // Tenant ID managed by the Home Network Member.
-  string home_network_tenant_id = 4;
-  // New Routing Policy for the Home Network Member.
-  RoutingPolicy policy = 5;
+message SetRoutingPolicyRequest {
+  RoutingPolicy policy = 3;
 }
 
 message GetRoutingPolicyResponse {
@@ -114,11 +107,13 @@ service RoutingPolicyManager {
   // Get the Default Routing Policy.
   rpc GetDefaultPolicy(GetDefaultRoutingPolicyRequest) returns (GetRoutingPolicyResponse);
   // Set the Default Routing Policy.
-  rpc SetDefaultPolicy(SetDefaultRoutingPolicyRequest) returns (google.protobuf.Empty);
+  rpc SetDefaultPolicy(SetRoutingPolicyRequest) returns (google.protobuf.Empty);
+  // List the Routing Policies with Home Networks.
+  rpc ListHomeNetworkPolicies(ListHomeNetworkRoutingPoliciesRequest) returns (ListHomeNetworkRoutingPoliciesResponse);
   // Get the Routing Policy with the Home Network.
   rpc GetHomeNetworkPolicy(GetHomeNetworkRoutingPolicyRequest) returns (GetRoutingPolicyResponse);
   // Set the Routing Policy with the Home Network.
-  rpc SetHomeNetworkPolicy(SetHomeNetworkRoutingPolicyRequest) returns (google.protobuf.Empty);
+  rpc SetHomeNetworkPolicy(SetRoutingPolicyRequest) returns (google.protobuf.Empty);
 }
 
 message PublishUplinkMessageRequest {
