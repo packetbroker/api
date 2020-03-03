@@ -23,6 +23,49 @@ import "packetbroker/api/v2beta1/routing.proto";
 
 option go_package = "go.packetbroker.org/api/v2beta1;packetbroker";
 
+message ListTenantsRequest {
+  // LoRa Alliance NetID of the Member.
+  uint32 net_id = 1;
+}
+
+message ListTenantsResponse {
+  repeated string tenant_ids = 1;
+}
+
+message GetTenantRequest {
+  // LoRa Alliance NetID of the Member.
+  uint32 net_id = 1;
+  // Tenant ID managed by the Member.
+  string tenant_id = 2;
+}
+
+message GetTenantResponse {
+  Tenant tenant = 1;
+}
+
+message SetTenantRequest {
+  // New tenant to set.
+  Tenant tenant = 1;
+}
+
+message DeleteTenantRequest {
+  // LoRa Alliance NetID of the Member.
+  uint32 net_id = 1;
+  // Tenant ID managed by the Member.
+  string tenant_id = 2;
+}
+
+service TenantManager {
+  // List tenants.
+  rpc ListTenants(ListTenantsRequest) returns (ListTenantsResponse);
+  // Get tenant.
+  rpc GetTenant(GetTenantRequest) returns (GetTenantResponse);
+  // Set tenant.
+  rpc SetTenant(SetTenantRequest) returns (google.protobuf.Empty);
+  // Delete tenant.
+  rpc DeleteTenant(DeleteTenantRequest) returns (google.protobuf.Empty);
+}
+
 message GetDefaultRoutingPolicyRequest {
   // LoRa Alliance NetID of the Forwarder Member.
   uint32 forwarder_net_id = 1;

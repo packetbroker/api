@@ -106,11 +106,6 @@ message RoutingFilter {
     // Pass (un)confirmed uplink data messages.
     google.protobuf.BoolValue confirmed = 1;
 
-    message DevAddrPrefix {
-      uint32 value = 1;
-      // Significant bits of value.
-      uint32 length = 2;
-    }
     // Pass DevAddrs by prefix. If empty, allow all DevAddrs.
     repeated DevAddrPrefix dev_addr_prefixes = 2;
 
