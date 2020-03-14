@@ -124,7 +124,3 @@ message Gateway {
   // Subscribing Home Networks receive this value if the Gateway Visibility has frequency_plan set.
   GatewayFrequencyPlan frequency_plan = 13;
 }
-
-message Gateways {
-  repeated Gateway gateways = 1;
-}

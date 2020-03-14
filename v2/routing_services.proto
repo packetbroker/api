@@ -34,7 +34,7 @@ message ListTenantsRequest {
 }
 
 message ListTenantsResponse {
-  repeated string tenant_ids = 1;
+  repeated Tenant tenants = 1;
   // Total number of items.
   uint32 total = 2;
 }
