@@ -59,8 +59,6 @@ message RoutingPolicy {
     bool signal_quality = 4;
     // Forward gateway location, RSSI, SNR and fine timestamp.
     bool localization = 5;
-    // Forward uplink token to enable downlink.
-    bool allow_downlink = 6;
   }
   // Uplink policy.
   Uplink uplink = 5;

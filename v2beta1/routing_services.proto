@@ -26,10 +26,17 @@ option go_package = "go.packetbroker.org/api/v2beta1;packetbroker";
 message ListTenantsRequest {
   // LoRa Alliance NetID of the Member.
   uint32 net_id = 1;
+  // Number of items to skip for pagination.
+  uint32 offset = 2;
+  // Limit number items for pagination.
+  // If 0, use the server's default.
+  uint32 limit = 3;
 }
 
 message ListTenantsResponse {
   repeated string tenant_ids = 1;
+  // Total number of items.
+  uint32 total = 2;
 }
 
 message GetTenantRequest {
@@ -78,10 +85,17 @@ message ListHomeNetworkRoutingPoliciesRequest {
   uint32 forwarder_net_id = 1;
   // Tenant ID managed by the Forwarder Member.
   string forwarder_tenant_id = 2;
+  // Number of items to skip for pagination.
+  uint32 offset = 3;
+  // Limit number items for pagination.
+  // If 0, use the server's default.
+  uint32 limit = 4;
 }
 
 message ListHomeNetworkRoutingPoliciesResponse {
   repeated RoutingPolicy policies = 1;
+  // Total number of items.
+  uint32 total = 2;
 }
 
 message GetHomeNetworkRoutingPolicyRequest {
