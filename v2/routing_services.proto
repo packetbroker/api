@@ -179,21 +179,25 @@ message SubscribeForwarderRequest {
   uint32 forwarder_net_id = 1;
   // Forwarder identifier issued by the Forwarder Member.
   string forwarder_id = 2;
+  // Tenant ID managed by the Forwarder Member.
+  string forwarder_tenant_id = 3;
   // Shared subscription group (optional).
   // Queue durability depends on the Router configuration.
-  string group = 3;
+  string group = 4;
 }
 
 message SubscribeHomeNetworkRequest {
   // LoRa Alliance NetID of the Home Network Member.
   uint32 home_network_net_id = 1;
+  // Tenant ID managed by the Home Network Member.
+  string home_network_tenant_id = 2;
   // Routing filters to configure the subscription.
   // A message gets delivered if any of the given filters pass.
   // If no filters are specified, all messages will be delivered.
-  repeated RoutingFilter filters = 2;
+  repeated RoutingFilter filters = 3;
   // Shared subscription group (optional).
   // Queue durability depends on the Router configuration.
-  string group = 3;
+  string group = 4;
 }
 
 service RouterForwarderData {
