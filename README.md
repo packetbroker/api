@@ -41,7 +41,7 @@ On uplink:
 - Forwarders publish the encrypted message to Packet Broker Router. The uplink message contains:
    - Pointers to KEKs used for encrypting DEKs in the message. The pointers consist of the Key Exchange address and the KEK label
    - Teaser of the `PHYPayload` to drive the decision to decrypt an encrypted DEK, containing:
-     - SHA-256 hash of the payload
+     - SHA-256 hash of the `PHYPayload` _except `MIC`_ (to support retransmissions in LoRaWAN 1.1.x)
      - LoRaWAN public fields
        - Join-request: `JoinEUI`, `DevEUI` and `DevNonce`
        - Data uplink: confirmed uplink yes/no, `DevAddr`, `FOpts` yes/no, `FCnt`, `FPort` and `FRMPayload` length
