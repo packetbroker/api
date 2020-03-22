@@ -185,10 +185,10 @@ message UplinkMessage {
   GatewayMetadata gateway_metadata = 8;
 
   // Forwarder uplink token (optional).
-  // Subscribing Home Networks receive this value if the Uplink Routing Policy has allow_downlink set.
+  // Subscribing Home Networks receive this value if the Routing Policy allows any downlink.
   bytes forwarder_uplink_token = 9;
   // Gateway uplink token (optional).
-  // Subscribing Home Networks receive this value if the Uplink Routing Policy has allow_downlink set.
+  // Subscribing Home Networks receive this value if the Routing Policy allows any downlink.
   bytes gateway_uplink_token = 10;
 }
 
@@ -213,10 +213,8 @@ message DownlinkMessage {
   DownlinkMessageClass class = 5;
 
   // Forwarder uplink token, copied from UplinkMessage.
-  // If unset, gateway_uplink_token must be set.
   bytes forwarder_uplink_token = 6;
   // Gateway uplink token, copied from UplinkMessage.
-  // If unset, forwarder_uplink_token must be set.
   bytes gateway_uplink_token = 7;
 
   // Priority of the downlink message.
