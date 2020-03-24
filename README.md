@@ -121,6 +121,22 @@ All Key Exchanges keep track of the usage of KEKs to decrypt DEKs on request by 
 2. **Balancer**
    Members can offset the balance with a mutation that they both agree on, typically from an out-of-band monetary transaction
 
+### Operations
+
+Packet Broker Router exposes the [routing services API](v2/routing_services.proto). Clients can use gRPC directly, or use the [Packet Broker command-line interface (CLI)](https://github.com/packetbroker/pb).
+
+Packet Broker Router uses the following default ports per component:
+
+| Service | Component | Port |
+| --- | --- | ---: |
+| `TenantManager` | Control Plane | `1912`|
+| `RoutingPolicyManager` | Control Plane | `1912` |
+| `RouterForwarderData` | Data Plane | `1913` |
+| `RouterHomeNetworkData` | Data Plane | `1913` |
+| `RouterRouterData` | Data Plane | `1913` |
+
+Packet Broker Router uses TLS mutual authentication. [Learn how to obtain a TLS client certificate](https://github.com/packetbroker/pb/tree/master/configs).
+
 ## License
 
 The API is distributed under [Apache License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0). See `LICENSE` for more information.
