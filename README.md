@@ -123,17 +123,17 @@ All Key Exchanges keep track of the usage of KEKs to decrypt DEKs on request by 
 
 ### Operations
 
-Packet Broker Router exposes the [routing services API](v2/routing_services.proto). Clients can use gRPC directly, or use the [Packet Broker command-line interface (CLI)](https://github.com/packetbroker/pb).
+Packet Broker Router exposes the [routing services API](v3/routing_services.proto). Clients can use gRPC directly, or use the [Packet Broker command-line interface (CLI)](https://github.com/packetbroker/pb).
 
 Packet Broker Router uses the following default ports per component:
 
 | Service | Component | Port |
 | --- | --- | ---: |
-| `TenantManager` | Control Plane | `1912`|
-| `RoutingPolicyManager` | Control Plane | `1912` |
-| `RouterForwarderData` | Data Plane | `1913` |
-| `RouterHomeNetworkData` | Data Plane | `1913` |
-| `RouterRouterData` | Data Plane | `1913` |
+| `TenantManager` | Control Plane | `1900`|
+| `RoutingPolicyManager` | Control Plane | `1900` |
+| `RouterForwarderData` | Data Plane | `1900` |
+| `RouterHomeNetworkData` | Data Plane | `1900` |
+| `RouterRouterData` | Data Plane | `1900` |
 
 Packet Broker Router uses TLS mutual authentication. [Learn how to obtain a TLS client certificate](https://github.com/packetbroker/pb/tree/master/configs).
 
