@@ -62,8 +62,8 @@ message GatewayFrequencyPlan {
 message Gateway {
   // LoRa Alliance NetID of the Forwarder Member.
   uint32 forwarder_net_id = 1;
-  // Forwarder identifier issued by the Forwarder Member.
-  string forwarder_id = 2;
+  // Forwarder cluster of the Forwarder Member.
+  string forwarder_cluster_id = 2;
   // Unique identifier of the gateway.
   fixed64 eui = 3;
   // Timestamp when the gateway was last updated.

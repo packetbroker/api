@@ -78,9 +78,9 @@ message RoutingPolicy {
 message ForwarderIdentifier {
   // LoRa Alliance NetID of the Forwarder Member.
   uint32 net_id = 1;
-  // Forwarder ID. If empty, consider NetID only.
-  // Forwarder IDs are assigned by the Member.
-  string forwarder_id = 2;
+  // Forwarder cluster of the Forwarder Member.
+  // If empty, consider NetID only.
+  string forwarder_cluster_id = 2;
 }
 
 message ForwarderIdentifiers {
@@ -159,8 +159,8 @@ message RoutedUplinkMessage {
   uint32 forwarder_net_id = 2;
   // Tenant ID managed by the Forwarder Member.
   string forwarder_tenant_id = 3;
-  // Forwarder identifier issued by the Forwarder Member.
-  string forwarder_id = 4;
+  // Forwarder cluster of the Forwarder Member.
+  string forwarder_cluster_id = 4;
   // LoRa Alliance NetID of the Home Network Member.
   uint32 home_network_net_id = 5;
   // Tenant ID managed by the Home Network Member.
@@ -182,8 +182,8 @@ message RoutedDownlinkMessage {
   string home_network_tenant_id = 3;
   // LoRa Alliance NetID of the Forwarder Member.
   uint32 forwarder_net_id = 4;
-  // Forwarder identifier issued by the Forwarder Member.
-  string forwarder_id = 5;
+  // Forwarder cluster of the Forwarder Member.
+  string forwarder_cluster_id = 5;
   // Tenant ID managed by the Forwarder Member.
   string forwarder_tenant_id = 6;
   // Downlink message.

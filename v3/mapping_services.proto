@@ -24,15 +24,15 @@ option go_package = "go.packetbroker.org/api/v3;packetbroker";
 message GetDefaultGatewayVisibilityRequest {
   // LoRa Alliance NetID of the Forwarder Member.
   uint32 forwarder_net_id = 1;
-  // Forwarder identifier issued by the Forwarder Member.
-  string forwarder_id = 2;
+  // Forwarder cluster of the Forwarder Member.
+  string forwarder_cluster_id = 2;
 }
 
 message SetDefaultGatewayVisibilityRequest {
   // LoRa Alliance NetID of the Forwarder Member.
   uint32 forwarder_net_id = 1;
-  // Forwarder identifier issued by the Forwarder Member.
-  string forwarder_id = 2;
+  // Forwarder cluster of the Forwarder Member.
+  string forwarder_cluster_id = 2;
   // New default Gateway Visibility.
   GatewayVisibility visibility = 3;
 }
@@ -40,8 +40,8 @@ message SetDefaultGatewayVisibilityRequest {
 message GetHomeNetworkGatewayVisibilityRequest {
   // LoRa Alliance NetID of the Forwarder Member.
   uint32 forwarder_net_id = 1;
-  // Forwarder identifier issued by the Forwarder Member.
-  string forwarder_id = 2;
+  // Forwarder cluster of the Forwarder Member.
+  string forwarder_cluster_id = 2;
   // LoRa Alliance NetID of the Home Network Member.
   uint32 home_network_net_id = 3;
 }
@@ -49,8 +49,8 @@ message GetHomeNetworkGatewayVisibilityRequest {
 message SetHomeNetworkGatewayVisibilityRequest {
   // LoRa Alliance NetID of the Forwarder Member.
   uint32 forwarder_net_id = 1;
-  // Forwarder identifier issued by the Forwarder Member.
-  string forwarder_id = 2;
+  // Forwarder cluster of the Forwarder Member.
+  string forwarder_cluster_id = 2;
   // LoRa Alliance NetID of the Home Network Member.
   uint32 home_network_net_id = 3;
   // New Gateway Visibility for the Home Network Member.
@@ -75,8 +75,8 @@ service GatewayVisibilityManager {
 message UpdateForwarderGatewayRequest {
   // LoRa Alliance NetID of the Forwarder Member.
   uint32 forwarder_net_id = 1;
-  // Forwarder identifier issued by the Forwarder Member.
-  string forwarder_id = 2;
+  // Forwarder cluster of the Forwarder Member.
+  string forwarder_cluster_id = 2;
   // Gateway to update.
   Gateway gateway = 3;
 }
@@ -107,8 +107,8 @@ message GetHomeNetworkGatewayRequest {
   uint32 home_network_net_id = 1;
   // LoRa Alliance NetID of the Forwarder Member.
   uint32 forwarder_net_id = 2;
-  // Forwarder identifier issued by the Forwarder Member.
-  string forwarder_id = 3;
+  // Forwarder cluster of the Forwarder Member.
+  string forwarder_cluster_id = 3;
   // Unique identifier of the gateway.
   uint64 eui = 4;
 }
@@ -120,8 +120,8 @@ message SubscribeHomeNetworkGatewaysRequest {
   message ForwarderEUIs {
     // LoRa Alliance NetID of the Forwarder Member.
     uint32 forwarder_net_id = 1;
-    // Forwarder identifier issued by the Forwarder Member.
-    string forwarder_id = 2;
+    // Forwarder cluster of the Forwarder Member.
+    string forwarder_cluster_id = 2;
     // Set of unique identifiers of gateways.
     // Leave empty to subscribe to all gateways of the Forwarder Member.
     repeated uint64 euis = 3;
