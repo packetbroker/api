@@ -6,19 +6,20 @@ This repository contains the API for interacting with the Packet Broker Router a
 
 ## Terminology
 
-| Term | Meaning |
-| --- | --- |
-| Router | Routes message from Forwarders to Home Networks according to the Forwarder's Policy and Home Network's Filters |
-| Key Exchange | Mechanism to transfer encryption Keys from Forwarders to Home Networks |
-| KEK | Key encryption key. Can expire on a time and/or on a number of usages. Has a price per key or per use. Key expiration is enforced by Key Exchange |
-| DEK | Data encryption key. These are sent encrypted with the key encryption key |
-| Member | Authority of Home Networks and Forwarders. Manages its Home Networks with their `DevAddr` prefixes and its Forwarders. It must have a LoRa Alliance `NetID` |
-| Forwarder | Network that forwards traffic from its gateways to and from Packet Broker. Has an ID within the Member scope |
-| Home Network | Network where the device is registered and which manages the MAC state. Has a set of `DevAddr` prefixes |
-| Routing Policy | Routing policy of Forwarder and Home Network. Contains whether routing is enabled, Uplink Policy and Downlink Policy |
-| Uplink Routing Policy | Flags to indicate what uplink messages and metadata get forwarded and if downlink is allowed. Can be a combination of join-request, MAC data, application data, signal quality (gateway antenna RSSI and SNR), localization (gateway antenna location, RSSI, SNR and fine timestamp if available), and whether downlink is allowed |
-| Downlink Routing Policy | Flags to indicate what downlink messages can be forwarded. Can be a combination of join-accept, MAC data and application data |
-| Routing Filter | Filter uplink messages optionally by Member, Forwarder ID, join-request EUI prefixes, confirmed yes/no, `DevAddr` prefix, `FOpts` yes/no, `FPort` ranges and whether or not gateway metadata is present. There can be multiple filters; any filter that passes has the message forwarded to the Home Network |
+Term | Meaning
+--- | ---
+Router | Routes message from Forwarders to Home Networks according to the Forwarder's Policy and Home Network's Filters
+Key Exchange | Mechanism to transfer encryption Keys from Forwarders to Home Networks
+KEK | Key encryption key. Can expire on a time and/or on a number of usages. Has a price per key or per use. Key expiration is enforced by Key Exchange
+DEK | Data encryption key. These are sent encrypted with the key encryption key
+Member | Authority of Home Networks and Forwarders. Manages its Home Networks with their `DevAddr` prefixes and its Forwarders. It must have a LoRa Alliance `NetID`
+Forwarder | Network that forwards traffic from its gateways to and from Packet Broker. Has an ID within the Member scope
+Home Network | Network where the device is registered and which manages the MAC state. Has an ID within the Member scope
+Tenant| Tenant of a Forwarder or Home Network. Has an ID within the Forwarder or Home Network scope and a set of `DevAddr` prefixes
+Routing Policy | Routing policy of Forwarder (Tenant) and Home Network (Tenant). Contains whether routing is enabled, Uplink Routing Policy and Downlink Routing Policy
+Uplink Routing Policy | Flags to indicate what uplink messages and metadata get forwarded and if downlink is allowed. Can be a combination of join-request, MAC data, application data, signal quality (gateway antenna RSSI and SNR), localization (gateway antenna location, RSSI, SNR and fine timestamp if available), and whether downlink is allowed
+Downlink Routing Policy | Flags to indicate what downlink messages can be forwarded. Can be a combination of join-accept, MAC data and application data
+Routing Filter | Filter uplink messages optionally by Member, Forwarder ID, join-request EUI prefixes, confirmed yes/no, `DevAddr` prefix, `FOpts` yes/no, `FPort` ranges and whether or not gateway metadata is present. There can be multiple filters; any filter that passes has the message forwarded to the Home Network
 
 ## Concept
 
@@ -53,7 +54,7 @@ On uplink:
    - Encrypted localization and the DEK encrypted with one or multiple KEKs
    - Forwarder and gateway uplink tokens
    - Region of the gateway as defined in LoRaWAN Regional Parameters
-- Packet Broker Router routes the encrypted message with the Forwarder ID to the Home Network according to the Routing Policy and Routing Filter
+- Packet Broker Router routes the encrypted message with the Forwarder (Tenant) to the Home Network (Tenant) according to the Routing Policy and Routing Filter
 - Home Network can buy the message (i.e. decrypt a DEK) based the teasers, based on price(s) on Key Exchange(s) and payload hash (to check if the message has been received already via other means)
 - If the Key Exchange provides the KEK, the Home Network can decrypt the DEK itself. Otherwise, the Home Network requests the Key Exchange to decrypt the DEK
   - Alternatively, the Home Network may optionally have the `PHYPayload` decrypted and pass the `FNwkSIntKey` or `NwkSKey` to validate the MIC before recording the transaction, if the Key Exchange supports this
@@ -68,7 +69,7 @@ On downlink:
   - Class (A or C)
   - Forwarder and gateway uplink tokens copied from the uplink message
 
-Downlink is similar to Stateless Passive Roaming as defined in LoRaWAN Backend Interfaces. The API is compatible with the `XmitDataReq` message.
+Downlink is similar to Stateless Passive Roaming as defined in LoRaWAN Backend Interfaces. The API is compatible with the `XmitDataReq` message, except that Packet Broker downlink can be used for join-accept messages.
 
 ### Components
 
@@ -89,21 +90,21 @@ Downlink is similar to Stateless Passive Roaming as defined in LoRaWAN Backend I
       - Uplink
          - Acts on messages published by a Forwarder
          - Depending on the message type:
-           - On join-request, determines the Home Networks by their configured `JoinEUI` and `DevEUI` prefixes of interest
-           - On data uplink, determines the Home Networks by the `NetID` from `DevAddr`. Drops the message if none found
+           - On join-request, determines the Home Networks (and their Tenants) by their configured `JoinEUI` and `DevEUI` prefixes of interest
+           - On data uplink, determines the Home Networks (and their Tenants) by the `NetID` from `DevAddr`. Drops the message if none found
          - Looks up the Uplink Routing Policy of the concerning Forwarder and Home Network. Falls back to the default Routing Uplink Policy. Drops the message if uplink routing is disabled for the concerning Home Network
          - Applies the Uplink Routing Policy
          - Looks up the Home Networks' Routing Filters. If any, drop the message if any Filter does not pass
-         - Delivers the message to the Home Networks
+         - Delivers the message to the Home Network (Tenants)
       - Downlink
-         - Acts on messages published by a Home Network
-         - Determines the Forwarder by the given `NetID` and Forwarder ID. Drops the message if not found
-         - Looks up the Downlink Policy of the concerning Forwarder and Home Network. Falls back to the default Routing Policy. Drops the message if downlink routing is disabled
+         - Acts on messages published by a Home Network (Tenant)
+         - Determines the Forwarder (Tenant) by the given `NetID` and Forwarder ID and optionally Tenant ID. Drops the message if not found
+         - Looks up the Downlink Policy of the concerning Forwarder (Tenant) and Home Network (Tenant). Falls back to the Routing Policy of the Home Network, and if not set, falls back to the default Routing Policy. Drops the message if downlink routing is disabled
          - Applies the Downlink Routing Policy
-         - Delivers the message to the Forwarder
+         - Delivers the message to the Forwarder (Tenant)
 - Home Network
    - Publishes downlink messages to Packet Broker Router
-   - Subscribes to uplink on Packet Broker Router with a set of Routing Filters. If no Routing Filters specified, a catch-all Routing Filter applies
+   - Subscribes to uplink on Packet Broker Router with its ID and a set of Routing Filters. If no Routing Filters specified, a catch-all Routing Filter applies
    - Makes consideration to have `PHYPayload` or metadata decrypted
    - On a positive decision, has the encrypted DEK decrypted
    - If the Key Exchange provides the KEK, the Home Network decrypts the DEK. Otherwise, the Home Network requests Key Exchange to decrypt the encrypted DEK
@@ -121,21 +122,24 @@ All Key Exchanges keep track of the usage of KEKs to decrypt DEKs on request by 
 2. **Balancer**
    Members can offset the balance with a mutation that they both agree on, typically from an out-of-band monetary transaction
 
-### Operations
+## Operations
 
-Packet Broker Router exposes the [routing services API](v3/routing_services.proto). Clients can use gRPC directly, or use the [Packet Broker command-line interface (CLI)](https://github.com/packetbroker/pb).
+Packet Broker Router exposes the [routing services API](./routing/v1/service.proto). Clients can use gRPC directly, or use the [Packet Broker command-line interface (CLI)](https://github.com/packetbroker/pb).
 
-Packet Broker Router uses the following default ports per component:
+Packet Broker Router services are exposed on the following default ports:
 
-| Service | Component | Port |
-| --- | --- | ---: |
-| `TenantManager` | Control Plane | `1900`|
-| `RoutingPolicyManager` | Control Plane | `1900` |
-| `RouterForwarderData` | Data Plane | `1900` |
-| `RouterHomeNetworkData` | Data Plane | `1900` |
-| `RouterRouterData` | Data Plane | `1900` |
+Service | Component | Port
+--- | --- | ---:
+`org.packetbroker.iam.v1.NetworkRegistry` | IAM | `1900`
+`org.packetbroker.iam.v1.TenantRegistry` | IAM | `1900`
+`org.packetbroker.iam.v1.APIKeyVault` | IAM | `1900`
+`org.packetbroker.routing.v1.PolicyManager` | Control Plane | `1900`
+`org.packetbroker.routing.v1.Routes` | Control Plane | `1900`
+`org.packetbroker.routing.v1.ForwarderData` | Data Plane | `1900`
+`org.packetbroker.routing.v1.HomeNetworkData` | Data Plane | `1900`
+`org.packetbroker.routing.v1.RouterData` | Data Plane | `1900`
 
-Packet Broker Router uses TLS mutual authentication. [Learn how to obtain a TLS client certificate](https://github.com/packetbroker/pb/tree/master/configs).
+Packet Broker Router uses token-based HTTP authentication and TLS mutual authentication. [Learn how to obtain a TLS client certificate](https://github.com/packetbroker/pb/tree/master/configs).
 
 ## License
 
