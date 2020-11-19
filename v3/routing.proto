@@ -163,6 +163,8 @@ message RoutedUplinkMessage {
   string forwarder_cluster_id = 4;
   // LoRa Alliance NetID of the Home Network Member.
   uint32 home_network_net_id = 5;
+  // Home Network cluster of the Home Network Member.
+  string home_network_cluster_id = 9;
   // Tenant ID managed by the Home Network Member.
   // This value is empty if it cannot be determined by the Router.
   string home_network_tenant_id = 6;
@@ -178,6 +180,8 @@ message RoutedDownlinkMessage {
   string id = 1;
   // LoRa Alliance NetID of the Home Network Member.
   uint32 home_network_net_id = 2;
+  // Home Network cluster of the Home Network Member.
+  string home_network_cluster_id = 9;
   // Tenant ID managed by the Home Network Member.
   string home_network_tenant_id = 3;
   // LoRa Alliance NetID of the Forwarder Member.
