@@ -89,12 +89,8 @@ message ForwarderIdentifiers {
 
 // Filter for Home Networks to subscribe to forwarded messages.
 message RoutingFilter {
-  oneof forwarders {
-    // Allow Forwarders. Cannot be empty if set.
-    ForwarderIdentifiers forwarder_whitelist = 1;
-    // Disallow Forwarders. Cannot be empty if set.
-    ForwarderIdentifiers forwarder_blacklist = 2;
-  }
+  reserved 1; // Deprecated forwarder_whitelist;
+  reserved 2; // Deprecated forwarder_blacklist;
 
   message JoinRequest {
     message EUIPrefixes {
