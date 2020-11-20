@@ -19,23 +19,9 @@ package org.packetbroker.v3;
 import "google/protobuf/timestamp.proto";
 import "google/protobuf/wrappers.proto";
 import "packetbroker/api/v3/messages.proto";
+import "packetbroker/api/v3/networks.proto";
 
 option go_package = "go.packetbroker.org/api/v3;packetbroker";
-
-message DevAddrPrefix {
-  uint32 value = 1;
-  // Significant bits of value.
-  uint32 length = 2;
-}
-
-message Tenant {
-  // LoRa Alliance NetID of the Member.
-  uint32 net_id = 1;
-  // ID assigned by the Member.
-  string tenant_id = 2;
-  // DevAddr prefixes of the tenant.
-  repeated DevAddrPrefix dev_addr_prefixes = 3;
-}
 
 // Routing policy between a Forwarder and a Home Network.
 message RoutingPolicy {
@@ -73,18 +59,6 @@ message RoutingPolicy {
   }
   // Downlink policy.
   Downlink downlink = 6;
-}
-
-message ForwarderIdentifier {
-  // LoRa Alliance NetID of the Forwarder Member.
-  uint32 net_id = 1;
-  // Forwarder cluster of the Forwarder Member.
-  // If empty, consider NetID only.
-  string forwarder_cluster_id = 2;
-}
-
-message ForwarderIdentifiers {
-  repeated ForwarderIdentifier list = 1;
 }
 
 // Filter for Home Networks to subscribe to forwarded messages.

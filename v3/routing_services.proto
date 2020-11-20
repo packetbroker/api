@@ -19,6 +19,7 @@ package org.packetbroker.v3;
 import "google/protobuf/empty.proto";
 import "packetbroker/api/v3/enums.proto";
 import "packetbroker/api/v3/messages.proto";
+import "packetbroker/api/v3/networks.proto";
 import "packetbroker/api/v3/routing.proto";
 
 option go_package = "go.packetbroker.org/api/v3;packetbroker";
