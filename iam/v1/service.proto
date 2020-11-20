@@ -1,0 +1,172 @@
+// Copyright © 2020 The Things Industries B.V.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+syntax = "proto3";
+
+package org.packetbroker.iam.v1;
+
+import "google/protobuf/empty.proto";
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/wrappers.proto";
+import "packetbroker/api/v3/contact.proto";
+import "packetbroker/api/v3/networks.proto";
+
+option go_package = "go.packetbroker.org/api/iam;iampb";
+
+message ListNetworksRequest {
+  // Limit the number of items.
+  // If 0, use the server's default.
+  uint32 limit = 1;
+  // Number of items to skip.
+  uint32 offset = 2;
+}
+
+message ListNetworksResponse {
+  repeated org.packetbroker.v3.Network networks = 1;
+  // Total number of networks.
+  uint32 total = 2;
+}
+
+message CreateNetworkRequest {
+  org.packetbroker.v3.Network network = 1;
+}
+
+message NetworkRequest {
+  uint32 net_id = 1;
+}
+
+message ContactInfoValue {
+  org.packetbroker.v3.ContactInfo value = 1;
+}
+
+message UpdateNetworkRequest {
+  uint32 net_id = 1;
+  // Name of the tenant.
+  google.protobuf.StringValue name = 2;
+  // Administrative contact.
+  ContactInfoValue administrative_contact = 3;
+  // Technical contact.
+  ContactInfoValue technical_contact = 4;
+}
+
+service NetworkRegistry {
+  // List networks.
+  rpc ListNetworks(ListNetworksRequest) returns (ListNetworksResponse);
+  // Create a network.
+  rpc CreateNetwork(CreateNetworkRequest) returns (org.packetbroker.v3.Network);
+  // Get a network.
+  rpc GetNetwork(NetworkRequest) returns (org.packetbroker.v3.Network);
+  // Update a network.
+  rpc UpdateNetwork(UpdateNetworkRequest) returns (google.protobuf.Empty);
+  // Delete a network.
+  rpc DeleteNetwork(NetworkRequest) returns (google.protobuf.Empty);
+}
+
+message ListTenantsRequest {
+  uint32 net_id = 1;
+  // Limit the number of items.
+  // If 0, use the server's default.
+  uint32 limit = 2;
+  // Number of items to skip.
+  uint32 offset = 3;
+}
+
+message ListTenantsResponse {
+  repeated org.packetbroker.v3.Tenant tenants = 1;
+  // Total number of tenants.
+  uint32 total = 2;
+}
+
+message CreateTenantRequest {
+  org.packetbroker.v3.Tenant tenant = 1;
+}
+
+message TenantRequest {
+  // LoRa Alliance NetID of the Member.
+  uint32 net_id = 1;
+  // ID assigned by the Member.
+  string tenant_id = 2;
+}
+
+message UpdateTenantRequest {
+  // LoRa Alliance NetID of the Member.
+  uint32 net_id = 1;
+  // ID assigned by the Member.
+  string tenant_id = 2;
+  // Name of the tenant.
+  google.protobuf.StringValue name = 3;
+
+  message DevAddrBlocksValue {
+    repeated org.packetbroker.v3.DevAddrBlock value = 1;
+  }
+  // DevAddr blocks of the tenant.
+  DevAddrBlocksValue dev_addr_blocks = 4;
+
+  // Administrative contact.
+  ContactInfoValue administrative_contact = 5;
+  // Technical contact.
+  ContactInfoValue technical_contact = 6;
+}
+
+service TenantRegistry {
+  // List a network's tenants.
+  rpc ListTenants(ListTenantsRequest) returns (ListTenantsResponse);
+  // Create a tenant.
+  rpc CreateTenant(CreateTenantRequest) returns (org.packetbroker.v3.Tenant);
+  // Get a tenant.
+  rpc GetTenant(TenantRequest) returns (org.packetbroker.v3.Tenant);
+  // Update a tenant.
+  rpc UpdateTenant(UpdateTenantRequest) returns (google.protobuf.Empty);
+  // Delete a tenant.
+  rpc DeleteTenant(TenantRequest) returns (google.protobuf.Empty);
+}
+
+message ListAPIKeysRequest {
+  // LoRa Alliance NetID of the Member.
+  uint32 net_id = 1;
+  // ID assigned by the Member (optional).
+  string tenant_id = 2;
+  // Cluster of the Member (optional).
+  string cluster_id = 3;
+}
+
+message ListAPIKeysResponse {
+  repeated org.packetbroker.v3.APIKey keys = 1;
+}
+
+message CreateAPIKeyRequest {
+  // LoRa Alliance NetID of the Member.
+  uint32 net_id = 1;
+  // ID assigned by the Member (optional).
+  string tenant_id = 2;
+  // Cluster of the Member (optional).
+  string cluster_id = 3;
+  // Not valid before this timestamp (optional).
+  google.protobuf.Timestamp not_before = 4;
+  // Not valid after this timestamp (optional).
+  google.protobuf.Timestamp not_after = 5;
+}
+
+message APIKeyRequest {
+  string key_id = 1;
+}
+
+service APIKeyVault {
+  // List API keys.
+  rpc ListAPIKeys(ListAPIKeysRequest) returns (ListAPIKeysResponse);
+  // Create an API key.
+  rpc CreateAPIKey(CreateAPIKeyRequest) returns (org.packetbroker.v3.APIKey);
+  // Delete an API key.
+  rpc DeleteAPIKey(APIKeyRequest) returns (google.protobuf.Empty);
+}
