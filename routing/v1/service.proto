@@ -23,14 +23,14 @@ import "packetbroker/api/v3/routing.proto";
 
 option go_package = "go.packetbroker.org/api/routing;routingpb";
 
-message GetDefaultRoutingPolicyRequest {
+message GetDefaultPolicyRequest {
   // LoRa Alliance NetID of the Forwarder Member.
   uint32 forwarder_net_id = 1;
   // Tenant ID managed by the Forwarder Member.
   string forwarder_tenant_id = 2;
 }
 
-message ListHomeNetworkRoutingPoliciesRequest {
+message ListHomeNetworkPoliciesRequest {
   // LoRa Alliance NetID of the Forwarder Member.
   uint32 forwarder_net_id = 1;
   // Tenant ID managed by the Forwarder Member.
@@ -42,13 +42,13 @@ message ListHomeNetworkRoutingPoliciesRequest {
   uint32 limit = 4;
 }
 
-message ListHomeNetworkRoutingPoliciesResponse {
+message ListHomeNetworkPoliciesResponse {
   repeated org.packetbroker.v3.RoutingPolicy policies = 1;
   // Total number of items.
   uint32 total = 2;
 }
 
-message GetHomeNetworkRoutingPolicyRequest {
+message GetHomeNetworkPolicyRequest {
   // LoRa Alliance NetID of the Forwarder Member.
   uint32 forwarder_net_id = 1;
   // Tenant ID managed by the Forwarder Member.
@@ -59,25 +59,25 @@ message GetHomeNetworkRoutingPolicyRequest {
   string home_network_tenant_id = 4;
 }
 
-message SetRoutingPolicyRequest {
+message SetPolicyRequest {
   org.packetbroker.v3.RoutingPolicy policy = 3;
 }
 
-message GetRoutingPolicyResponse {
+message GetPolicyResponse {
   org.packetbroker.v3.RoutingPolicy policy = 1;
 }
 
-service RoutingPolicyManager {
+service PolicyManager {
   // Get the Default Routing Policy.
-  rpc GetDefaultPolicy(GetDefaultRoutingPolicyRequest) returns (GetRoutingPolicyResponse);
+  rpc GetDefaultPolicy(GetDefaultPolicyRequest) returns (GetPolicyResponse);
   // Set the Default Routing Policy.
-  rpc SetDefaultPolicy(SetRoutingPolicyRequest) returns (google.protobuf.Empty);
+  rpc SetDefaultPolicy(SetPolicyRequest) returns (google.protobuf.Empty);
   // List the Routing Policies with Home Networks.
-  rpc ListHomeNetworkPolicies(ListHomeNetworkRoutingPoliciesRequest) returns (ListHomeNetworkRoutingPoliciesResponse);
+  rpc ListHomeNetworkPolicies(ListHomeNetworkPoliciesRequest) returns (ListHomeNetworkPoliciesResponse);
   // Get the Routing Policy with the Home Network.
-  rpc GetHomeNetworkPolicy(GetHomeNetworkRoutingPolicyRequest) returns (GetRoutingPolicyResponse);
+  rpc GetHomeNetworkPolicy(GetHomeNetworkPolicyRequest) returns (GetPolicyResponse);
   // Set the Routing Policy with the Home Network.
-  rpc SetHomeNetworkPolicy(SetRoutingPolicyRequest) returns (google.protobuf.Empty);
+  rpc SetHomeNetworkPolicy(SetPolicyRequest) returns (google.protobuf.Empty);
 }
 
 message PublishUplinkMessageRequest {
@@ -100,10 +100,10 @@ message PublishDownlinkMessageRequest {
   // LoRa Alliance NetID of the Home Network Member.
   uint32 home_network_net_id = 1;
   // Tenant ID managed by the Home Network Member.
-  string home_network_tenant_id = 2;
-  // Home Network cluster of the Home Network Member.
-  string home_network_cluster_id = 3;
+  string home_network_cluster_id = 2;
   // LoRa Alliance NetID of the Forwarder Member.
+  string home_network_tenant_id = 3;
+  // Home Network cluster of the Home Network Member.
   uint32 forwarder_net_id = 4;
   // Forwarder cluster of the Forwarder Member.
   // In LoRaWAN Class A downlink, this value must be copied from the RoutedUplinkMessage.
@@ -137,10 +137,10 @@ message SubscribeForwarderRequest {
 message SubscribeHomeNetworkRequest {
   // LoRa Alliance NetID of the Home Network Member.
   uint32 home_network_net_id = 1;
-  // Tenant ID managed by the Home Network Member.
-  string home_network_tenant_id = 2;
   // Home Network cluster of the Home Network Member.
-  string home_network_cluster_id = 3;
+  string home_network_cluster_id = 2;
+  // Tenant ID managed by the Home Network Member.
+  string home_network_tenant_id = 3;
   // Routing filters to configure the subscription.
   // A message gets delivered if any of the given filters pass.
   // If no filters are specified, all messages will be delivered.
@@ -150,14 +150,14 @@ message SubscribeHomeNetworkRequest {
   string group = 5;
 }
 
-service RouterForwarderData {
+service ForwarderData {
   // Publish an uplink message.
   rpc Publish(PublishUplinkMessageRequest) returns (PublishUplinkMessageResponse);
   // Subscribe to routed downlink messages.
   rpc Subscribe(SubscribeForwarderRequest) returns (stream org.packetbroker.v3.RoutedDownlinkMessage);
 }
 
-service RouterHomeNetworkData {
+service HomeNetworkData {
   // Publish a downlink message.
   rpc Publish(PublishDownlinkMessageRequest) returns (PublishDownlinkMessageResponse);
   // Subscribe to routed uplink messages.
@@ -179,7 +179,7 @@ message RouteMessageResponse {
   org.packetbroker.v3.MessageDeliveryState state = 1;
 }
 
-service RouterRouterData {
+service RouterData {
   // Route an uplink message.
   rpc RouteUplink(RouteUplinkMessageRequest) returns (RouteMessageResponse);
   // Route a downlink message.
