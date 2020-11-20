@@ -17,6 +17,7 @@ syntax = "proto3";
 package org.packetbroker.routing.v1;
 
 import "google/protobuf/empty.proto";
+import "google/protobuf/timestamp.proto";
 import "packetbroker/api/v3/enums.proto";
 import "packetbroker/api/v3/messages.proto";
 import "packetbroker/api/v3/routing.proto";
@@ -184,4 +185,19 @@ service RouterData {
   rpc RouteUplink(RouteUplinkMessageRequest) returns (RouteMessageResponse);
   // Route a downlink message.
   rpc RouteDownlink(RouteDownlinkMessageRequest) returns (RouteMessageResponse);
+}
+
+message ListRoutesRequest {
+  uint32 limit = 1;
+  google.protobuf.Timestamp created_since = 2;
+}
+
+message ListRoutesResponse {
+  repeated org.packetbroker.v3.DevAddrPrefixRoute routes = 1;
+  uint32 total = 2;
+}
+
+service Routes {
+  // Returns the routes.
+  rpc ListRoutes(ListRoutesRequest) returns (ListRoutesResponse);
 }
