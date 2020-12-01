@@ -17,7 +17,6 @@ syntax = "proto3";
 package org.packetbroker.iam.v1;
 
 import "google/protobuf/empty.proto";
-import "google/protobuf/timestamp.proto";
 import "google/protobuf/wrappers.proto";
 import "packetbroker/api/v3/contact.proto";
 import "packetbroker/api/v3/networks.proto";
@@ -152,10 +151,6 @@ message CreateAPIKeyRequest {
   string tenant_id = 2;
   // Cluster of the Member (optional).
   string cluster_id = 3;
-  // Not valid before this timestamp (optional).
-  google.protobuf.Timestamp not_before = 4;
-  // Not valid after this timestamp (optional).
-  google.protobuf.Timestamp not_after = 5;
 }
 
 message APIKeyRequest {

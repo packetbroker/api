@@ -73,12 +73,8 @@ message APIKey {
   string tenant_id = 3;
   // Cluster of the Member.
   string cluster_id = 4;
-  // Not valid before this timestamp.
-  google.protobuf.Timestamp not_before = 5;
-  // Not valid after this timestamp.
-  google.protobuf.Timestamp not_after = 6;
   // Last authentication timestamp.
-  google.protobuf.Timestamp authenticated_at = 7;
+  google.protobuf.Timestamp authenticated_at = 5;
   // Secret key value.
-  string key = 8;
+  string key = 6;
 }
