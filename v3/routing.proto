@@ -23,6 +23,19 @@ import "packetbroker/api/v3/networks.proto";
 
 option go_package = "go.packetbroker.org/api/v3;packetbroker";
 
+message DevAddrPrefixRoute {
+  // Prefix of the route.
+  DevAddrPrefix prefix = 1;
+  // LoRa Alliance NetID of the Member.
+  uint32 net_id = 2;
+  // Tenant ID assigned by the Member (optional).
+  string tenant_id = 3;
+  // Timestamp when the route was created.
+  google.protobuf.Timestamp created_at = 4;
+  // Cluster of the Home Network Member (optional).
+  string home_network_cluster_id = 5;
+}
+
 // Routing policy between a Forwarder and a Home Network.
 message RoutingPolicy {
   // LoRa Alliance NetID of the Forwarder Member.

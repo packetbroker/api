@@ -33,6 +33,8 @@ message Network {
 }
 
 message Tenant {
+  reserved 3; // Deprecated dev_addr_prefixes;
+
   // LoRa Alliance NetID of the Member.
   uint32 net_id = 1;
   // ID assigned by the Member.
@@ -40,28 +42,23 @@ message Tenant {
   // Name of the tenant.
   string name = 4;
   // DevAddr prefixes of the tenant.
-  repeated DevAddrPrefix dev_addr_prefixes = 3;
+  repeated DevAddrBlock dev_addr_blocks = 5;
   // Administrative contact.
-  ContactInfo administrative_contact = 5;
+  ContactInfo administrative_contact = 6;
   // Technical contact.
-  ContactInfo technical_contact = 6;
+  ContactInfo technical_contact = 7;
 }
 
 message DevAddrPrefix {
   uint32 value = 1;
   // Significant bits of value.
   uint32 length = 2;
-  // Cluster of the Home Network Member (optional).
-  string home_network_cluster_id = 3;
 }
 
-message DevAddrPrefixRoute {
-  // Prefix of the route.
+message DevAddrBlock {
   DevAddrPrefix prefix = 1;
-  // Tenant ID assigned by the Member.
-  string tenant_id = 2;
   // Cluster of the Home Network Member (optional).
-  string home_network_cluster_id = 3;
+  string home_network_cluster_id = 2;
 }
 
 message APIKey {
