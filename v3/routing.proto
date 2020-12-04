@@ -46,6 +46,8 @@ message RoutingPolicy {
   uint32 home_network_net_id = 3;
   // Tenant ID managed by the Home Network Member.
   string home_network_tenant_id = 4;
+  // Timestamp when the policy got last updated.
+  google.protobuf.Timestamp updated_at = 7;
 
   message Uplink {
     // Forward join-request messages.

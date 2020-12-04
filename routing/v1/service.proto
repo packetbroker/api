@@ -24,6 +24,20 @@ import "packetbroker/api/v3/routing.proto";
 
 option go_package = "go.packetbroker.org/api/routing;routingpb";
 
+message ListDefaultPoliciesRequest {
+  // Timestamp to list from for pagination.
+  google.protobuf.Timestamp updated_since = 1;
+  // Limit number items for pagination.
+  // If 0, use the server's default.
+  uint32 limit = 2;
+}
+
+message ListDefaultPoliciesResponse {
+  repeated org.packetbroker.v3.RoutingPolicy policies = 1;
+  // Total number of items.
+  uint32 total = 2;
+}
+
 message GetDefaultPolicyRequest {
   // LoRa Alliance NetID of the Forwarder Member.
   uint32 forwarder_net_id = 1;
@@ -36,8 +50,8 @@ message ListHomeNetworkPoliciesRequest {
   uint32 forwarder_net_id = 1;
   // Tenant ID managed by the Forwarder Member.
   string forwarder_tenant_id = 2;
-  // Number of items to skip for pagination.
-  uint32 offset = 3;
+  // Timestamp to list from for pagination.
+  google.protobuf.Timestamp updated_since = 3;
   // Limit number items for pagination.
   // If 0, use the server's default.
   uint32 limit = 4;
@@ -69,6 +83,8 @@ message GetPolicyResponse {
 }
 
 service PolicyManager {
+  // List the Default Routing Policies.
+  rpc ListDefaultPolicies(ListDefaultPoliciesRequest) returns (ListDefaultPoliciesResponse);
   // Get the Default Routing Policy.
   rpc GetDefaultPolicy(GetDefaultPolicyRequest) returns (GetPolicyResponse);
   // Set the Default Routing Policy.
