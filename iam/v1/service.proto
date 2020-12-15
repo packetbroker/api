@@ -23,6 +23,10 @@ import "packetbroker/api/v3/networks.proto";
 
 option go_package = "go.packetbroker.org/api/iam;iampb";
 
+message DevAddrBlocksValue {
+  repeated org.packetbroker.v3.DevAddrBlock value = 1;
+}
+
 message ListNetworksRequest {
   // Limit the number of items.
   // If 0, use the server's default.
@@ -53,10 +57,12 @@ message UpdateNetworkRequest {
   uint32 net_id = 1;
   // Name of the tenant.
   google.protobuf.StringValue name = 2;
+  // DevAddr blocks of the tenant.
+  DevAddrBlocksValue dev_addr_blocks = 3;
   // Administrative contact.
-  ContactInfoValue administrative_contact = 3;
+  ContactInfoValue administrative_contact = 4;
   // Technical contact.
-  ContactInfoValue technical_contact = 4;
+  ContactInfoValue technical_contact = 5;
 }
 
 service NetworkRegistry {
@@ -105,13 +111,8 @@ message UpdateTenantRequest {
   string tenant_id = 2;
   // Name of the tenant.
   google.protobuf.StringValue name = 3;
-
-  message DevAddrBlocksValue {
-    repeated org.packetbroker.v3.DevAddrBlock value = 1;
-  }
   // DevAddr blocks of the tenant.
   DevAddrBlocksValue dev_addr_blocks = 4;
-
   // Administrative contact.
   ContactInfoValue administrative_contact = 5;
   // Technical contact.

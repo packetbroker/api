@@ -26,10 +26,12 @@ message Network {
   uint32 net_id = 1;
   // Name of the network.
   string name = 2;
+  // DevAddr prefixes of the tenant.
+  repeated DevAddrBlock dev_addr_blocks = 3;
   // Administrative contact.
-  ContactInfo administrative_contact = 3;
+  ContactInfo administrative_contact = 4;
   // Technical contact.
-  ContactInfo technical_contact = 4;
+  ContactInfo technical_contact = 5;
 }
 
 message Tenant {
