@@ -130,14 +130,14 @@ Packet Broker Router services are exposed on the following default ports:
 
 Service | Component | Port
 --- | --- | ---:
-`org.packetbroker.iam.v1.NetworkRegistry` | IAM | `1900`
-`org.packetbroker.iam.v1.TenantRegistry` | IAM | `1900`
-`org.packetbroker.iam.v1.APIKeyVault` | IAM | `1900`
-`org.packetbroker.routing.v1.PolicyManager` | Control Plane | `1900`
-`org.packetbroker.routing.v1.Routes` | Control Plane | `1900`
-`org.packetbroker.routing.v1.ForwarderData` | Data Plane | `1900`
-`org.packetbroker.routing.v1.HomeNetworkData` | Data Plane | `1900`
-`org.packetbroker.routing.v1.RouterData` | Data Plane | `1900`
+`org.packetbroker.iam.v1.NetworkRegistry` | IAM | `443`
+`org.packetbroker.iam.v1.TenantRegistry` | IAM | `443`
+`org.packetbroker.iam.v1.APIKeyVault` | IAM | `443`
+`org.packetbroker.routing.v1.PolicyManager` | Control Plane | `443`
+`org.packetbroker.routing.v1.Routes` | Control Plane | `443`
+`org.packetbroker.routing.v1.ForwarderData` | Data Plane | `443`
+`org.packetbroker.routing.v1.HomeNetworkData` | Data Plane | `443`
+`org.packetbroker.routing.v1.RouterData` | Data Plane | `443`
 
 Packet Broker Router uses token-based HTTP authentication and TLS mutual authentication. [Learn how to obtain a TLS client certificate](https://github.com/packetbroker/pb/tree/master/configs).
 
