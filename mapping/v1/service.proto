@@ -113,6 +113,10 @@ message GetHomeNetworkGatewayRequest {
   uint64 eui = 4;
 }
 
+message GetHomeNetworkGatewayResponse {
+  org.packetbroker.v3.Gateway gateway = 1;
+}
+
 message SubscribeHomeNetworkGatewaysRequest {
   // LoRa Alliance NetID of the Home Network Member.
   uint32 home_network_net_id = 1;
@@ -140,7 +144,7 @@ service HomeNetworkMapper {
   // This rpc sets the total number of gateways in the x-total-count header.
   rpc ListGateways(ListHomeNetworkGatewaysRequest) returns (ListGatewaysResponse);
   // Get a gateway.
-  rpc GetGateway(GetHomeNetworkGatewayRequest) returns (org.packetbroker.v3.Gateway);
+  rpc GetGateway(GetHomeNetworkGatewayRequest) returns (GetHomeNetworkGatewayResponse);
   // Subscribe to gateway updates.
   rpc SubscribeGateway(SubscribeHomeNetworkGatewaysRequest) returns (stream org.packetbroker.v3.Gateway);
 }

@@ -45,6 +45,14 @@ message CreateNetworkRequest {
   org.packetbroker.v3.Network network = 1;
 }
 
+message CreateNetworkResponse {
+  org.packetbroker.v3.Network network = 1;
+}
+
+message GetNetworkResponse {
+  org.packetbroker.v3.Network network = 1;
+}
+
 message NetworkRequest {
   uint32 net_id = 1;
 }
@@ -69,9 +77,9 @@ service NetworkRegistry {
   // List networks.
   rpc ListNetworks(ListNetworksRequest) returns (ListNetworksResponse);
   // Create a network.
-  rpc CreateNetwork(CreateNetworkRequest) returns (org.packetbroker.v3.Network);
+  rpc CreateNetwork(CreateNetworkRequest) returns (CreateNetworkResponse);
   // Get a network.
-  rpc GetNetwork(NetworkRequest) returns (org.packetbroker.v3.Network);
+  rpc GetNetwork(NetworkRequest) returns (GetNetworkResponse);
   // Update a network.
   rpc UpdateNetwork(UpdateNetworkRequest) returns (google.protobuf.Empty);
   // Delete a network.
@@ -97,11 +105,19 @@ message CreateTenantRequest {
   org.packetbroker.v3.Tenant tenant = 1;
 }
 
+message CreateTenantResponse {
+  org.packetbroker.v3.Tenant tenant = 1;
+}
+
 message TenantRequest {
   // LoRa Alliance NetID of the Member.
   uint32 net_id = 1;
   // ID assigned by the Member.
   string tenant_id = 2;
+}
+
+message GetTenantResponse {
+  org.packetbroker.v3.Tenant tenant = 1;
 }
 
 message UpdateTenantRequest {
@@ -123,9 +139,9 @@ service TenantRegistry {
   // List a network's tenants.
   rpc ListTenants(ListTenantsRequest) returns (ListTenantsResponse);
   // Create a tenant.
-  rpc CreateTenant(CreateTenantRequest) returns (org.packetbroker.v3.Tenant);
+  rpc CreateTenant(CreateTenantRequest) returns (CreateTenantResponse);
   // Get a tenant.
-  rpc GetTenant(TenantRequest) returns (org.packetbroker.v3.Tenant);
+  rpc GetTenant(TenantRequest) returns (GetTenantResponse);
   // Update a tenant.
   rpc UpdateTenant(UpdateTenantRequest) returns (google.protobuf.Empty);
   // Delete a tenant.
@@ -158,11 +174,15 @@ message APIKeyRequest {
   string key_id = 1;
 }
 
+message CreateAPIKeyResponse {
+  org.packetbroker.v3.APIKey key = 1;
+}
+
 service APIKeyVault {
   // List API keys.
   rpc ListAPIKeys(ListAPIKeysRequest) returns (ListAPIKeysResponse);
   // Create an API key.
-  rpc CreateAPIKey(CreateAPIKeyRequest) returns (org.packetbroker.v3.APIKey);
+  rpc CreateAPIKey(CreateAPIKeyRequest) returns (CreateAPIKeyResponse);
   // Delete an API key.
   rpc DeleteAPIKey(APIKeyRequest) returns (google.protobuf.Empty);
 }
