@@ -19,6 +19,7 @@ package org.packetbroker.v3;
 import "google/protobuf/empty.proto";
 import "packetbroker/api/v3/enums.proto";
 import "packetbroker/api/v3/messages.proto";
+import "packetbroker/api/v3/networks.proto";
 import "packetbroker/api/v3/routing.proto";
 
 option go_package = "go.packetbroker.org/api/v3;packetbroker";
@@ -133,8 +134,8 @@ service RoutingPolicyManager {
 message PublishUplinkMessageRequest {
   // LoRa Alliance NetID of the Forwarder Member.
   uint32 forwarder_net_id = 1;
-  // Forwarder identifier issued by the Forwarder Member.
-  string forwarder_id = 2;
+  // Forwarder cluster of the Forwarder Member.
+  string forwarder_cluster_id = 2;
   // Tenant ID managed by the Forwarder Member.
   string forwarder_tenant_id = 3;
   // Uplink message to publish.
@@ -153,10 +154,10 @@ message PublishDownlinkMessageRequest {
   string home_network_tenant_id = 2;
   // LoRa Alliance NetID of the Forwarder Member.
   uint32 forwarder_net_id = 3;
-  // Forwarder identifier issued by the Forwarder Member.
+  // Forwarder cluster of the Forwarder Member.
   // In LoRaWAN Class A downlink, this value must be copied from the RoutedUplinkMessage.
   // In LoRaWAN Class C downlink, this value is typically copied from a recent RoutedUplinkMessage.
-  string forwarder_id = 4;
+  string forwarder_cluster_id = 4;
   // Tenant ID managed by the Forwarder Member.
   // In LoRaWAN Class A downlink, this value must be copied from the RoutedUplinkMessage.
   // In LoRaWAN Class C downlink, this value is typically copied from a recent RoutedUplinkMessage.
@@ -173,8 +174,8 @@ message PublishDownlinkMessageResponse {
 message SubscribeForwarderRequest {
   // LoRa Alliance NetID of the Forwarder Member.
   uint32 forwarder_net_id = 1;
-  // Forwarder identifier issued by the Forwarder Member.
-  string forwarder_id = 2;
+  // Forwarder cluster of the Forwarder Member.
+  string forwarder_cluster_id = 2;
   // Tenant ID managed by the Forwarder Member.
   string forwarder_tenant_id = 3;
   // Shared subscription group (optional).

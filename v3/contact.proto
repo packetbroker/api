@@ -14,23 +14,13 @@
 
 syntax = "proto3";
 
-package org.packetbroker.v1beta2;
+package org.packetbroker.v3;
 
-option go_package = "go.packetbroker.org/api/v1beta2;packetbroker";
+option go_package = "go.packetbroker.org/api/v3;packetbroker";
 
-// Pointer to a Key on a Key Exchange.
-message KeyPointer {
-  // Address of the Key Exchange.
-  string key_exchange = 1;
-  // Label of the Key.
-  string label = 2;
-}
-
-// Encrypted data.
-message EncryptedData {
-  // Encrypted data encryption keys with which the value is encrypted using AES-256-GCM.
-  // The map key refers to the key encryption key.
-  map<string, bytes> deks_encrypted = 1;
-  // Encrypted data.
-  bytes value = 2;
+message ContactInfo {
+  // Person name.
+  string name = 1;
+  // Email address.
+  string email = 2;
 }

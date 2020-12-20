@@ -160,6 +160,8 @@ message UplinkMessage {
   uint32 data_rate_index = 6;
   // Frequency (Hz).
   uint64 frequency = 7;
+  // Coding rate.
+  string coding_rate = 11;
 
   message GatewayMetadata {
     // Teaser of the gateway metadata.
