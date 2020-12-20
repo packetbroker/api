@@ -28,11 +28,12 @@ message DevAddrBlocksValue {
 }
 
 message ListNetworksRequest {
+  // Number of items to skip.
+  uint32 offset = 1;
   // Limit the number of items.
   // If 0, use the server's default.
-  uint32 limit = 1;
-  // Number of items to skip.
-  uint32 offset = 2;
+  // The actual limit may be capped by the server.
+  uint32 limit = 2;
 }
 
 message ListNetworksResponse {
@@ -88,11 +89,12 @@ service NetworkRegistry {
 
 message ListTenantsRequest {
   uint32 net_id = 1;
+  // Number of items to skip.
+  uint32 offset = 2;
   // Limit the number of items.
   // If 0, use the server's default.
-  uint32 limit = 2;
-  // Number of items to skip.
-  uint32 offset = 3;
+  // The actual limit may be capped by the server.
+  uint32 limit = 3;
 }
 
 message ListTenantsResponse {

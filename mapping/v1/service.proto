@@ -93,6 +93,7 @@ message ListHomeNetworkGatewaysRequest {
   uint32 offset = 2;
   // Limit number items for pagination.
   // If 0, use the server's default.
+  // The actual limit may be capped by the server.
   uint32 limit = 3;
 }
 
@@ -141,7 +142,6 @@ message SubscribeHomeNetworkGatewaysRequest {
 
 service HomeNetworkMapper {
   // List gateways.
-  // This rpc sets the total number of gateways in the x-total-count header.
   rpc ListGateways(ListHomeNetworkGatewaysRequest) returns (ListGatewaysResponse);
   // Get a gateway.
   rpc GetGateway(GetHomeNetworkGatewayRequest) returns (GetHomeNetworkGatewayResponse);
