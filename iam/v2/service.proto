@@ -1,0 +1,95 @@
+// Copyright © 2021 The Things Industries B.V.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+syntax = "proto3";
+
+package org.packetbroker.iam.v2;
+
+import "google/protobuf/empty.proto";
+import "google/protobuf/wrappers.proto";
+import "packetbroker/api/v3/enums.proto";
+import "packetbroker/api/v3/cluster.proto";
+import "packetbroker/api/v3/networks.proto";
+
+option go_package = "go.packetbroker.org/api/iam/v2;iampb";
+
+message ListNetworkAPIKeysRequest {
+  // LoRa Alliance NetID of the Member.
+  google.protobuf.UInt32Value net_id = 1;
+  // ID assigned by the Member.
+  google.protobuf.StringValue tenant_id = 2;
+  // Cluster of the Member.
+  google.protobuf.StringValue cluster_id = 3;
+}
+
+message ListNetworkAPIKeysResponse {
+  repeated org.packetbroker.v3.NetworkAPIKey keys = 1;
+}
+
+message CreateNetworkAPIKeyRequest {
+  // LoRa Alliance NetID of the Member.
+  uint32 net_id = 1;
+  // ID assigned by the Member.
+  string tenant_id = 2;
+  // Cluster of the Member.
+  string cluster_id = 3;
+  // Network rights.
+  repeated org.packetbroker.v3.APIKeyRight rights = 4;
+}
+
+message APIKeyRequest {
+  string key_id = 1;
+}
+
+message CreateNetworkAPIKeyResponse {
+  org.packetbroker.v3.NetworkAPIKey key = 1;
+}
+
+service NetworkAPIKeyVault {
+  // List API keys.
+  rpc ListAPIKeys(ListNetworkAPIKeysRequest) returns (ListNetworkAPIKeysResponse);
+  // Create an API key.
+  rpc CreateAPIKey(CreateNetworkAPIKeyRequest) returns (CreateNetworkAPIKeyResponse);
+  // Delete an API key.
+  rpc DeleteAPIKey(APIKeyRequest) returns (google.protobuf.Empty);
+}
+
+message ListClusterAPIKeysRequest {
+  // Cluster identifier.
+  google.protobuf.StringValue cluster_id = 3;
+}
+
+message ListClusterAPIKeysResponse {
+  repeated org.packetbroker.v3.ClusterAPIKey keys = 1;
+}
+
+message CreateClusterAPIKeyRequest {
+  // Cluster identifier.
+  string cluster_id = 1;
+  // Network rights.
+  repeated org.packetbroker.v3.APIKeyRight rights = 2;
+}
+
+message CreateClusterAPIKeyResponse {
+  org.packetbroker.v3.ClusterAPIKey key = 1;
+}
+
+service ClusterAPIKeyVault {
+  // List API keys.
+  rpc ListAPIKeys(ListClusterAPIKeysRequest) returns (ListClusterAPIKeysResponse);
+  // Create an API key.
+  rpc CreateAPIKey(CreateClusterAPIKeyRequest) returns (CreateClusterAPIKeyResponse);
+  // Delete an API key.
+  rpc DeleteAPIKey(APIKeyRequest) returns (google.protobuf.Empty);
+}
