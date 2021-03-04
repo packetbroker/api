@@ -160,7 +160,7 @@ message ListAPIKeysRequest {
 }
 
 message ListAPIKeysResponse {
-  repeated org.packetbroker.v3.APIKey keys = 1;
+  repeated org.packetbroker.v3.NetworkAPIKey keys = 1;
 }
 
 message CreateAPIKeyRequest {
@@ -177,7 +177,7 @@ message APIKeyRequest {
 }
 
 message CreateAPIKeyResponse {
-  org.packetbroker.v3.APIKey key = 1;
+  org.packetbroker.v3.NetworkAPIKey key = 1;
 }
 
 service APIKeyVault {

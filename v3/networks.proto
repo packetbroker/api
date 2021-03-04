@@ -18,6 +18,7 @@ package org.packetbroker.v3;
 
 import "google/protobuf/timestamp.proto";
 import "packetbroker/api/v3/contact.proto";
+import "packetbroker/api/v3/enums.proto";
 
 option go_package = "go.packetbroker.org/api/v3;packetbroker";
 
@@ -63,7 +64,7 @@ message DevAddrBlock {
   string home_network_cluster_id = 2;
 }
 
-message APIKey {
+message NetworkAPIKey {
   // Unique identifier of the API key.
   string key_id = 1;
   // LoRa Alliance NetID of the Member.
@@ -72,6 +73,8 @@ message APIKey {
   string tenant_id = 3;
   // Cluster of the Member.
   string cluster_id = 4;
+  // Network rights.
+  repeated APIKeyRight rights = 7;
   // Last authentication timestamp.
   google.protobuf.Timestamp authenticated_at = 5;
   // Secret key value.

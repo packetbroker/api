@@ -82,3 +82,14 @@ enum Modulation {
   // FSK modulation.
   FSK = 1;
 }
+
+enum APIKeyRight {
+  // Right to list networks and get network information.
+  READ_NETWORK = 0;
+  // Right to read contact information of networks.
+  READ_NETWORK_CONTACT = 1;
+  // Right to list network tenants and read tenants information.
+  READ_TENANT = 2;
+  // Right to read contact information of tenants.
+  READ_TENANT_CONTACT = 3;
+}
