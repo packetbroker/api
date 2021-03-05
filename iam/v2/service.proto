@@ -45,7 +45,7 @@ message CreateNetworkAPIKeyRequest {
   // Cluster of the Member.
   string cluster_id = 3;
   // Network rights.
-  repeated org.packetbroker.v3.APIKeyRight rights = 4;
+  repeated org.packetbroker.v3.Right rights = 4;
 }
 
 message APIKeyRequest {
@@ -78,7 +78,7 @@ message CreateClusterAPIKeyRequest {
   // Cluster identifier.
   string cluster_id = 1;
   // Network rights.
-  repeated org.packetbroker.v3.APIKeyRight rights = 2;
+  repeated org.packetbroker.v3.Right rights = 2;
 }
 
 message CreateClusterAPIKeyResponse {

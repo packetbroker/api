@@ -74,7 +74,7 @@ message NetworkAPIKey {
   // Cluster of the Member.
   string cluster_id = 4;
   // Network rights.
-  repeated APIKeyRight rights = 7;
+  repeated Right rights = 7;
   // Last authentication timestamp.
   google.protobuf.Timestamp authenticated_at = 5;
   // Secret key value.

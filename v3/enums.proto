@@ -83,7 +83,7 @@ enum Modulation {
   FSK = 1;
 }
 
-enum APIKeyRight {
+enum Right {
   // Right to list networks and get network information.
   READ_NETWORK = 0;
   // Right to read contact information of networks.
@@ -92,4 +92,8 @@ enum APIKeyRight {
   READ_TENANT = 2;
   // Right to read contact information of tenants.
   READ_TENANT_CONTACT = 3;
+  // Right to list routing policies.
+  READ_ROUTING_POLICY = 4;
+  // Right to list the route table.
+  READ_ROUTE_TABLE = 5;
 }
