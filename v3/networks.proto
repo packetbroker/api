@@ -52,6 +52,13 @@ message Tenant {
   ContactInfo technical_contact = 7;
 }
 
+message NetworkOrTenant {
+  oneof value {
+    Network network = 1;
+    Tenant tenant = 2;
+  }
+}
+
 message DevAddrPrefix {
   uint32 value = 1;
   // Significant bits of value.
