@@ -84,6 +84,25 @@ message GetPolicyResponse {
   org.packetbroker.v3.RoutingPolicy policy = 1;
 }
 
+message ListEffectivePoliciesRequest {
+  // LoRa Alliance NetID of the Home Network Member.
+  uint32 home_network_net_id = 1;
+  // ID assigned by the Home Network Member.
+  string home_network_tenant_id = 2;
+  // Number of items to skip.
+  uint32 offset = 3;
+  // Limit the number of items.
+  // If 0, use the server's default.
+  // The actual limit may be capped by the server.
+  uint32 limit = 4;
+}
+
+message ListEffectivePoliciesResponse {
+  repeated org.packetbroker.v3.RoutingPolicy policies = 1;
+  // Total number of items.
+  uint32 total = 2;
+}
+
 service PolicyManager {
   // List the Default Routing Policies.
   rpc ListDefaultPolicies(ListDefaultPoliciesRequest) returns (ListDefaultPoliciesResponse);
@@ -97,6 +116,8 @@ service PolicyManager {
   rpc GetHomeNetworkPolicy(GetHomeNetworkPolicyRequest) returns (GetPolicyResponse);
   // Set the Routing Policy with the Home Network.
   rpc SetHomeNetworkPolicy(SetPolicyRequest) returns (google.protobuf.Empty);
+  // List the effective Routing Policies, optionally for a specific Home Network.
+  rpc ListEffectivePolicies(ListEffectivePoliciesRequest) returns (ListEffectivePoliciesResponse);
 }
 
 message PublishUplinkMessageRequest {
