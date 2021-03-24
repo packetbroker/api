@@ -116,7 +116,7 @@ service PolicyManager {
   rpc GetHomeNetworkPolicy(GetHomeNetworkPolicyRequest) returns (GetPolicyResponse);
   // Set the Routing Policy with the Home Network.
   rpc SetHomeNetworkPolicy(SetPolicyRequest) returns (google.protobuf.Empty);
-  // List the effective Routing Policies.
+  // List the Routing Policies that Forwarders configured for the Home Network.
   rpc ListEffectivePolicies(ListEffectivePoliciesRequest) returns (ListEffectivePoliciesResponse);
 }
 
