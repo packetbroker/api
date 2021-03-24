@@ -72,6 +72,8 @@ message UpdateNetworkRequest {
   ContactInfoValue administrative_contact = 4;
   // Technical contact.
   ContactInfoValue technical_contact = 5;
+  // Indicates whether the network is listed in the catalog.
+  google.protobuf.BoolValue listed = 6;
 }
 
 service NetworkRegistry {
@@ -135,6 +137,8 @@ message UpdateTenantRequest {
   ContactInfoValue administrative_contact = 5;
   // Technical contact.
   ContactInfoValue technical_contact = 6;
+  // Indicates whether the tenant is listed in the catalog.
+  google.protobuf.BoolValue listed = 7;
 }
 
 service TenantRegistry {
