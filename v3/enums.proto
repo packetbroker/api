@@ -38,7 +38,7 @@ enum Region {
   IN_865_867 = 9;
   RU_864_870 = 10;
   // LoRa 2.4 GHz
-  WW2G4 = 14;
+  WW_2G4 = 14;
 }
 
 // LoRaWAN class for transmitting downlink.
