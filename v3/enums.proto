@@ -28,9 +28,17 @@ enum Region {
   AU_915_928 = 5;
   CN_470_510 = 6;
   AS_923 = 7;
+  // AS923 group 1
+  AS_923_1 = 11;
+  // AS923 group 2
+  AS_923_2 = 12;
+  // AS923 group 3
+  AS_923_3 = 13;
   KR_920_923 = 8;
   IN_865_867 = 9;
   RU_864_870 = 10;
+  // LoRa 2.4 GHz
+  WW2G4 = 14;
 }
 
 // LoRaWAN class for transmitting downlink.

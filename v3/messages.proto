@@ -131,10 +131,24 @@ message GatewayMetadataLocalization {
   }
 }
 
+message GatewayIdentifier {
+  // Extended unique identifier of the gateway.
+  google.protobuf.UInt64Value eui = 1;
+  oneof id {
+    // Unique identifier of the gateway within the namespace of the Forwarder.
+    string plain = 2;
+    // SHA-256 hash of plain.
+    bytes hash = 3;
+  }
+}
+
 // LoRaWAN uplink data message with encrypted PHYPayload and metadata.
 message UplinkMessage {
   // Key encryption keys with which data encryption keys are encrypted.
   map<string, KeyPointer> keks = 1;
+
+  // Identifier of the gateway.
+  GatewayIdentifier gateway_id = 12;
 
   message PHYPayload {
     // Teaser of the PHYPayload.
