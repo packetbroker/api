@@ -33,6 +33,8 @@ message Network {
   ContactInfo administrative_contact = 4;
   // Technical contact.
   ContactInfo technical_contact = 5;
+  // Indicates whether the network is listed in the catalog.
+  bool public = 6;
 }
 
 message Tenant {
@@ -50,6 +52,8 @@ message Tenant {
   ContactInfo administrative_contact = 6;
   // Technical contact.
   ContactInfo technical_contact = 7;
+  // Indicates whether the tenant is listed in the catalog.
+  bool public = 8;
 }
 
 message NetworkOrTenant {
