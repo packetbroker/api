@@ -62,6 +62,10 @@ message ContactInfoValue {
   org.packetbroker.v3.ContactInfo value = 1;
 }
 
+message TargetValue {
+  org.packetbroker.v3.Target value = 1;
+}
+
 message UpdateNetworkRequest {
   uint32 net_id = 1;
   // Name of the tenant.
@@ -74,6 +78,8 @@ message UpdateNetworkRequest {
   ContactInfoValue technical_contact = 5;
   // Indicates whether the network is listed in the catalog.
   google.protobuf.BoolValue listed = 6;
+  // Optional target information.
+  TargetValue target = 7;
 }
 
 service NetworkRegistry {
@@ -139,6 +145,8 @@ message UpdateTenantRequest {
   ContactInfoValue technical_contact = 6;
   // Indicates whether the tenant is listed in the catalog.
   google.protobuf.BoolValue listed = 7;
+  // Optional target information.
+  TargetValue target = 8;
 }
 
 service TenantRegistry {

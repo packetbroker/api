@@ -112,7 +112,8 @@ message Target {
   }
   message CustomAuth {
     // Custom authorization value.
-    // When using an HTTP protocol, this is used as the Authorization header value.
+    // When using an HTTP protocol, this is used as the raw Authorization header value. That is, it may include the
+    // authorization type (Bearer, Basic, Key, etc).
     string value = 1;
   }
   oneof authorization {
