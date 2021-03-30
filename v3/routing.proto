@@ -34,6 +34,8 @@ message DevAddrPrefixRoute {
   google.protobuf.Timestamp created_at = 4;
   // Cluster of the Home Network Member (optional).
   string home_network_cluster_id = 5;
+  // Target information (optional).
+  Target target = 6;
 }
 
 // Routing policy between a Forwarder and a Home Network.

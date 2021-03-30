@@ -35,6 +35,8 @@ message Network {
   ContactInfo technical_contact = 5;
   // Indicates whether the network is listed in the catalog.
   bool listed = 6;
+  // Optional target information.
+  Target target = 7;
 }
 
 message Tenant {
@@ -54,6 +56,8 @@ message Tenant {
   ContactInfo technical_contact = 7;
   // Indicates whether the tenant is listed in the catalog.
   bool listed = 8;
+  // Optional target information.
+  Target target = 9;
 }
 
 message NetworkOrTenant {
@@ -90,4 +94,29 @@ message NetworkAPIKey {
   google.protobuf.Timestamp authenticated_at = 5;
   // Secret key value.
   string key = 6;
+}
+
+message Target {
+  // Protocol to use.
+  TargetProtocol protocol = 1;
+  // Address of the target.
+  // When using an HTTP protocol, this can be a URL with scheme, host, port and path.
+  // This value may be empty if the protocol supports service lookup (e.g. via DNS).
+  string address = 2;
+
+  message BasicAuth {
+    // Username.
+    string username = 1;
+    // Password.
+    string password = 2;
+  }
+  message CustomAuth {
+    // Custom authorization value.
+    // When using an HTTP protocol, this is used as the Authorization header value.
+    string value = 1;
+  }
+  oneof authorization {
+    BasicAuth basic_auth = 3;
+    CustomAuth custom_auth = 4;
+  }
 }
