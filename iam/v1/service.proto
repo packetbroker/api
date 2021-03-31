@@ -62,18 +62,30 @@ message ContactInfoValue {
   org.packetbroker.v3.ContactInfo value = 1;
 }
 
+message TargetValue {
+  org.packetbroker.v3.Target value = 1;
+}
+
 message UpdateNetworkRequest {
   uint32 net_id = 1;
   // Name of the tenant.
+  // This field gets updated when a value is set.
   google.protobuf.StringValue name = 2;
   // DevAddr blocks of the tenant.
+  // This field gets updated when a value is set.
   DevAddrBlocksValue dev_addr_blocks = 3;
   // Administrative contact.
+  // This field gets updated when a value is set.
   ContactInfoValue administrative_contact = 4;
   // Technical contact.
+  // This field gets updated when a value is set.
   ContactInfoValue technical_contact = 5;
   // Indicates whether the network is listed in the catalog.
+  // This field gets updated when a value is set.
   google.protobuf.BoolValue listed = 6;
+  // Target information.
+  // This field gets updated when a value is set.
+  TargetValue target = 7;
 }
 
 service NetworkRegistry {
@@ -126,19 +138,29 @@ message GetTenantResponse {
 
 message UpdateTenantRequest {
   // LoRa Alliance NetID of the Member.
+  // This field gets updated when a value is set.
   uint32 net_id = 1;
   // ID assigned by the Member.
+  // This field gets updated when a value is set.
   string tenant_id = 2;
   // Name of the tenant.
+  // This field gets updated when a value is set.
   google.protobuf.StringValue name = 3;
   // DevAddr blocks of the tenant.
+  // This field gets updated when a value is set.
   DevAddrBlocksValue dev_addr_blocks = 4;
   // Administrative contact.
+  // This field gets updated when a value is set.
   ContactInfoValue administrative_contact = 5;
   // Technical contact.
+  // This field gets updated when a value is set.
   ContactInfoValue technical_contact = 6;
   // Indicates whether the tenant is listed in the catalog.
+  // This field gets updated when a value is set.
   google.protobuf.BoolValue listed = 7;
+  // Target information.
+  // This field gets updated when a value is set.
+  TargetValue target = 8;
 }
 
 service TenantRegistry {

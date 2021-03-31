@@ -104,4 +104,13 @@ enum Right {
   READ_ROUTING_POLICY = 4;
   // Right to list the route table.
   READ_ROUTE_TABLE = 5;
+  // Right to read target authentication information.
+  READ_TARGET_AUTH = 6;
+}
+
+enum TargetProtocol {
+  // LoRaWAN Backend Interfaces (TS002) 1.0.
+  TS002_V1_0 = 0;
+  // LoRaWAN Backend Interfaces (TS002) 1.1.0.
+  TS002_V1_1_0 = 1;
 }
