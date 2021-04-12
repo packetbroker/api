@@ -236,26 +236,3 @@ message DownlinkMessage {
   // Priority of the downlink message.
   DownlinkMessagePriority priority = 8;
 }
-
-// Transmission result.
-message TransmissionResult {
-  enum Code {
-    SUCCESS = 0;
-    UNKNOWN_ERROR = 1;
-    TOO_LATE = 2;
-    TOO_EARLY = 3;
-    COLLISION_PACKET = 4;
-    COLLISION_BEACON = 5;
-    TX_FREQUENCY = 6;
-    TX_POWER = 7;
-    GPS_UNLOCKED = 8;
-  }
-  // Result code.
-  Code code = 1;
-  // RX1 frequency.
-  google.protobuf.UInt64Value rx1_frequency = 2;
-  // RX2 frequency.
-  google.protobuf.UInt64Value rx2_frequency = 3;
-  // Downlink token copied from the DownlinkMessage.
-  bytes downlink_token = 4;
-}
