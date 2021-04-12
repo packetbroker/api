@@ -75,6 +75,41 @@ enum MessageDeliveryState {
   PROCESSED = 3;
 }
 
+enum UplinkMessageProcessingError {
+  UPLINK_UNKNOWN_ERROR = 0;
+  // The message does not pass the routing policy.
+  UPLINK_ROUTING_POLICY = 1;
+  // A matching device session could not be found.
+  // This can be caused by an unknown DevAddr or a MIC check failure.
+  MATCH_SESSION = 2;
+  // Internal error.
+  UPLINK_INTERNAL = 3;
+  // No Home Network endpoints found.
+  NO_HOME_NETWORK_ENDPOINTS = 4;
+}
+
+enum DownlinkMessageProcessingError {
+  DOWNLINK_UNKNOWN_ERROR = 0;
+  // The packet was sent too late for transmission, i.e. the window closed.
+  TOO_LATE = 1;
+  // The packet was sent too early for transmission, i.e. the transmission time is too far in the future.
+  TOO_EARLY = 2;
+  // There was a collision with another packet.
+  COLLISION_PACKET = 3;
+  // There was a collision with the class B beacon.
+  COLLISION_BEACON = 4;
+  // Wrong frequency.
+  TX_FREQUENCY = 5;
+  // Wrong TX power.
+  TX_POWER = 6;
+  // No GPS lock while the transmission requires an absolute time.
+  GPS_UNLOCKED = 7;
+  // The message does not pass the routing policy.
+  DOWNLINK_ROUTING_POLICY = 8;
+  // Internal error.
+  DOWNLINK_INTERNAL = 9;
+}
+
 enum TerrestrialAntennaPlacement {
   // Unknown antenna placement.
   UNKNOWN_PLACEMENT = 0;

@@ -195,6 +195,8 @@ service ForwarderData {
   rpc Publish(PublishUplinkMessageRequest) returns (PublishUplinkMessageResponse);
   // Subscribe to routed downlink messages.
   rpc Subscribe(SubscribeForwarderRequest) returns (stream org.packetbroker.v3.RoutedDownlinkMessage);
+  // Report the message state change of a downlink message.
+  rpc ReportDownlinkMessageDeliveryState(DownlinkMessageDeliveryStateChangeRequest) returns (google.protobuf.Empty);
 }
 
 service HomeNetworkData {
@@ -202,6 +204,8 @@ service HomeNetworkData {
   rpc Publish(PublishDownlinkMessageRequest) returns (PublishDownlinkMessageResponse);
   // Subscribe to routed uplink messages.
   rpc Subscribe(SubscribeHomeNetworkRequest) returns (stream org.packetbroker.v3.RoutedUplinkMessage);
+  // Report the message state change of an uplink message.
+  rpc ReportUplinkMessageDeliveryState(UplinkMessageDeliveryStateChangeRequest) returns (google.protobuf.Empty);
 }
 
 message RouteUplinkMessageRequest {
@@ -217,6 +221,14 @@ message RouteDownlinkMessageRequest {
 message RouteMessageResponse {
   // Delivery state of the message.
   org.packetbroker.v3.MessageDeliveryState state = 1;
+}
+
+message DownlinkMessageDeliveryStateChangeRequest {
+  org.packetbroker.v3.DownlinkMessageDeliveryStateChange state_change = 1;
+}
+
+message UplinkMessageDeliveryStateChangeRequest {
+  org.packetbroker.v3.UplinkMessageDeliveryStateChange state_change = 1;
 }
 
 service RouterData {
