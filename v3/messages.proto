@@ -201,10 +201,8 @@ message UplinkMessage {
   GatewayMetadata gateway_metadata = 8;
 
   // Forwarder uplink token (optional).
-  // Subscribing Home Networks receive this value if the Routing Policy allows any downlink.
   bytes forwarder_uplink_token = 9;
   // Gateway uplink token (optional).
-  // Subscribing Home Networks receive this value if the Routing Policy allows any downlink.
   bytes gateway_uplink_token = 10;
 }
 
