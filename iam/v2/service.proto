@@ -94,7 +94,7 @@ service ClusterAPIKeyVault {
   rpc DeleteAPIKey(APIKeyRequest) returns (google.protobuf.Empty);
 }
 
-message ListHomeNetworksRequest {
+message ListNetworksRequest {
   // Number of items to skip.
   uint32 offset = 1;
   // Limit the number of items.
@@ -103,13 +103,15 @@ message ListHomeNetworksRequest {
   uint32 limit = 2;
 }
 
-message ListHomeNetworksResponse {
-  repeated org.packetbroker.v3.NetworkOrTenant home_networks = 1;
-  // Total number of Home Networks.
+message ListNetworksResponse {
+  repeated org.packetbroker.v3.NetworkOrTenant networks = 1;
+  // Total number of networks.
   uint32 total = 2;
 }
 
 service Catalog {
+  // List the networks and tenants.
+  rpc ListNetworks(ListNetworksRequest) returns (ListNetworksResponse);
   // List all the networks and tenants that are Home Networks, i.e. those with DevAddr blocks assigned.
-  rpc ListHomeNetworks(ListHomeNetworksRequest) returns (ListHomeNetworksResponse);
+  rpc ListHomeNetworks(ListNetworksRequest) returns (ListNetworksResponse);
 }
