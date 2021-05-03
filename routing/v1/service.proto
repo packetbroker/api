@@ -20,6 +20,7 @@ import "google/protobuf/empty.proto";
 import "google/protobuf/timestamp.proto";
 import "packetbroker/api/v3/enums.proto";
 import "packetbroker/api/v3/messages.proto";
+import "packetbroker/api/v3/networks.proto";
 import "packetbroker/api/v3/routing.proto";
 
 option go_package = "go.packetbroker.org/api/routing;routingpb";
@@ -103,6 +104,25 @@ message ListEffectivePoliciesResponse {
   uint32 total = 2;
 }
 
+message ListNetworksWithPolicyRequest {
+  // LoRa Alliance NetID of the Member.
+  uint32 net_id = 1;
+  // ID assigned by the Member.
+  string tenant_id = 2;
+  // Number of items to skip.
+  uint32 offset = 3;
+  // Limit the number of items.
+  // If 0, use the server's default.
+  // The actual limit may be capped by the server.
+  uint32 limit = 4;
+}
+
+message ListNetworksResponse {
+  repeated org.packetbroker.v3.NetworkOrTenant networks = 1;
+  // Total number of networks.
+  uint32 total = 2;
+}
+
 service PolicyManager {
   // List the Default Routing Policies.
   rpc ListDefaultPolicies(ListDefaultPoliciesRequest) returns (ListDefaultPoliciesResponse);
@@ -118,6 +138,8 @@ service PolicyManager {
   rpc SetHomeNetworkPolicy(SetPolicyRequest) returns (google.protobuf.Empty);
   // List the Routing Policies that Forwarders configured for the Home Network.
   rpc ListEffectivePolicies(ListEffectivePoliciesRequest) returns (ListEffectivePoliciesResponse);
+  // List the networks and tenants that have a policy defined, either as Home Network or as Forwarder.
+  rpc ListNetworksWithPolicy(ListNetworksWithPolicyRequest) returns (ListNetworksResponse);
 }
 
 message PublishUplinkMessageRequest {
