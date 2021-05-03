@@ -101,6 +101,10 @@ message ListNetworksRequest {
   // If 0, use the server's default.
   // The actual limit may be capped by the server.
   uint32 limit = 2;
+  // Filter tenants by ID.
+  string tenant_id_contains = 3;
+  // Filter networks by name.
+  string name_contains = 4;
 }
 
 message ListNetworksResponse {
