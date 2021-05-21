@@ -1,0 +1,122 @@
+// Copyright © 2021 The Things Industries B.V.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+syntax = "proto3";
+
+package org.packetbroker.mapping.v2;
+
+import "google/protobuf/empty.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/wrappers.proto";
+import "packetbroker/api/v3/contact.proto";
+import "packetbroker/api/v3/gateway.proto";
+
+option go_package = "go.packetbroker.org/api/mapping/v2;mappingpb";
+
+message GetDefaultGatewayVisibilityRequest {
+  // LoRa Alliance NetID of the Forwarder Member.
+  uint32 forwarder_net_id = 1;
+  // Tenant ID managed by the Forwarder Member.
+  string forwarder_tenant_id = 2;
+}
+
+message SetDefaultGatewayVisibilityRequest {
+  // LoRa Alliance NetID of the Forwarder Member.
+  uint32 forwarder_net_id = 1;
+  // Tenant ID managed by the Forwarder Member.
+  string forwarder_tenant_id = 2;
+  // New default Gateway Visibility.
+  org.packetbroker.v3.GatewayVisibility visibility = 3;
+}
+
+message GetHomeNetworkGatewayVisibilityRequest {
+  // LoRa Alliance NetID of the Forwarder Member.
+  uint32 forwarder_net_id = 1;
+  // Tenant ID managed by the Forwarder Member.
+  string forwarder_tenant_id = 2;
+  // LoRa Alliance NetID of the Home Network Member.
+  uint32 home_network_net_id = 3;
+  // Tenant ID managed by the Home Network Member.
+  string home_network_tenant_id = 4;
+}
+
+message SetHomeNetworkGatewayVisibilityRequest {
+  // LoRa Alliance NetID of the Forwarder Member.
+  uint32 forwarder_net_id = 1;
+  // Tenant ID managed by the Forwarder Member.
+  string forwarder_tenant_id = 2;
+  // LoRa Alliance NetID of the Home Network Member.
+  uint32 home_network_net_id = 3;
+  // Tenant ID managed by the Home Network Member.
+  string home_network_tenant_id = 4;
+  // New Gateway Visibility for the Home Network Member.
+  org.packetbroker.v3.GatewayVisibility visibility = 5;
+}
+
+message GetGatewayVisibilityResponse {
+  org.packetbroker.v3.GatewayVisibility visibility = 1;
+}
+
+service GatewayVisibilityManager {
+  // Get the Default Gateway Visibility.
+  rpc GetDefaultVisibility(GetDefaultGatewayVisibilityRequest) returns (GetGatewayVisibilityResponse);
+  // Set the Default Gateway Visibility.
+  rpc SetDefaultVisibility(SetDefaultGatewayVisibilityRequest) returns (google.protobuf.Empty);
+  // Get the Gateway Visibility with the Home Network.
+  rpc GetHomeNetworkVisibility(GetHomeNetworkGatewayVisibilityRequest) returns (GetGatewayVisibilityResponse);
+  // Set the Gateway Visibility with the Home Network.
+  rpc SetHomeNetworkVisibility(SetHomeNetworkGatewayVisibilityRequest) returns (google.protobuf.Empty);
+}
+
+message UpdateGatewayRequest {
+  // LoRa Alliance NetID of the Forwarder Member.
+  uint32 forwarder_net_id = 1;
+  // Tenant ID managed by the Forwarder Member.
+  string forwarder_tenant_id = 2;
+  // Forwarder cluster of the Forwarder Member (optional).
+  string forwarder_cluster_id = 3;
+  // Identifier of the gateway.
+  org.packetbroker.v3.GatewayIdentifier forwarder_gateway_id = 4;
+  // Gateway location.
+  // This field gets updated when a value is set.
+  org.packetbroker.v3.GatewayLocationValue gateway_location = 5;
+  // Administrative contact.
+  // This field gets updated when a value is set.
+  org.packetbroker.v3.ContactInfoValue administrative_contact = 6;
+  // Technical contact.
+  // This field gets updated when a value is set.
+  org.packetbroker.v3.ContactInfoValue technical_contact = 7;
+  // Indicates whether the gateway is online.
+  // This field gets updated when a value is set.
+  google.protobuf.BoolValue online = 8;
+  // If the gateway is online, this value indicates the time-to-live for the online status. This value must be set when
+  // the online field is set and true.
+  // When the online status expires, the gateway will be offline.
+  // To keep the gateway online, update online status before the status expires.
+  google.protobuf.Duration online_ttl = 9;
+  // Frequency plan of the gateway.
+  // This field gets updated when a value is set.
+  org.packetbroker.v3.GatewayFrequencyPlan frequency_plan = 10;
+  // Received packets rate (number of packets per hour).
+  // This field gets updated when a value is set.
+  google.protobuf.FloatValue rx_rate = 11;
+  // Transmitted packets rate (number of packets per hour).
+  // This field gets updated when a value is set.
+  google.protobuf.FloatValue tx_rate = 12;
+}
+
+service Mapper {
+  // Update a gateway.
+  rpc UpdateGateway(UpdateGatewayRequest) returns (google.protobuf.Empty);
+}
