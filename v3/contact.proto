@@ -19,8 +19,14 @@ package org.packetbroker.v3;
 option go_package = "go.packetbroker.org/api/v3;packetbroker";
 
 message ContactInfo {
-  // Person name.
+  // Person or organization name.
   string name = 1;
   // Email address.
   string email = 2;
+  // URL.
+  string url = 3;
+}
+
+message ContactInfoValue {
+  ContactInfo value = 1;
 }
