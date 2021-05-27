@@ -78,11 +78,59 @@
                 "summary": "Amsterdam"
               }
             }
+          },
+          {
+            "name": "offset",
+            "description": "Number of gateways to skip",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          {
+            "name": "limit",
+            "description": "Number of gateways to return. A zero value uses the server's default limit",
+            "in":"query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 1000
+            }
+          },
+          {
+            "name": "updatedSince",
+            "description": "Return gateways that were updated since the given timestamp",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "online",
+            "description": "When true, return only gateways that are online",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
           }
         ],
         "responses": {
           "200": {
             "description": "Gateways",
+            "headers": {
+              "X-Total-Count": {
+                "schema": {
+                  "type": "integer"
+                },
+                "description": "Total number of gateways matching the filter criteria"
+              }
+            },
             "content": {
               "application/json": {
                 "schema": {
@@ -129,7 +177,7 @@
               }
             },
             "links": {
-              "GetGateway": {
+              "getGateway": {
                 "$ref": "#/components/links/Gateway"
               }
             }
