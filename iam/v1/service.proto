@@ -60,10 +60,6 @@ message NetworkRequest {
   uint32 net_id = 1;
 }
 
-message ContactInfoValue {
-  org.packetbroker.v3.ContactInfo value = 1;
-}
-
 message TargetValue {
   org.packetbroker.v3.Target value = 1;
 }
@@ -78,10 +74,10 @@ message UpdateNetworkRequest {
   DevAddrBlocksValue dev_addr_blocks = 3;
   // Administrative contact.
   // This field gets updated when a value is set.
-  ContactInfoValue administrative_contact = 4;
+  org.packetbroker.v3.ContactInfoValue administrative_contact = 4;
   // Technical contact.
   // This field gets updated when a value is set.
-  ContactInfoValue technical_contact = 5;
+  org.packetbroker.v3.ContactInfoValue technical_contact = 5;
   // Indicates whether the network is listed in the catalog.
   // This field gets updated when a value is set.
   google.protobuf.BoolValue listed = 6;
@@ -157,10 +153,10 @@ message UpdateTenantRequest {
   DevAddrBlocksValue dev_addr_blocks = 4;
   // Administrative contact.
   // This field gets updated when a value is set.
-  ContactInfoValue administrative_contact = 5;
+  org.packetbroker.v3.ContactInfoValue administrative_contact = 5;
   // Technical contact.
   // This field gets updated when a value is set.
-  ContactInfoValue technical_contact = 6;
+  org.packetbroker.v3.ContactInfoValue technical_contact = 6;
   // Indicates whether the tenant is listed in the catalog.
   // This field gets updated when a value is set.
   google.protobuf.BoolValue listed = 7;

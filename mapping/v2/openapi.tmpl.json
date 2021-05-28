@@ -1,0 +1,566 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "version": "2.0.0",
+    "title": "Packet Broker Mapper",
+    "description": "Packet Broker Mapper provides geospatial services for mapping LoRaWAN infrastructure.",
+    "contact": {
+      "name": "Packet Broker Operations",
+      "email": "ops@packetbroker.net",
+      "url": "https://packetbroker.net"
+    },
+    "license": {
+      "name": "Apache 2.0",
+      "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
+    }
+  },
+  "servers": [
+    {
+      "url": "{{ .Server }}",
+      "description": "Packet Broker Mapper API"
+    }
+  ],
+  "security": [
+    {
+      "OAuth2": [
+        "networks"
+      ]
+    }
+  ],
+  "paths": {
+    "/gateways": {
+      "get": {
+        "description": "Returns all gateways that the caller has access to.",
+        "operationId": "listGateways",
+        "parameters": [
+          {
+            "name": "distanceWithin",
+            "description": "Filter by distance from a coordinate",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/Point"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "latitude": {
+                      "type": "number"
+                    },
+                    "longitude": {
+                      "type": "number"
+                    },
+                    "distance": {
+                      "type": "number",
+                      "description": "Distance (meters)",
+                      "minimum": 0,
+                      "format": "double"
+                    }
+                  },
+                  "required": [
+                    "latitude",
+                    "longitude",
+                    "distance"
+                  ]
+                }
+              ]
+            },
+            "style": "deepObject",
+            "examples": {
+              "amsterdam": {
+                "value": {
+                  "latitude": 52.3676,
+                  "longitude": 4.9041,
+                  "distance": 7500
+                },
+                "summary": "Amsterdam"
+              }
+            }
+          },
+          {
+            "name": "offset",
+            "description": "Number of gateways to skip",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          {
+            "name": "limit",
+            "description": "Number of gateways to return. A zero value uses the server's default limit",
+            "in":"query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 1000
+            }
+          },
+          {
+            "name": "updatedSince",
+            "description": "Return gateways that were updated since the given timestamp",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "online",
+            "description": "When true, return only gateways that are online",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Gateways",
+            "headers": {
+              "X-Total-Count": {
+                "schema": {
+                  "type": "integer"
+                },
+                "description": "Total number of gateways matching the filter criteria"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Gateway"
+                  }
+                },
+                "examples": {
+                  "Amsterdam": {
+                    "summary": "Amsterdam",
+                    "value": [
+                      {
+                        "netID": "000013",
+                        "tenantID": "ttn",
+                        "id": "tti-hq",
+                        "eui": "70B3D57ED0000001",
+                        "clusterID": "ttn-eu1",
+                        "location": {
+                          "latitude": 52.3664025,
+                          "longitude": 4.8914439,
+                          "altitude": 16,
+                          "hdop": 5
+                        },
+                        "antennaPlacement": "INDOOR",
+                        "antennaCount": 1,
+                        "fineTimestamps": false,
+                        "online": true
+                      },
+                      {
+                        "netID": "000013",
+                        "tenantID": "ttn",
+                        "id": "waag",
+                        "eui": "EEFBC0B96C5C8683",
+                        "clusterID": "ttn-eu1",
+                        "location": {
+                          "latitude": 52.3767409,
+                          "longitude": 4.9078567
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            "links": {
+              "getGateway": {
+                "$ref": "#/components/links/Gateway"
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/gateway/{id}": {
+      "get": {
+        "description": "Get gateway details.",
+        "operationId": "getGateway",
+        "parameters": [
+          {
+            "name": "id",
+            "description": "Identifier of the gateway",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/GatewayIdentifier"
+            },
+            "explode": true,
+            "examples": {
+              "tti-hq": {
+                "summary": "The Things Industries HQ",
+                "value": {
+                  "netID": "000013",
+                  "tenantID": "ttn",
+                  "id": "tti-hq"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Gateway details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GatewayDetails"
+                },
+                "examples": {
+                  "tti-hq": {
+                    "summary": "The Things Industries HQ",
+                    "value": {
+                      "netID": "000013",
+                      "tenantID": "ttn",
+                      "id": "tti-hq",
+                      "eui": "70B3D57ED0000001",
+                      "clusterID": "ttn-eu1",
+                      "location": {
+                        "latitude": 52.3664025,
+                        "longitude": 4.8914439,
+                        "altitude": 16,
+                        "hdop": 5
+                      },
+                      "antennaPlacement": "INDOOR",
+                      "antennaCount": 1,
+                      "fineTimestamps": false,
+                      "online": true,
+                      "technicalContact": {
+                        "name": "Johan Stokking",
+                        "email": "johan@thethingsindustries.com"
+                      },
+                      "frequencyPlan": {
+                        "region": "EU_863_870",
+                        "loraMultiSFChannels": [
+                          868100000,
+                          868300000,
+                          868500000,
+                          867100000,
+                          867300000,
+                          867500000,
+                          867700000,
+                          867900000
+                        ],
+                        "fskChannel": 869525000
+                      },
+                      "rxRate": 1.46,
+                      "txRate": 0.62
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Gateway not found"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "links": {
+      "Gateway": {
+        "operationId": "getGateway",
+        "parameters": {
+          "id": {
+            "netID": "$response.body#/netID",
+            "tenantID": "$response.body#/tenantID",
+            "id": "$response.body#/id"
+          }
+        }
+      }
+    },
+    "schemas": {
+      "Error": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "Point": {
+        "type": "object",
+        "properties": {
+          "latitude": {
+            "type": "number",
+            "minimum": -90,
+            "maximum": 90,
+            "format": "double",
+            "description": "The North–South position (degrees; -90 to +90), where 0 is the equator, North pole is positive, South pole is negative"
+          },
+          "longitude": {
+            "type": "number",
+            "minimum": -180,
+            "maximum": 180,
+            "format": "double",
+            "description": "The East-West position (degrees; -180 to +180), where 0 is the Prime Meridian (Greenwich), East is positive, West is negative"
+          },
+          "hdop": {
+            "type": "number",
+            "minimum": 0,
+            "format": "double",
+            "description": "Horizontal dilution of precision"
+          }
+        },
+        "required": [
+          "latitude",
+          "longitude"
+        ]
+      },
+      "PointZ": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Point"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "altitude": {
+                "type": "number",
+                "format": "double",
+                "description": "Altitude (meters), where 0 is the mean sea level"
+              }
+            }
+          }
+        ]
+      },
+      "GatewayIdentifier": {
+        "type": "object",
+        "properties": {
+          "netID": {
+            "type": "string",
+            "pattern": "^[0-9A-F]{6}$",
+            "description": "LoRa Alliance NetID (hex)"
+          },
+          "tenantID": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Tenant within the NetID"
+          },
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Gateway ID"
+          }
+        },
+        "required": [
+          "netID",
+          "id"
+        ]
+      },
+      "Frequency": {
+        "type": "integer",
+        "description": "Frequency (Hz)",
+        "format": "int64",
+        "minimum": 0
+      },
+      "LoRaSingleSFChannel": {
+        "type": "object",
+        "properties": {
+          "frequency": {
+            "$ref": "#/components/schemas/Frequency"
+          },
+          "spreadingFactor": {
+            "type": "integer",
+            "minimum": 5,
+            "maximum": 12
+          },
+          "bandwidth": {
+            "type": "integer",
+            "description": "Bandwidth (Hz)",
+            "minimum": 0
+          }
+        },
+        "required": [
+          "frequency",
+          "spreadingFactor",
+          "bandwidth"
+        ]
+      },
+      "FrequencyPlan": {
+        "type": "object",
+        "properties": {
+          "region": {
+            "enum": [
+              "UNKNOWN_REGION",
+              "EU_863_870",
+              "US_902_928",
+              "CN_779_787",
+              "EU_433",
+              "AU_915_928",
+              "CN_470_510",
+              "AS_923",
+              "AS_923_1",
+              "AS_923_2",
+              "AS_923_3",
+              "KR_920_923",
+              "IN_865_867",
+              "RU_864_870",
+              "WW_2G4"
+            ]
+          },
+          "loraMultiSFChannels": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Frequency"
+            }
+          },
+          "loraSingleSFChannels": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LoRaSingleSFChannel"
+            }
+          },
+          "fskChannel": {
+            "$ref": "#/components/schemas/Frequency"
+          }
+        },
+        "required": [
+          "region"
+        ]
+      },
+      "Gateway": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/GatewayIdentifier"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "eui": {
+                "type": "string",
+                "pattern": "^[0-9A-F]{16}$",
+                "description": "64-bit EUI (hex)"
+              },
+              "clusterID": {
+                "type": "string",
+                "description": "Cluster that the gateway is connected to"
+              },
+              "location": {
+                "$ref": "#/components/schemas/PointZ"
+              },
+              "antennaPlacement": {
+                "enum": [
+                  "UNKNOWN_PLACEMENT",
+                  "INDOOR",
+                  "OUTDOOR"
+                ]
+              },
+              "antennaCount": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 255
+              },
+              "fineTimestamps": {
+                "type": "boolean",
+                "description": "Whether the gateway produces fine timestamps"
+              },
+              "online": {
+                "type": "boolean",
+                "description": "Whether the gateway is currently online"
+              }
+            }
+          }
+        ]
+      },
+      "GatewayDetails": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Gateway"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "administrativeContact": {
+                "$ref": "#/components/schemas/ContactInfo"
+              },
+              "technicalContact": {
+                "$ref": "#/components/schemas/ContactInfo"
+              },
+              "frequencyPlan": {
+                "$ref": "#/components/schemas/FrequencyPlan"
+              },
+              "rxRate": {
+                "type": "number",
+                "description": "Received message rate (messages per second)",
+                "minimum": 0
+              },
+              "txRate": {
+                "type": "number",
+                "description": "Transmitted message rate (messages per second)",
+                "minimum": 0
+              }
+            }
+          }
+        ]
+      },
+      "ContactInfo": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "url": {
+            "type": "string",
+            "format": "uri"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "OAuth2": {
+        "type": "oauth2",
+        "flows": {
+          "clientCredentials": {
+            "tokenUrl": "{{ .TokenURL }}",
+            "scopes": {
+              "networks": "Networks"
+            }
+          }
+        }
+      }
+    }
+  }
+}

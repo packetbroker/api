@@ -20,6 +20,7 @@ import "google/protobuf/duration.proto";
 import "google/protobuf/timestamp.proto";
 import "google/protobuf/wrappers.proto";
 import "packetbroker/api/v3/enums.proto";
+import "packetbroker/api/v3/gateway.proto";
 import "packetbroker/api/v3/keys.proto";
 import "packetbroker/api/v3/location.proto";
 
@@ -128,17 +129,6 @@ message GatewayMetadataLocalization {
   oneof value {
     Terrestrial terrestrial = 1;
     Satellite satellite = 2;
-  }
-}
-
-message GatewayIdentifier {
-  // Extended unique identifier of the gateway.
-  google.protobuf.UInt64Value eui = 1;
-  oneof id {
-    // Unique identifier of the gateway within the namespace of the Forwarder.
-    string plain = 2;
-    // SHA-256 hash of plain.
-    bytes hash = 3;
   }
 }
 

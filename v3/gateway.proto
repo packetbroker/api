@@ -1,0 +1,173 @@
+// Copyright © 2021 The Things Industries B.V.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+syntax = "proto3";
+
+package org.packetbroker.v3;
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/wrappers.proto";
+import "packetbroker/api/v3/enums.proto";
+import "packetbroker/api/v3/contact.proto";
+import "packetbroker/api/v3/location.proto";
+
+option go_package = "go.packetbroker.org/api/v3;packetbroker";
+
+message GatewayVisibility {
+  // Show location.
+  bool location = 1;
+  // Show antenna placement (indoor/outdoor).
+  bool antenna_placement = 2;
+  // Show antenna count.
+  bool antenna_count = 3;
+  // Show whether the gateway produces fine timestamps.
+  bool fine_timestamps = 4;
+  // Show contact information.
+  bool contact_info = 5;
+  // Show status (online/offline).
+  bool status = 6;
+  // Show frequency plan.
+  bool frequency_plan = 8;
+  // Show receive and transmission packet rates.
+  bool packet_rates = 9;
+
+  reserved 7; // Deprecated counters;
+}
+
+message GatewayFrequencyPlan {
+  // Region of the frequency plan.
+  Region region = 1;
+
+  message LoRaMultiSFChannel {
+    // Frequency (Hz).
+    uint64 frequency = 1;
+  }
+  // LoRa channels demodulating multiple spreading factors per channel.
+  repeated LoRaMultiSFChannel lora_multi_sf_channels = 3;
+
+  message LoRaSingleSFChannel {
+    // Frequency (Hz).
+    uint64 frequency = 1;
+    // LoRa spreading factor.
+    uint32 spreading_factor = 2;
+    // LoRa bandwidth (Hz).
+    uint32 bandwidth = 3;
+  }
+  // LoRa channels for a single spreading factor and bandwidth.
+  // This is typically used for LoRa 2.4 GHz gateways.
+  repeated LoRaSingleSFChannel lora_single_sf_channels = 4;
+
+  message FSKChannel {
+    // Frequency (Hz).
+    uint64 frequency = 1;
+  }
+  // FSK channel.
+  FSKChannel fsk_channel = 5;
+
+  reserved 2; // Deprecated uplink_channels;
+}
+
+message GatewayIdentifier {
+  // Extended unique identifier of the gateway.
+  google.protobuf.UInt64Value eui = 1;
+  oneof id {
+    // Unique identifier of the gateway within the namespace of the Forwarder.
+    string plain = 2;
+    // SHA-256 hash of plain.
+    bytes hash = 3;
+  }
+}
+
+message GatewayLocation {
+  message Terrestrial {
+    // Location of the (first) antenna.
+    // Home Networks receive this value if the Gateway Visibility has location set.
+    Location location = 1;
+    // Antenna placement (indoor/outdoor).
+    // Home Networks receive this value if the Gateway Visibility has antenna_placement set.
+    TerrestrialAntennaPlacement antenna_placement = 2;
+    // Number of antennas.
+    // Home Networks receive this value if the Gateway Visibility has antenna_count set.
+    google.protobuf.UInt32Value antenna_count = 3;
+    // Indicates whether the gateway produces fine timestamps.
+    // Home Networks receive this value if the Gateway Visibility has fine_timestamps set.
+    google.protobuf.BoolValue fine_timestamps = 4;
+  }
+  message Satellite {
+    // Satellite location.
+    // Home Networks receive this value if the Gateway Visibility has location set.
+    Location location = 1;
+    // Field of view (meters).
+    // Home Networks receive this value if the Gateway Visibility has location set.
+    double field_of_view = 2;
+    // Trajectory, typically containing the recent past and projected path.
+    // Home Networks receive this value if the Gateway Visibility has location set.
+    repeated TimedLocation trajectory = 3;
+  }
+  oneof value {
+    Terrestrial terrestrial = 1;
+    Satellite satellite = 2;
+  }
+}
+
+message GatewayLocationValue {
+  GatewayLocation location = 1;
+}
+
+message Gateway {
+  // LoRa Alliance NetID of the Forwarder Member.
+  uint32 net_id = 1;
+  // Tenant ID managed by the Forwarder Member.
+  string tenant_id = 14;
+  // Forwarder cluster of the Forwarder Member (optional).
+  string cluster_id = 2;
+  // Identifier of the gateway.
+  GatewayIdentifier gateway_id = 15;
+  // Timestamp when the gateway was last updated.
+  google.protobuf.Timestamp updated_at = 4;
+
+  // Gateway location.
+  GatewayLocation location = 20;
+
+  // Administrative contact.
+  // Home Networks receive this value if the Gateway Visibility has contact_info set.
+  ContactInfo administrative_contact = 16;
+  // Technical contact.
+  // Home Networks receive this value if the Gateway Visibility has contact_info set.
+  ContactInfo technical_contact = 17;
+
+  // Indicates whether the gateway is online.
+  // Home Networks receive this value if the Gateway Visibility has status set.
+  google.protobuf.BoolValue online = 10;
+
+  // Frequency plan of the gateway.
+  // Home Networks receive this value if the Gateway Visibility has frequency_plan set.
+  GatewayFrequencyPlan frequency_plan = 13;
+
+  // Received packets rate (number of packets per hour).
+  // Home Networks receive this value if the Gateway Visibility has packet_rates set.
+  google.protobuf.FloatValue rx_rate = 18;
+  // Transmitted packets rate (number of packets per hour).
+  // Home Networks receive this value if the Gateway Visibility has packet_rates set.
+  google.protobuf.FloatValue tx_rate = 19;
+
+  reserved 3; // Deprecated eui;
+  reserved 5; // Deprecated terrestrial;
+  reserved 6; // Deprecated satellite;
+  reserved 7; // Deprecated contact_name;
+  reserved 8; // Deprecated contact_email;
+  reserved 9; // Deprecated contact_url;
+  reserved 11; // Deprecated rx_count;
+  reserved 12; // Deprecated tx_count;
+}
