@@ -58,6 +58,11 @@ message CreateNetworkAPIKeyResponse {
   org.packetbroker.v3.NetworkAPIKey key = 1;
 }
 
+message UpdateAPIKeyStateRequest {
+  string key_id = 1;
+  org.packetbroker.v3.APIKeyState state = 2;
+}
+
 service NetworkAPIKeyVault {
   // List API keys.
   rpc ListAPIKeys(ListNetworkAPIKeysRequest) returns (ListNetworkAPIKeysResponse);
@@ -65,6 +70,8 @@ service NetworkAPIKeyVault {
   rpc CreateAPIKey(CreateNetworkAPIKeyRequest) returns (CreateNetworkAPIKeyResponse);
   // Delete an API key.
   rpc DeleteAPIKey(APIKeyRequest) returns (google.protobuf.Empty);
+  // Update API key state.
+  rpc UpdateAPIKeyState(UpdateAPIKeyStateRequest) returns (google.protobuf.Empty);
 }
 
 message ListClusterAPIKeysRequest {
@@ -96,6 +103,8 @@ service ClusterAPIKeyVault {
   rpc CreateAPIKey(CreateClusterAPIKeyRequest) returns (CreateClusterAPIKeyResponse);
   // Delete an API key.
   rpc DeleteAPIKey(APIKeyRequest) returns (google.protobuf.Empty);
+  // Update API key state.
+  rpc UpdateAPIKeyState(UpdateAPIKeyStateRequest) returns (google.protobuf.Empty);
 }
 
 message ListNetworksRequest {
