@@ -46,6 +46,8 @@ message CreateNetworkAPIKeyRequest {
   string cluster_id = 3;
   // Network rights.
   repeated org.packetbroker.v3.Right rights = 4;
+  // Secret key value. Leave empty to generate one.
+  string key = 5;
 }
 
 message APIKeyRequest {
@@ -79,6 +81,8 @@ message CreateClusterAPIKeyRequest {
   string cluster_id = 1;
   // Network rights.
   repeated org.packetbroker.v3.Right rights = 2;
+  // Secret key value. Leave empty to generate one.
+  string key = 3;
 }
 
 message CreateClusterAPIKeyResponse {
