@@ -94,6 +94,8 @@ message NetworkAPIKey {
   google.protobuf.Timestamp authenticated_at = 5;
   // Secret key value.
   string key = 6;
+  // Key state.
+  APIKeyState state = 8;
 }
 
 message Target {

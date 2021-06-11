@@ -32,4 +32,6 @@ message ClusterAPIKey {
   google.protobuf.Timestamp authenticated_at = 4;
   // Secret key value.
   string key = 5;
+  // Key state.
+  APIKeyState state = 6;
 }

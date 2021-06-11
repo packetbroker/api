@@ -143,6 +143,15 @@ enum Right {
   READ_TARGET_AUTH = 6;
 }
 
+enum APIKeyState {
+  // Requested.
+  REQUESTED = 0;
+  // Approved.
+  APPROVED = 1;
+  // Rejected.
+  REJECTED = 2;
+}
+
 enum TargetProtocol {
   // LoRaWAN Backend Interfaces (TS002) 1.0.
   TS002_V1_0 = 0;
