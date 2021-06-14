@@ -31,15 +31,6 @@ message GetDefaultGatewayVisibilityRequest {
   string forwarder_tenant_id = 2;
 }
 
-message SetDefaultGatewayVisibilityRequest {
-  // LoRa Alliance NetID of the Forwarder Member.
-  uint32 forwarder_net_id = 1;
-  // Tenant ID managed by the Forwarder Member.
-  string forwarder_tenant_id = 2;
-  // New default Gateway Visibility.
-  org.packetbroker.v3.GatewayVisibility visibility = 3;
-}
-
 message GetHomeNetworkGatewayVisibilityRequest {
   // LoRa Alliance NetID of the Forwarder Member.
   uint32 forwarder_net_id = 1;
@@ -51,17 +42,8 @@ message GetHomeNetworkGatewayVisibilityRequest {
   string home_network_tenant_id = 4;
 }
 
-message SetHomeNetworkGatewayVisibilityRequest {
-  // LoRa Alliance NetID of the Forwarder Member.
-  uint32 forwarder_net_id = 1;
-  // Tenant ID managed by the Forwarder Member.
-  string forwarder_tenant_id = 2;
-  // LoRa Alliance NetID of the Home Network Member.
-  uint32 home_network_net_id = 3;
-  // Tenant ID managed by the Home Network Member.
-  string home_network_tenant_id = 4;
-  // New Gateway Visibility for the Home Network Member.
-  org.packetbroker.v3.GatewayVisibility visibility = 5;
+message SetGatewayVisibilityRequest {
+  org.packetbroker.v3.GatewayVisibility visibility = 3;
 }
 
 message GetGatewayVisibilityResponse {
@@ -72,11 +54,11 @@ service GatewayVisibilityManager {
   // Get the Default Gateway Visibility.
   rpc GetDefaultVisibility(GetDefaultGatewayVisibilityRequest) returns (GetGatewayVisibilityResponse);
   // Set the Default Gateway Visibility.
-  rpc SetDefaultVisibility(SetDefaultGatewayVisibilityRequest) returns (google.protobuf.Empty);
+  rpc SetDefaultVisibility(SetGatewayVisibilityRequest) returns (google.protobuf.Empty);
   // Get the Gateway Visibility with the Home Network.
   rpc GetHomeNetworkVisibility(GetHomeNetworkGatewayVisibilityRequest) returns (GetGatewayVisibilityResponse);
   // Set the Gateway Visibility with the Home Network.
-  rpc SetHomeNetworkVisibility(SetHomeNetworkGatewayVisibilityRequest) returns (google.protobuf.Empty);
+  rpc SetHomeNetworkVisibility(SetGatewayVisibilityRequest) returns (google.protobuf.Empty);
 }
 
 message UpdateGatewayRequest {

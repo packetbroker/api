@@ -25,6 +25,16 @@ import "packetbroker/api/v3/location.proto";
 option go_package = "go.packetbroker.org/api/v3;packetbroker";
 
 message GatewayVisibility {
+  // LoRa Alliance NetID of the Forwarder Member.
+  uint32 forwarder_net_id = 10;
+  // Tenant ID managed by the Forwarder Member.
+  string forwarder_tenant_id = 11;
+  // LoRa Alliance NetID of the Home Network Member.
+  uint32 home_network_net_id = 12;
+  // Tenant ID managed by the Home Network Member.
+  string home_network_tenant_id = 13;
+  // Timestamp when the policy got last updated.
+  google.protobuf.Timestamp updated_at = 14;
   // Show location.
   bool location = 1;
   // Show antenna placement (indoor/outdoor).
