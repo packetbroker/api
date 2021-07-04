@@ -131,12 +131,25 @@ enum Right {
   READ_NETWORK = 0;
   // Right to read contact information of networks.
   READ_NETWORK_CONTACT = 1;
-  // Right to list routing policies.
-  READ_ROUTING_POLICY = 4;
   // Right to list the route table.
   READ_ROUTE_TABLE = 5;
   // Right to read target authentication information.
   READ_TARGET_AUTH = 6;
+
+  // Right to read and list routing policies.
+  READ_ROUTING_POLICY = 4;
+  // Right to write routing policies.
+  WRITE_ROUTING_POLICY = 7;
+
+  // Right to read and list gateway visibilities.
+  READ_GATEWAY_VISIBILITY = 8;
+  // Right to write gateway visibilities.
+  WRITE_GATEWAY_VISIBILITY = 9;
+
+  // Right to read traffic.
+  READ_TRAFFIC = 10;
+  // Right to write traffic.
+  WRITE_TRAFFIC = 11;
 
   reserved 2; // READ_TENANT
   reserved 3; // READ_TENANT_CONTACT
@@ -156,4 +169,33 @@ enum TargetProtocol {
   TS002_V1_0 = 0;
   // LoRaWAN Backend Interfaces (TS002) 1.1.0.
   TS002_V1_1_0 = 1;
+}
+
+enum RegionalParametersVersion {
+  // LoRaWAN 1.0.
+  TS001_V1_0 = 0;
+  // LoRaWAN 1.0.1.
+  TS001_V1_0_1 = 1;
+  // LoRaWAN Regional Parameters 1.0.2.
+  RP001_V1_0_2_A = 2;
+  // LoRaWAN Regional Parameters 1.0.2 revision B.
+  RP001_V1_0_2_B = 3;
+  // LoRaWAN Regional Parameters 1.0.3 revision A.
+  RP001_V1_0_3_A = 4;
+  // LoRaWAN Regional Parameters 1.1 revision A.
+  RP001_V1_1_A = 5;
+  // LoRaWAN Regional Parameters 1.1 revision B.
+  RP001_V1_1_B = 6;
+  // LoRaWAN Regional Parameters RP002-1.0.0.
+  RP002_V1_0_0 = 7;
+  // LoRaWAN Regional Parameters RP002-1.0.1.
+  RP002_V1_0_1 = 8;
+  // LoRaWAN Regional Parameters RP002-1.0.2.
+  RP002_V1_0_2 = 9;
+  // LoRaWAN Regional Parameters RP002-1.0.3.
+  RP002_V1_0_3 = 10;
+}
+
+message RegionalParametersVersionValue {
+  RegionalParametersVersion value = 1;
 }

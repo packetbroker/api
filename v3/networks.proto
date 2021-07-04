@@ -133,3 +133,12 @@ message Target {
     TLSClientAuth tls_client_auth = 5;
   }
 }
+
+message NetworkTarget {
+  // LoRa Alliance NetID of the Member.
+  uint32 net_id = 1;
+  // Tenant ID assigned by the Member (optional).
+  string tenant_id = 2;
+  // Target information.
+  Target target = 3;
+}
