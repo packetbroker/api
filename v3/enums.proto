@@ -170,3 +170,32 @@ enum TargetProtocol {
   // LoRaWAN Backend Interfaces (TS002) 1.1.0.
   TS002_V1_1_0 = 1;
 }
+
+enum RegionalParametersVersion {
+  // LoRaWAN 1.0.
+  TS001_V1_0 = 0;
+  // LoRaWAN 1.0.1.
+  TS001_V1_0_1 = 1;
+  // LoRaWAN Regional Parameters 1.0.2.
+  RP001_V1_0_2_A = 2;
+  // LoRaWAN Regional Parameters 1.0.2 revision B.
+  RP001_V1_0_2_B = 3;
+  // LoRaWAN Regional Parameters 1.0.3 revision A.
+  RP001_V1_0_3_A = 4;
+  // LoRaWAN Regional Parameters 1.1 revision A.
+  RP001_V1_1_A = 5;
+  // LoRaWAN Regional Parameters 1.1 revision B.
+  RP001_V1_1_B = 6;
+  // LoRaWAN Regional Parameters RP002-1.0.0.
+  RP002_V1_0_0 = 7;
+  // LoRaWAN Regional Parameters RP002-1.0.1.
+  RP002_V1_0_1 = 8;
+  // LoRaWAN Regional Parameters RP002-1.0.2.
+  RP002_V1_0_2 = 9;
+  // LoRaWAN Regional Parameters RP002-1.0.3.
+  RP002_V1_0_3 = 10;
+}
+
+message RegionalParametersVersionValue {
+  RegionalParametersVersion value = 1;
+}
