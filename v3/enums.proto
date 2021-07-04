@@ -131,12 +131,25 @@ enum Right {
   READ_NETWORK = 0;
   // Right to read contact information of networks.
   READ_NETWORK_CONTACT = 1;
-  // Right to list routing policies.
-  READ_ROUTING_POLICY = 4;
   // Right to list the route table.
   READ_ROUTE_TABLE = 5;
   // Right to read target authentication information.
   READ_TARGET_AUTH = 6;
+
+  // Right to read and list routing policies.
+  READ_ROUTING_POLICY = 4;
+  // Right to write routing policies.
+  WRITE_ROUTING_POLICY = 7;
+
+  // Right to read and list gateway visibilities.
+  READ_GATEWAY_VISIBILITY = 8;
+  // Right to write gateway visibilities.
+  WRITE_GATEWAY_VISIBILITY = 9;
+
+  // Right to read traffic.
+  READ_TRAFFIC = 10;
+  // Right to write traffic.
+  WRITE_TRAFFIC = 11;
 
   reserved 2; // READ_TENANT
   reserved 3; // READ_TENANT_CONTACT
