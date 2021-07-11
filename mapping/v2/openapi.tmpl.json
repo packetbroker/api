@@ -101,7 +101,7 @@
           },
           {
             "name": "updatedSince",
-            "description": "Return gateways that were updated since the given timestamp",
+            "description": "Return gateways that were updated since the given timestamp. When set, the response is sorted by updatedAt",
             "in": "query",
             "required": false,
             "schema": {
