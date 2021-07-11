@@ -117,6 +117,38 @@
             "schema": {
               "type": "boolean"
             }
+          },
+          {
+            "name": "forwarder",
+            "description": "Return gateways from a Forwarder",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "allOf":[
+                {
+                  "$ref": "#/components/schemas/NetworkIdentifier"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "clusterID": {
+                      "type": "string",
+                      "description": "Cluster that the gateway is connected to",
+                      "pattern": "^[a-z0-9](?:[-]?[a-z0-9]){2,}$"
+                    }
+                  }
+                }
+              ]
+            },
+            "examples": {
+              "the-things-network": {
+                "value": {
+                  "netID": "000013",
+                  "tenantID": "ttn"
+                },
+                "summary": "The Things Network"
+              }
+            }
           }
         ],
         "responses": {
@@ -368,7 +400,7 @@
           }
         ]
       },
-      "GatewayIdentifier": {
+      "NetworkIdentifier": {
         "type": "object",
         "properties": {
           "netID": {
@@ -380,16 +412,29 @@
             "type": "string",
             "minLength": 1,
             "description": "Tenant within the NetID"
-          },
-          "id": {
-            "type": "string",
-            "minLength": 1,
-            "description": "Gateway ID"
           }
         },
-        "required": [
-          "netID",
-          "id"
+        "required": ["netID"]
+      },
+      "GatewayIdentifier": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/NetworkIdentifier"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1,
+                "description": "Gateway ID"
+              }
+            },
+            "required": [
+              "netID",
+              "id"
+            ]
+          }
         ]
       },
       "Frequency": {
