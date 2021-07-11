@@ -91,13 +91,12 @@
           },
           {
             "name": "limit",
-            "description": "Number of gateways to return. A zero value uses the server's default limit",
+            "description": "Number of gateways to return",
             "in":"query",
             "required": false,
             "schema": {
               "type": "integer",
-              "minimum": 0,
-              "maximum": 1000
+              "minimum": 0
             }
           },
           {
@@ -123,14 +122,6 @@
         "responses": {
           "200": {
             "description": "Gateways",
-            "headers": {
-              "X-Total-Count": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Total number of gateways matching the filter criteria"
-              }
-            },
             "content": {
               "application/json": {
                 "schema": {
