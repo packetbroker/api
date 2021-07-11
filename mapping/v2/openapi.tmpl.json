@@ -140,6 +140,7 @@
                         "id": "tti-hq",
                         "eui": "70B3D57ED0000001",
                         "clusterID": "ttn-eu1",
+                        "updatedAt": "2021-07-11T14:05:21Z",
                         "location": {
                           "latitude": 52.3664025,
                           "longitude": 4.8914439,
@@ -157,6 +158,7 @@
                         "id": "waag",
                         "eui": "EEFBC0B96C5C8683",
                         "clusterID": "ttn-eu1",
+                        "updatedAt": "2021-07-11T13:19:58Z",
                         "location": {
                           "latitude": 52.3767409,
                           "longitude": 4.9078567
@@ -229,6 +231,7 @@
                       "id": "tti-hq",
                       "eui": "70B3D57ED0000001",
                       "clusterID": "ttn-eu1",
+                      "updatedAt": "2021-07-11T14:05:21Z",
                       "location": {
                         "latitude": 52.3664025,
                         "longitude": 4.8914439,
@@ -476,6 +479,11 @@
               "clusterID": {
                 "type": "string",
                 "description": "Cluster that the gateway is connected to"
+              },
+              "updatedAt": {
+                "type": "string",
+                "format": "date-time",
+                "description": "Timestamp that the gateway was last updated"
               },
               "location": {
                 "$ref": "#/components/schemas/Location"
