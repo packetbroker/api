@@ -188,7 +188,7 @@
         }
       }
     },
-    "/gateway/{id}": {
+    "/gateways/{id}": {
       "get": {
         "description": "Get gateway details.",
         "operationId": "getGateway",
