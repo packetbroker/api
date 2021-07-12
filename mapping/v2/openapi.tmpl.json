@@ -1,7 +1,7 @@
 {
   "openapi": "3.0.3",
   "info": {
-    "version": "2.0.0",
+    "version": "2.1.0",
     "title": "Packet Broker Mapper",
     "description": "Packet Broker Mapper provides geospatial services for mapping LoRaWAN infrastructure.",
     "contact": {
@@ -91,18 +91,17 @@
           },
           {
             "name": "limit",
-            "description": "Number of gateways to return. A zero value uses the server's default limit",
+            "description": "Number of gateways to return",
             "in":"query",
             "required": false,
             "schema": {
               "type": "integer",
-              "minimum": 0,
-              "maximum": 1000
+              "minimum": 0
             }
           },
           {
             "name": "updatedSince",
-            "description": "Return gateways that were updated since the given timestamp",
+            "description": "Return gateways that were updated since the given timestamp. When set, the response is sorted by updatedAt",
             "in": "query",
             "required": false,
             "schema": {
@@ -118,19 +117,43 @@
             "schema": {
               "type": "boolean"
             }
+          },
+          {
+            "name": "forwarder",
+            "description": "Return gateways from a Forwarder",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "allOf":[
+                {
+                  "$ref": "#/components/schemas/NetworkIdentifier"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "clusterID": {
+                      "type": "string",
+                      "description": "Cluster that the gateway is connected to",
+                      "pattern": "^[a-z0-9](?:[-]?[a-z0-9]){2,}$"
+                    }
+                  }
+                }
+              ]
+            },
+            "examples": {
+              "the-things-network": {
+                "value": {
+                  "netID": "000013",
+                  "tenantID": "ttn"
+                },
+                "summary": "The Things Network"
+              }
+            }
           }
         ],
         "responses": {
           "200": {
             "description": "Gateways",
-            "headers": {
-              "X-Total-Count": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "Total number of gateways matching the filter criteria"
-              }
-            },
             "content": {
               "application/json": {
                 "schema": {
@@ -149,6 +172,7 @@
                         "id": "tti-hq",
                         "eui": "70B3D57ED0000001",
                         "clusterID": "ttn-eu1",
+                        "updatedAt": "2021-07-11T14:05:21Z",
                         "location": {
                           "latitude": 52.3664025,
                           "longitude": 4.8914439,
@@ -166,6 +190,7 @@
                         "id": "waag",
                         "eui": "EEFBC0B96C5C8683",
                         "clusterID": "ttn-eu1",
+                        "updatedAt": "2021-07-11T13:19:58Z",
                         "location": {
                           "latitude": 52.3767409,
                           "longitude": 4.9078567
@@ -195,7 +220,7 @@
         }
       }
     },
-    "/gateway/{id}": {
+    "/gateways/{id}": {
       "get": {
         "description": "Get gateway details.",
         "operationId": "getGateway",
@@ -238,6 +263,7 @@
                       "id": "tti-hq",
                       "eui": "70B3D57ED0000001",
                       "clusterID": "ttn-eu1",
+                      "updatedAt": "2021-07-11T14:05:21Z",
                       "location": {
                         "latitude": 52.3664025,
                         "longitude": 4.8914439,
@@ -374,7 +400,7 @@
           }
         ]
       },
-      "GatewayIdentifier": {
+      "NetworkIdentifier": {
         "type": "object",
         "properties": {
           "netID": {
@@ -386,16 +412,29 @@
             "type": "string",
             "minLength": 1,
             "description": "Tenant within the NetID"
-          },
-          "id": {
-            "type": "string",
-            "minLength": 1,
-            "description": "Gateway ID"
           }
         },
-        "required": [
-          "netID",
-          "id"
+        "required": ["netID"]
+      },
+      "GatewayIdentifier": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/NetworkIdentifier"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1,
+                "description": "Gateway ID"
+              }
+            },
+            "required": [
+              "netID",
+              "id"
+            ]
+          }
         ]
       },
       "Frequency": {
@@ -485,6 +524,11 @@
               "clusterID": {
                 "type": "string",
                 "description": "Cluster that the gateway is connected to"
+              },
+              "updatedAt": {
+                "type": "string",
+                "format": "date-time",
+                "description": "Timestamp that the gateway was last updated"
               },
               "location": {
                 "$ref": "#/components/schemas/Location"
