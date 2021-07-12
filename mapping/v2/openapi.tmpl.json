@@ -185,7 +185,7 @@
                           "latitude": 52.3664025,
                           "longitude": 4.8914439,
                           "altitude": 16,
-                          "hdop": 5
+                          "accuracy": 5
                         },
                         "antennaPlacement": "INDOOR",
                         "antennaCount": 1,
@@ -276,7 +276,7 @@
                         "latitude": 52.3664025,
                         "longitude": 4.8914439,
                         "altitude": 16,
-                        "hdop": 5
+                        "accuracy": 5
                       },
                       "antennaPlacement": "INDOOR",
                       "antennaCount": 1,
@@ -398,11 +398,11 @@
           {
             "type": "object",
             "properties": {
-              "hdop": {
+              "accuracy": {
                 "type": "number",
                 "minimum": 0,
                 "format": "double",
-                "description": "Horizontal dilution of precision"
+                "description": "Accuracy (meters)"
               }
             }
           }

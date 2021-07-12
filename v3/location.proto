@@ -27,11 +27,11 @@ message Location {
   double longitude = 2;
   // Altitude (meters), where 0 is the mean sea level.
   double altitude = 5;
-  // Horizontal dilution of precision (meters).
-  double hdop = 6;
+  // Accuracy of the location (meters).
+  float accuracy = 4;
 
   reserved 3; // altitude;
-  reserved 4; // accuracy;
+  reserved 6; // hdop;
 }
 
 message TimedLocation {
