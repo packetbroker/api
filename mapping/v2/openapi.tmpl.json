@@ -147,6 +147,14 @@
                   "tenantID": "ttn"
                 },
                 "summary": "The Things Network"
+              },
+              "the-things-network-eu": {
+                "value": {
+                  "netID": "000013",
+                  "tenantID": "ttn",
+                  "clusterID": "ttn-eu1"
+                },
+                "summary": "The Things Network (eu1)"
               }
             }
           }
