@@ -178,13 +178,13 @@ message UplinkMessage {
   Region gateway_region = 5;
 
   oneof data_rate {
-    // Data rate index as defined in the gateway's LoRaWAN region.
-    // DEPRECATED: Specify data rate settings per modulation instead.
-    uint32 data_rate_index = 6;
     LoRaDataRate lora_data_rate = 13;
     FSKDataRate fsk_data_rate = 14;
     LRFHSSDataRate lrfhss_data_rate = 15;
   }
+  // Data rate index as defined in the gateway's LoRaWAN region.
+  // DEPRECATED: Specify data rate settings per modulation instead.
+  uint32 data_rate_index = 6;
 
   // Frequency (Hz).
   uint64 frequency = 7;
@@ -234,13 +234,13 @@ message DownlinkMessage {
     // Frequency (Hz).
     uint64 frequency = 1;
     oneof data_rate {
-      // Data rate index as defined in the gateway's LoRaWAN region.
-      // DEPRECATED: Specify data rate settings per modulation instead.
-      uint32 data_rate_index = 2;
       LoRaDataRate lora_data_rate = 3;
       FSKDataRate fsk_data_rate = 4;
       LRFHSSDataRate lrfhss_data_rate = 5;
     }
+    // Data rate index as defined in the gateway's LoRaWAN region.
+    // DEPRECATED: Specify data rate settings per modulation instead.
+    uint32 data_rate_index = 2;
   }
   // RX1 settings.
   RXSettings rx1 = 2;
