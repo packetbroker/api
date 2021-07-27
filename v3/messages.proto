@@ -150,6 +150,14 @@ message LRFHSSDataRate {
   uint32 operating_channel_width = 2;
 }
 
+message DataRate {
+  oneof modulation {
+    LoRaDataRate lora = 1;
+    FSKDataRate fsk = 2;
+    LRFHSSDataRate lrfhss = 3;
+  }
+}
+
 // LoRaWAN uplink data message with encrypted PHYPayload and metadata.
 message UplinkMessage {
   // Key encryption keys with which data encryption keys are encrypted.
@@ -179,11 +187,7 @@ message UplinkMessage {
   // Region of the gateway.
   Region gateway_region = 5;
 
-  oneof data_rate {
-    LoRaDataRate lora_data_rate = 13;
-    FSKDataRate fsk_data_rate = 14;
-    LRFHSSDataRate lrfhss_data_rate = 15;
-  }
+  DataRate data_rate = 13;
   // Data rate index as defined in the gateway's LoRaWAN region.
   // DEPRECATED: Specify data rate settings per modulation instead.
   uint32 data_rate_index = 6;
@@ -235,11 +239,7 @@ message DownlinkMessage {
   message RXSettings {
     // Frequency (Hz).
     uint64 frequency = 1;
-    oneof data_rate {
-      LoRaDataRate lora_data_rate = 3;
-      FSKDataRate fsk_data_rate = 4;
-      LRFHSSDataRate lrfhss_data_rate = 5;
-    }
+    DataRate data_rate = 3;
     // Data rate index as defined in the gateway's LoRaWAN region.
     // DEPRECATED: Specify data rate settings per modulation instead.
     uint32 data_rate_index = 2;
