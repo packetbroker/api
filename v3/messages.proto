@@ -30,6 +30,8 @@ option go_package = "go.packetbroker.org/api/v3;packetbroker";
 message PHYPayloadTeaser {
   // SHA-256 hash of PHYPayload.
   bytes hash = 1;
+  // Length of PHYPayload.
+  uint32 length = 4;
 
   message JoinRequestTeaser {
     // JoinEUI of the join-request.
