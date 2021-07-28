@@ -79,9 +79,10 @@ enum UplinkMessageProcessingError {
   UPLINK_UNKNOWN_ERROR = 0;
   // The message does not pass the routing policy.
   UPLINK_ROUTING_POLICY = 1;
-  // A matching device session could not be found.
-  // This can be caused by an unknown DevAddr or a MIC check failure.
-  MATCH_SESSION = 2;
+  // A matching device could not be found.
+  // For join-request messages, this can be caused by the device not being registered or an already used DevNonce.
+  // For data uplink messages, this can be caused by an unknown DevAddr or a MIC check failure.
+  NOT_FOUND = 2;
   // Internal error.
   UPLINK_INTERNAL = 3;
   // No Home Network endpoints found.
