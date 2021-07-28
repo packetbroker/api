@@ -109,6 +109,8 @@ enum DownlinkMessageProcessingError {
   DOWNLINK_ROUTING_POLICY = 8;
   // Internal error.
   DOWNLINK_INTERNAL = 9;
+  // Gateway not connected.
+  GATEWAY_NOT_CONNECTED = 10;
 }
 
 enum TerrestrialAntennaPlacement {
