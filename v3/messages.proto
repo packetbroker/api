@@ -189,7 +189,7 @@ message UplinkMessage {
 
   DataRate data_rate = 13;
   // Data rate index as defined in the gateway's LoRaWAN region.
-  // DEPRECATED: Specify data rate settings per modulation instead.
+  // DEPRECATED: Set data_rate instead.
   uint32 data_rate_index = 6;
 
   // Frequency (Hz).
@@ -241,7 +241,7 @@ message DownlinkMessage {
     uint64 frequency = 1;
     DataRate data_rate = 3;
     // Data rate index as defined in the gateway's LoRaWAN region.
-    // DEPRECATED: Specify data rate settings per modulation instead.
+    // DEPRECATED: Set data_rate instead.
     uint32 data_rate_index = 2;
   }
   // RX1 settings.

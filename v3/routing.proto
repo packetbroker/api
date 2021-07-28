@@ -20,6 +20,7 @@ import "google/protobuf/timestamp.proto";
 import "google/protobuf/wrappers.proto";
 import "packetbroker/api/v3/enums.proto";
 import "packetbroker/api/v3/messages.proto";
+import "packetbroker/api/v3/gateway.proto";
 import "packetbroker/api/v3/networks.proto";
 
 option go_package = "go.packetbroker.org/api/v3;packetbroker";
@@ -234,15 +235,26 @@ message DownlinkMessageDeliveryStateChange {
   string forwarder_cluster_id = 6;
   // Tenant ID managed by the Forwarder Member.
   string forwarder_tenant_id = 7;
+  // Identifier of the gateway.
+  GatewayIdentifier forwarder_gateway_id = 13;
   // Downlink token. This value must be copied from the DownlinkMessage.
   bytes downlink_token = 8;
   // New delivery state of the message.
   MessageDeliveryState state = 9;
 
   message TransmissionResult {
+    // Frequency (Hz). If 0, RX1 is not used.
+    uint64 rx1_frequency = 3;
+    DataRate rx1_data_rate = 4;
+    // Frequency (Hz). If 0, RX2 is not used.
+    uint64 rx2_frequency = 5;
+    DataRate rx2_data_rate = 6;
+
     // Whether RX1 was used for transmission.
+    // DEPRECATED: Set rx1_frequency and rx1_data_rate instead.
     bool rx1 = 1;
     // Whether RX2 was used for transmission.
+    // DEPRECATED: Set rx1_frequency and rx2_data_rate instead.
     bool rx2 = 2;
   }
   oneof result {
