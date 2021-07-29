@@ -243,19 +243,11 @@ message DownlinkMessageDeliveryStateChange {
   MessageDeliveryState state = 9;
 
   message TransmissionResult {
-    // Frequency (Hz). If 0, RX1 is not used.
-    uint64 rx1_frequency = 3;
-    DataRate rx1_data_rate = 4;
-    // Frequency (Hz). If 0, RX2 is not used.
-    uint64 rx2_frequency = 5;
-    DataRate rx2_data_rate = 6;
-
     // Whether RX1 was used for transmission.
-    // DEPRECATED: Set rx1_frequency and rx1_data_rate instead.
     bool rx1 = 1;
     // Whether RX2 was used for transmission.
-    // DEPRECATED: Set rx1_frequency and rx2_data_rate instead.
     bool rx2 = 2;
+    reserved 3, 4, 5, 6; // rx{1,2}_{frequency,data_rate}
   }
   oneof result {
     // Any error.
