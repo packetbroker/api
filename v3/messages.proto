@@ -138,6 +138,8 @@ message LoRaDataRate {
   uint32 spreading_factor = 1;
   // Bandwidth (Hz).
   uint32 bandwidth = 2;
+  // Coding rate.
+  string coding_rate = 3;
 }
 
 message FSKDataRate {
@@ -145,9 +147,13 @@ message FSKDataRate {
 }
 
 message LRFHSSDataRate {
+  // Modulation type.
+  // 0 is GMSK at 488 Hz.
   uint32 modulation_type = 1;
   // Operating channel width (Hz).
   uint32 operating_channel_width = 2;
+  // Coding rate.
+  string coding_rate = 3;
 }
 
 message DataRate {
@@ -195,6 +201,7 @@ message UplinkMessage {
   // Frequency (Hz).
   uint64 frequency = 7;
   // Coding rate.
+  // DEPRECATED: Set through data_rate instead.
   string coding_rate = 11;
 
   message GatewayMetadata {
