@@ -118,6 +118,15 @@ message ListNetworksRequest {
   string tenant_id_contains = 3;
   // Filter networks by name.
   string name_contains = 4;
+  message PolicyReference {
+    // LoRa Alliance NetID of the Member.
+    uint32 net_id = 1;
+    // ID assigned by the Member.
+    string tenant_id = 2;
+  }
+  // Include networks with which a policy is defined. The policy reference defines the Forwarder or Home Network with
+  // which a routing policy has been defined.
+  PolicyReference policy_reference = 5;
 }
 
 message ListNetworksResponse {
@@ -127,8 +136,8 @@ message ListNetworksResponse {
 }
 
 service Catalog {
-  // List the networks and tenants.
+  // List networks and tenants.
   rpc ListNetworks(ListNetworksRequest) returns (ListNetworksResponse);
-  // List all the networks and tenants that are Home Networks, i.e. those with DevAddr blocks assigned.
+  // List networks and tenants that are Home Networks, i.e. those with DevAddr blocks assigned.
   rpc ListHomeNetworks(ListNetworksRequest) returns (ListNetworksResponse);
 }
