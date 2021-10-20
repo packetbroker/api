@@ -172,8 +172,8 @@ enum APIKeyState {
 enum TargetProtocol {
   // LoRaWAN Backend Interfaces (TS002) 1.0.
   TS002_V1_0 = 0;
-  // LoRaWAN Backend Interfaces (TS002) 1.1.0.
-  TS002_V1_1_0 = 1;
+  // LoRaWAN Backend Interfaces (TS002) 1.1.
+  TS002_V1_1 = 1;
 }
 
 enum RegionalParametersVersion {
