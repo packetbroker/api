@@ -20,7 +20,7 @@ import "google/protobuf/empty.proto";
 import "google/protobuf/wrappers.proto";
 import "packetbroker/api/v3/enums.proto";
 import "packetbroker/api/v3/cluster.proto";
-import "packetbroker/api/v3/networks.proto";
+import "packetbroker/api/v3/network.proto";
 
 option go_package = "go.packetbroker.org/api/iam/v2;iampb";
 

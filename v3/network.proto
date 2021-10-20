@@ -19,6 +19,7 @@ package org.packetbroker.v3;
 import "google/protobuf/timestamp.proto";
 import "packetbroker/api/v3/contact.proto";
 import "packetbroker/api/v3/enums.proto";
+import "packetbroker/api/v3/target.proto";
 
 option go_package = "go.packetbroker.org/api/v3;packetbroker";
 
@@ -33,7 +34,7 @@ message Network {
   ContactInfo administrative_contact = 4;
   // Technical contact.
   ContactInfo technical_contact = 5;
-  // Indicates whether the network is listed in the catalog.
+  // Indicates whether the network is publicly listed in the catalog.
   bool listed = 6;
   // Optional target information.
   Target target = 7;
@@ -96,42 +97,6 @@ message NetworkAPIKey {
   string key = 6;
   // Key state.
   APIKeyState state = 8;
-}
-
-message Target {
-  // Protocol to use.
-  TargetProtocol protocol = 1;
-  // Address of the target.
-  // When using an HTTP protocol, this can be a URL with scheme, host, port and path.
-  // This value may be empty if the protocol supports service lookup (e.g. via DNS).
-  string address = 2;
-  // PEM encoded root CAs to verify the server certificate.
-  // This value may be empty to use the default trusted root certificates.
-  bytes root_cas = 6;
-
-  message BasicAuth {
-    // Username.
-    string username = 1;
-    // Password.
-    string password = 2;
-  }
-  message CustomAuth {
-    // Custom authorization value.
-    // When using an HTTP protocol, this is used as the raw Authorization header value. That is, it may include the
-    // authorization type (Bearer, Basic, Key, etc).
-    string value = 1;
-  }
-  message TLSClientAuth {
-    // PEM encoded client certificate.
-    bytes cert = 1;
-    // PEM encoded private key.
-    bytes key = 2;
-  }
-  oneof authorization {
-    BasicAuth basic_auth = 3;
-    CustomAuth custom_auth = 4;
-    TLSClientAuth tls_client_auth = 5;
-  }
 }
 
 message NetworkTarget {

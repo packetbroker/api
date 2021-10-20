@@ -21,7 +21,8 @@ import "google/protobuf/wrappers.proto";
 import "packetbroker/api/v3/enums.proto";
 import "packetbroker/api/v3/messages.proto";
 import "packetbroker/api/v3/gateway.proto";
-import "packetbroker/api/v3/networks.proto";
+import "packetbroker/api/v3/network.proto";
+import "packetbroker/api/v3/target.proto";
 
 option go_package = "go.packetbroker.org/api/v3;packetbroker";
 
