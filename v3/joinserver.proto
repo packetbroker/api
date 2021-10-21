@@ -35,19 +35,11 @@ message JoinServer {
   // Indicates whether the Join Server is publicly listed.
   bool listed = 6;
 
-  message FixedEndpoint {
-    // LoRa Alliance NetID of the Member.
-    uint32 net_id = 1;
-    // ID assigned by the Member (optional).
-    string tenant_id = 2;
-    // Cluster of the Member (optional).
-    string cluster_id = 3;
-  }
   oneof resolver {
     // Target to lookup the endpoint based on DevEUI for this set of JoinEUIs.
     Target lookup = 7;
     // Fixed endpoint which handles activations from any DevEUI for this set of JoinEUIs.
-    FixedEndpoint fixed = 8;
+    JoinServerFixedEndpoint fixed = 8;
   }
 }
 
@@ -55,4 +47,13 @@ message JoinEUIPrefix {
   uint64 value = 1;
   // Significant bits of value.
   uint32 length = 2;
+}
+
+message JoinServerFixedEndpoint {
+  // LoRa Alliance NetID of the Member.
+  uint32 net_id = 1;
+  // ID assigned by the Member (optional).
+  string tenant_id = 2;
+  // Cluster of the Member (optional).
+  string cluster_id = 3;
 }

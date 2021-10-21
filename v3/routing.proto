@@ -22,6 +22,7 @@ import "packetbroker/api/v3/enums.proto";
 import "packetbroker/api/v3/messages.proto";
 import "packetbroker/api/v3/gateway.proto";
 import "packetbroker/api/v3/network.proto";
+import "packetbroker/api/v3/joinserver.proto";
 import "packetbroker/api/v3/target.proto";
 
 option go_package = "go.packetbroker.org/api/v3;packetbroker";
@@ -255,5 +256,21 @@ message DownlinkMessageDeliveryStateChange {
     DownlinkMessageProcessingError error = 10;
     // Transmission result.
     TransmissionResult success = 11;
+  }
+}
+
+message JoinEUIPrefixRoute {
+  // Prefix of the route.
+  JoinEUIPrefix prefix = 1;
+  // ID of the Join Server.
+  uint32 id = 2;
+  // Timestamp when the route was created.
+  google.protobuf.Timestamp created_at = 3;
+
+  oneof resolver {
+    // Target to lookup the endpoint based on DevEUI for this set of JoinEUIs.
+    Target lookup = 4;
+    // Fixed endpoint which handles activations from any DevEUI for this set of JoinEUIs.
+    JoinServerFixedEndpoint fixed = 5;
   }
 }
