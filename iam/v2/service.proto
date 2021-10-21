@@ -19,8 +19,11 @@ package org.packetbroker.iam.v2;
 import "google/protobuf/empty.proto";
 import "google/protobuf/wrappers.proto";
 import "packetbroker/api/v3/enums.proto";
+import "packetbroker/api/v3/contact.proto";
 import "packetbroker/api/v3/cluster.proto";
+import "packetbroker/api/v3/joinserver.proto";
 import "packetbroker/api/v3/network.proto";
+import "packetbroker/api/v3/target.proto";
 
 option go_package = "go.packetbroker.org/api/iam/v2;iampb";
 
@@ -135,9 +138,93 @@ message ListNetworksResponse {
   uint32 total = 2;
 }
 
+message ListJoinServersRequest {
+  // Number of items to skip.
+  uint32 offset = 1;
+  // Limit the number of items.
+  // If 0, use the server's default.
+  // The actual limit may be capped by the server.
+  uint32 limit = 2;
+  // Filter Join Servers by name.
+  string name_contains = 3;
+}
+
+message ListJoinServersResponse {
+  repeated org.packetbroker.v3.JoinServer join_servers = 1;
+  // Total number of Join Servers.
+  uint32 total = 2;
+}
+
 service Catalog {
   // List networks and tenants.
   rpc ListNetworks(ListNetworksRequest) returns (ListNetworksResponse);
   // List networks and tenants that are Home Networks, i.e. those with DevAddr blocks assigned.
   rpc ListHomeNetworks(ListNetworksRequest) returns (ListNetworksResponse);
+  // List Join Servers.
+  rpc ListJoinServers(ListJoinServersRequest) returns (ListJoinServersResponse);
+}
+
+message JoinEUIPrefixesValue {
+  repeated org.packetbroker.v3.JoinEUIPrefix value = 1;
+}
+
+message JoinServerFixedEndpointValue {
+  org.packetbroker.v3.JoinServerFixedEndpoint value = 1;
+}
+
+message CreateJoinServerRequest {
+  org.packetbroker.v3.JoinServer join_server = 1;
+}
+
+message CreateJoinServerResponse {
+  org.packetbroker.v3.JoinServer join_server = 1;
+}
+
+message GetJoinServerResponse {
+  org.packetbroker.v3.JoinServer join_server = 1;
+}
+
+message JoinServerRequest {
+  uint32 id = 1;
+}
+
+message UpdateJoinServerRequest {
+  uint32 id = 1;
+  // Name of the Join Server.
+  // This field gets updated when a value is set.
+  google.protobuf.StringValue name = 2;
+  // JoinEUI prefixes of the Join Server.
+  // This field gets updated when a value is set.
+  JoinEUIPrefixesValue join_eui_prefixes = 3;
+  // Administrative contact.
+  // This field gets updated when a value is set.
+  org.packetbroker.v3.ContactInfoValue administrative_contact = 4;
+  // Technical contact.
+  // This field gets updated when a value is set.
+  org.packetbroker.v3.ContactInfoValue technical_contact = 5;
+  // Indicates whether the network is listed in the catalog.
+  // This field gets updated when a value is set.
+  google.protobuf.BoolValue listed = 6;
+
+  oneof resolver {
+    // Target to lookup the endpoint based on DevEUI for this set of JoinEUIs.
+    // This field gets updated when a value is set.
+    org.packetbroker.v3.Target lookup = 7;
+    // Fixed endpoint which handles activations from any DevEUI for this set of JoinEUIs.
+    // This field gets updated when a value is set.
+    org.packetbroker.v3.JoinServerFixedEndpoint fixed = 8;
+  }
+}
+
+service JoinServerRegistry {
+  // List networks.
+  rpc ListJoinServers(ListJoinServersRequest) returns (ListJoinServersResponse);
+  // Create a network.
+  rpc CreateJoinServer(CreateJoinServerRequest) returns (CreateJoinServerResponse);
+  // Get a network.
+  rpc GetJoinServer(JoinServerRequest) returns (GetJoinServerResponse);
+  // Update a network.
+  rpc UpdateJoinServer(UpdateJoinServerRequest) returns (google.protobuf.Empty);
+  // Delete a network.
+  rpc DeleteJoinServer(JoinServerRequest) returns (google.protobuf.Empty);
 }
