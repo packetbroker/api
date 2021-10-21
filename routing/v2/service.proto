@@ -1,0 +1,76 @@
+// Copyright © 2021 The Things Industries B.V.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+syntax = "proto3";
+
+package org.packetbroker.routing.v2;
+
+import "packetbroker/api/v3/network.proto";
+import "packetbroker/api/v3/routing.proto";
+
+option go_package = "go.packetbroker.org/api/routing/v2;routingpb";
+
+message ListUplinkRoutesRequest {
+  // Number of items to skip.
+  uint32 offset = 1;
+  // Limit the number of items.
+  // If 0, use the server's default.
+  // The actual limit may be capped by the server.
+  uint32 limit = 2;
+}
+
+message ListUplinkRoutesResponse {
+  repeated org.packetbroker.v3.DevAddrPrefixRoute routes = 1;
+  // Total number of routes.
+  uint32 total = 2;
+}
+
+message ListJoinRequestRoutesRequest {
+  // Number of items to skip.
+  uint32 offset = 1;
+  // Limit the number of items.
+  // If 0, use the server's default.
+  // The actual limit may be capped by the server.
+  uint32 limit = 2;
+}
+
+message ListJoinRequestRoutesResponse {
+  repeated org.packetbroker.v3.JoinEUIPrefixRoute routes = 1;
+  // Total number of routes.
+  uint32 total = 2;
+}
+
+message ListNetworkTargetsRequest {
+  // Number of items to skip.
+  uint32 offset = 1;
+  // Limit the number of items.
+  // If 0, use the server's default.
+  // The actual limit may be capped by the server.
+  uint32 limit = 2;
+}
+
+message ListNetworkTargetsResponse {
+  repeated org.packetbroker.v3.NetworkTarget targets = 1;
+  // Total number of targets.
+  uint32 total = 2;
+}
+
+service Routes {
+  // Returns the routes for uplink messages.
+  rpc ListUplinkRoutes(ListUplinkRoutesRequest) returns (ListUplinkRoutesResponse);
+  // Returns the routes for join-requests.
+  rpc ListJoinRequestRoutes(ListJoinRequestRoutesRequest) returns (ListJoinRequestRoutesResponse);
+  // Returns the network targets.
+  rpc ListNetworkTargets(ListNetworkTargetsRequest) returns (ListNetworkTargetsResponse);
+}
