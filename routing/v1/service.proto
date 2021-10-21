@@ -299,6 +299,7 @@ message ListTargetsResponse {
   uint32 total = 2;
 }
 
+// DEPRECATED: Use org.packetbroker.routing.v2.Routes instead.
 service Routes {
   // Returns the routes.
   rpc ListRoutes(ListRoutesRequest) returns (ListRoutesResponse);
