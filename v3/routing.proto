@@ -140,6 +140,8 @@ message RouteHop {
   string receiver_name = 4;
   // Receiver agent.
   string receiver_agent = 5;
+  // Protocol used between sender and receiver.
+  Protocol protocol = 6;
 }
 
 // Uplink message routed from a Forwarder to a Home Network.
