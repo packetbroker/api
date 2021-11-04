@@ -22,7 +22,7 @@ option go_package = "go.packetbroker.org/api/v3;packetbroker";
 
 message Target {
   // Protocol to use.
-  TargetProtocol protocol = 1;
+  Protocol protocol = 1;
   // Address of the target.
   // When using an HTTP protocol, this can be a URL with scheme, host, port and path.
   // This value may be empty if the protocol supports service lookup (e.g. via DNS).
