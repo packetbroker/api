@@ -191,7 +191,7 @@ enum RegionalParametersVersion {
   // LoRaWAN 1.0.1.
   TS001_V1_0_1 = 1;
   // LoRaWAN Regional Parameters 1.0.2.
-  RP001_V1_0_2_A = 2;
+  RP001_V1_0_2 = 2;
   // LoRaWAN Regional Parameters 1.0.2 revision B.
   RP001_V1_0_2_B = 3;
   // LoRaWAN Regional Parameters 1.0.3 revision A.
