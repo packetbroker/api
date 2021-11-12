@@ -134,7 +134,7 @@
                     "clusterID": {
                       "type": "string",
                       "description": "Cluster that the gateway is connected to",
-                      "pattern": "^[a-z0-9](?:[-]?[a-z0-9]){2,}$"
+                      "pattern": "^(?:(?:[a-z0-9]|(?:[a-z0-9][a-z0-9-]?)*[a-z0-9])\\.)*(?:[a-z0-9]|(?:[a-z0-9][a-z0-9-]?)*[a-z0-9])$"
                     }
                   }
                 }
@@ -146,15 +146,15 @@
                   "netID": "000013",
                   "tenantID": "ttn"
                 },
-                "summary": "The Things Network"
+                "summary": "The Things Stack Community Edition"
               },
               "the-things-network-eu": {
                 "value": {
                   "netID": "000013",
                   "tenantID": "ttn",
-                  "clusterID": "ttn-eu1"
+                  "clusterID": "eu1.cloud.thethings.network"
                 },
-                "summary": "The Things Network (eu1)"
+                "summary": "The Things Stack Community Edition (eu1)"
               }
             }
           }
@@ -179,7 +179,7 @@
                         "tenantID": "ttn",
                         "id": "tti-hq",
                         "eui": "70B3D57ED0000001",
-                        "clusterID": "ttn-eu1",
+                        "clusterID": "eu1.cloud.thethings.network",
                         "updatedAt": "2021-07-11T14:05:21Z",
                         "location": {
                           "latitude": 52.3664025,
@@ -197,7 +197,7 @@
                         "tenantID": "ttn",
                         "id": "waag",
                         "eui": "EEFBC0B96C5C8683",
-                        "clusterID": "ttn-eu1",
+                        "clusterID": "eu1.cloud.thethings.network",
                         "updatedAt": "2021-07-11T13:19:58Z",
                         "location": {
                           "latitude": 52.3767409,
@@ -270,7 +270,7 @@
                       "tenantID": "ttn",
                       "id": "tti-hq",
                       "eui": "70B3D57ED0000001",
-                      "clusterID": "ttn-eu1",
+                      "clusterID": "eu1.cloud.thethings.network",
                       "updatedAt": "2021-07-11T14:05:21Z",
                       "location": {
                         "latitude": 52.3664025,
