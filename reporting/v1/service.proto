@@ -1,0 +1,123 @@
+// Copyright © 2021 The Things Industries B.V.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+syntax = "proto3";
+
+package org.packetbroker.reporting.v1;
+
+import "google/protobuf/wrappers.proto";
+import "packetbroker/api/v3/enums.proto";
+
+option go_package = "go.packetbroker.org/api/reporting;reportingpb";
+
+message MonthYear {
+  // Calendar month (1 tot 12).
+  uint32 month = 1;
+  // Calendar year.
+  uint32 year = 2;
+}
+
+message Today {}
+
+message Last30Days {}
+
+message MonthPeriod {
+  // From month (inclusive).
+  MonthYear from = 1;
+  // To month (inclusive).
+  MonthYear to = 2;
+}
+
+message GetRoutedMessagesRequest {
+  // LoRa Alliance NetID of the Forwarder Member.
+  // When unset, match any Forwarder.
+  google.protobuf.UInt32Value forwarder_net_id = 1;
+  // Tenant ID managed by the Forwarder Member.
+  // When unset, match any Forwarder tenant.
+  google.protobuf.StringValue forwarder_tenant_id = 2;
+  // LoRa Alliance NetID of the Home Network Member.
+  // When unset, match any Home Network.
+  google.protobuf.UInt32Value home_network_net_id = 3;
+  // Tenant ID managed by the Home Network Member.
+  // When unset, match any Home Network tenant.
+  google.protobuf.StringValue home_network_tenant_id = 4;
+
+  oneof time {
+    Today today = 5;
+    Last30Days last_30_days = 6;
+    MonthPeriod period = 7;
+  }
+}
+
+message RoutedMessagesRecord {
+  // Month that this record applies to.
+  // If unset, this record applies to the selected moving window (e.g. today, last 30 days).
+  MonthYear month = 1;
+  // LoRa Alliance NetID of the Forwarder Member.
+  uint32 forwarder_net_id = 2;
+  // Tenant ID managed by the Forwarder Member.
+  string forwarder_tenant_id = 3;
+  // LoRa Alliance NetID of the Home Network Member.
+  uint32 home_network_net_id = 4;
+  // Tenant ID managed by the Home Network Member.
+  string home_network_tenant_id = 5;
+
+  message Uplink {
+    message ErrorCount {
+      org.packetbroker.v3.UplinkMessageProcessingError error_type = 1;
+      uint64 count = 2;
+    }
+    // Count of join-requests that are routed by Packet Broker.
+    uint64 join_requests_routed_count = 1;
+    // Count of join-requests processed successfully by the Home Network.
+    uint64 join_requests_processed_success_count = 2;
+    // Count of join-requests processed with an error by the Home Network.
+    repeated ErrorCount join_requests_processed_error_count = 3;
+    // Count of data uplink messages that are routed by Packet Broker.
+    uint64 data_messages_routed_count = 4;
+    // Count of data uplink messages processed successfully by the Home Network.
+    uint64 data_messages_processed_success_count = 5;
+    // Count of data uplink messages processed with an error by the Home Network.
+    repeated ErrorCount data_messages_processed_error_count = 6;
+  }
+  Uplink uplink = 6;
+
+  message Downlink {
+    message ErrorCount {
+      org.packetbroker.v3.DownlinkMessageProcessingError error_type = 1;
+      uint64 count = 2;
+    }
+    // Count of join-accepts that are routed by Packet Broker.
+    uint64 join_accepts_routed_count = 1;
+    // Count of join-accepts processed successfully by the Forwarder.
+    uint64 join_accepts_processed_success_count = 2;
+    // Count of join-accepts processed with an error by the Forwarder.
+    repeated ErrorCount join_accepts_processed_error_count = 3;
+    // Count of data downlink messages that are routed by Packet Broker.
+    uint64 data_messages_routed_count = 4;
+    // Count of data downlink messages processed successfully by the Forwarder.
+    uint64 data_messages_processed_success_count = 5;
+    // Count of data downlink messages processed with an error by the Forwarder.
+    repeated ErrorCount data_messages_processed_error_count = 6;
+  }
+  Downlink downlink = 7;
+}
+
+message GetRoutedMessagesResponse {
+  repeated RoutedMessagesRecord records = 1;
+}
+
+service Reporter {
+  rpc GetRoutedMessages(GetRoutedMessagesRequest) returns (GetRoutedMessagesResponse);
+}
