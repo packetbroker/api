@@ -161,6 +161,9 @@ enum Right {
   // Right to write traffic.
   WRITE_TRAFFIC = 11;
 
+  // Right to read reports.
+  READ_REPORT = 14;
+
   reserved 2; // READ_TENANT
   reserved 3; // READ_TENANT_CONTACT
 }
