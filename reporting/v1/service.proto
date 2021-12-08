@@ -16,6 +16,7 @@ syntax = "proto3";
 
 package org.packetbroker.reporting.v1;
 
+import "google/protobuf/timestamp.proto";
 import "google/protobuf/wrappers.proto";
 import "packetbroker/api/v3/enums.proto";
 
@@ -61,9 +62,11 @@ message GetRoutedMessagesRequest {
 }
 
 message RoutedMessagesRecord {
-  // Month that this record applies to.
-  // If unset, this record applies to the selected moving window (e.g. today, last 30 days).
-  MonthYear month = 1;
+  // End date that the time window applies to.
+  // If the queried time is today, this contains the current date.
+  // If the queried time is the last 30 days, this contains the last day.
+  // If the queried time is a period in months, this contains the last day of the month this record applies to.
+  google.protobuf.Timestamp to = 1;
   // LoRa Alliance NetID of the Forwarder Member.
   uint32 forwarder_net_id = 2;
   // Tenant ID managed by the Forwarder Member.
