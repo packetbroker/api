@@ -27,6 +27,14 @@ enum Region {
   EU_433 = 4;
   AU_915_928 = 5;
   CN_470_510 = 6;
+  // CN470-510 20 MHz antenna, type A
+  CN_470_510_20_A = 16;
+  // CN470-510 20 MHz antenna, type B
+  CN_470_510_20_B = 17;
+  // CN470-510 26 MHz antenna, type A
+  CN_470_510_26_A = 18;
+  // CN470-510 26 MHz antenna, type B
+  CN_470_510_26_B = 19;
   AS_923 = 7;
   // AS923 group 1
   AS_923_1 = 11;
