@@ -36,8 +36,7 @@ enum Region {
   // CN470-510 26 MHz antenna, type B
   CN_470_510_26_B = 19;
   AS_923 = 7;
-  // AS923 group 1
-  AS_923_1 = 11;
+  reserved 11; // Deprecated: AS_923_1
   // AS923 group 2
   AS_923_2 = 12;
   // AS923 group 3
