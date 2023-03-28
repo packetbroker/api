@@ -74,3 +74,35 @@ service Routes {
   // Returns the network targets.
   rpc ListNetworkTargets(ListNetworkTargetsRequest) returns (ListNetworkTargetsResponse);
 }
+
+message TopicSubscription {
+  // Topic name.
+  string topic_name = 1;
+  // Subscription group.
+  string group = 2;
+}
+
+message TopicSubscriptions {
+  repeated TopicSubscription subscriptions = 1;
+}
+
+message TopicSubscriptionsChange {
+  oneof change {
+    TopicSubscriptions subscribes = 1;
+    TopicSubscriptions unsubscribes = 2;
+  }
+}
+
+message TopicMessage {
+  // Topic name.
+  string topic_name = 1;
+  // Message body.
+  bytes body = 2;
+  // Message metadata.
+  map<string, string> metadata = 3;
+}
+
+service Publisher {
+  // Subscribe to topics and receive messages.
+  rpc Subscribe(stream TopicSubscriptionsChange) returns (stream TopicMessage);
+}
