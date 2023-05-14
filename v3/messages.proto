@@ -237,8 +237,6 @@ message UplinkMessage {
 message DownlinkMessage {
   // LoRaWAN region.
   Region region = 10;
-  // LoRaWAN Regional Parameters version to which the data rate indices apply.
-  RegionalParametersVersionValue regional_parameters_version = 11;
 
   // PHYPayload of the downlink message.
   bytes phy_payload = 1;
@@ -269,4 +267,6 @@ message DownlinkMessage {
 
   // Priority of the downlink message.
   DownlinkMessagePriority priority = 8;
+
+  reserved 11; // DEPRECATED: regional_parameters_version
 }
