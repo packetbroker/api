@@ -17,6 +17,7 @@ syntax = "proto3";
 package org.packetbroker.v3;
 
 import "google/protobuf/timestamp.proto";
+import "google/protobuf/wrappers.proto";
 import "packetbroker/api/v3/contact.proto";
 import "packetbroker/api/v3/enums.proto";
 import "packetbroker/api/v3/target.proto";
@@ -38,6 +39,10 @@ message Network {
   bool listed = 6;
   // Optional target information.
   Target target = 7;
+  // Delegated network.
+  google.protobuf.UInt32Value delegated_net_id = 8;
+  // Networks that this network represents.
+  repeated uint32 represents_net_ids = 9;
 }
 
 message Tenant {
