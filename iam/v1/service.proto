@@ -85,6 +85,12 @@ message UpdateNetworkRequest {
   // Target information.
   // This field gets updated when a value is set.
   TargetValue target = 7;
+  // Delegated network.
+  // This field gets updated when a value is set.
+  message DelegatedNetID {
+    google.protobuf.UInt32Value value = 1;
+  }
+  DelegatedNetID delegated_net_id = 8;
 }
 
 service NetworkRegistry {
