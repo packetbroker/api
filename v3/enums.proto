@@ -220,6 +220,8 @@ enum RegionalParametersVersion {
   RP002_V1_0_2 = 9;
   // LoRaWAN Regional Parameters RP002-1.0.3.
   RP002_V1_0_3 = 10;
+  // LoRaWAN Regional Parameters RP002-1.0.4.
+  RP002_V1_0_4 = 11;
 }
 
 message RegionalParametersVersionValue {
