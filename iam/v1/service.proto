@@ -66,6 +66,7 @@ message TargetValue {
 }
 
 message UpdateNetworkRequest {
+  // LoRa Alliance NetID of the Member.
   uint32 net_id = 1;
   // Name of the tenant.
   // This field gets updated when a value is set.
@@ -93,6 +94,12 @@ message UpdateNetworkRequest {
   DelegatedNetID delegated_net_id = 8;
 }
 
+message UpdateNetworkListedRequest {
+  uint32 net_id = 1;
+  // Indicates whether the network is listed in the catalog.
+  bool listed = 2;
+}
+
 service NetworkRegistry {
   // List networks.
   rpc ListNetworks(ListNetworksRequest) returns (ListNetworksResponse);
@@ -102,6 +109,8 @@ service NetworkRegistry {
   rpc GetNetwork(NetworkRequest) returns (GetNetworkResponse);
   // Update a network.
   rpc UpdateNetwork(UpdateNetworkRequest) returns (google.protobuf.Empty);
+  // Update the listed state of a network.
+  rpc UpdateNetworkListed(UpdateNetworkListedRequest) returns (google.protobuf.Empty);
   // Delete a network.
   rpc DeleteNetwork(NetworkRequest) returns (google.protobuf.Empty);
 }
@@ -147,10 +156,8 @@ message GetTenantResponse {
 
 message UpdateTenantRequest {
   // LoRa Alliance NetID of the Member.
-  // This field gets updated when a value is set.
   uint32 net_id = 1;
   // ID assigned by the Member.
-  // This field gets updated when a value is set.
   string tenant_id = 2;
   // Name of the tenant.
   // This field gets updated when a value is set.
@@ -172,6 +179,15 @@ message UpdateTenantRequest {
   TargetValue target = 8;
 }
 
+message UpdateTenantListedRequest {
+  // LoRa Alliance NetID of the Member.
+  uint32 net_id = 1;
+  // ID assigned by the Member.
+  string tenant_id = 2;
+  // Indicates whether the tenant is listed in the catalog.
+  bool listed = 3;
+}
+
 service TenantRegistry {
   // List a network's tenants.
   rpc ListTenants(ListTenantsRequest) returns (ListTenantsResponse);
@@ -181,6 +197,8 @@ service TenantRegistry {
   rpc GetTenant(TenantRequest) returns (GetTenantResponse);
   // Update a tenant.
   rpc UpdateTenant(UpdateTenantRequest) returns (google.protobuf.Empty);
+  // Update the listed state of a tenant.
+  rpc UpdateTenantListed(UpdateTenantListedRequest) returns (google.protobuf.Empty);
   // Delete a tenant.
   rpc DeleteTenant(TenantRequest) returns (google.protobuf.Empty);
 }

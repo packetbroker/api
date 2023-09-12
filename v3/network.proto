@@ -25,6 +25,9 @@ import "packetbroker/api/v3/target.proto";
 option go_package = "go.packetbroker.org/api/v3;packetbroker";
 
 message Network {
+  // Authority of the network.
+  // If empty, Packet Broker is the authority.
+  string authority = 10;
   // LoRa Alliance NetID of the Member.
   uint32 net_id = 1;
   // Name of the network.
@@ -46,8 +49,9 @@ message Network {
 }
 
 message Tenant {
-  reserved 3; // Deprecated dev_addr_prefixes;
-
+  // Authority of the tenant.
+  // If empty, Packet Broker is the authority.
+  string authority = 10;
   // LoRa Alliance NetID of the Member.
   uint32 net_id = 1;
   // ID assigned by the Member.
@@ -64,6 +68,8 @@ message Tenant {
   bool listed = 8;
   // Optional target information.
   Target target = 9;
+
+  reserved 3; // Deprecated dev_addr_prefixes;
 }
 
 message NetworkOrTenant {
