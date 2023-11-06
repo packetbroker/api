@@ -1,7 +1,7 @@
 {
   "openapi": "3.0.3",
   "info": {
-    "version": "2.2.0",
+    "version": "2.3.0",
     "title": "Packet Broker Mapper",
     "description": "Packet Broker Mapper provides geospatial services for mapping LoRaWAN infrastructure.",
     "contact": {
