@@ -111,6 +111,10 @@ service ClusterAPIKeyVault {
 }
 
 message ListNetworksRequest {
+  // LoRa Alliance NetID of the Member.
+  uint32 net_id = 6;
+  // ID assigned by the Member.
+  string tenant_id = 7;
   // Number of items to skip.
   uint32 offset = 1;
   // Limit the number of items.
@@ -139,6 +143,10 @@ message ListNetworksResponse {
 }
 
 message ListJoinServersRequest {
+  // LoRa Alliance NetID of the Member.
+  uint32 net_id = 4;
+  // ID assigned by the Member.
+  string tenant_id = 5;
   // Number of items to skip.
   uint32 offset = 1;
   // Limit the number of items.
