@@ -1,7 +1,7 @@
 {
   "openapi": "3.0.3",
   "info": {
-    "version": "2.1.0",
+    "version": "2.2.0",
     "title": "Packet Broker Mapper",
     "description": "Packet Broker Mapper provides geospatial services for mapping LoRaWAN infrastructure.",
     "contact": {
@@ -150,6 +150,15 @@
                 },
                 "summary": "The Things Stack Sandbox (eu1)"
               }
+            }
+          },
+          {
+            "name": "homeNetwork",
+            "description": "Return gateways visible to an authenticated Home Network",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/HomeNetworkIdentifier"
             }
           }
         ],
@@ -408,6 +417,22 @@
           }
         },
         "required": ["netID"]
+      },
+      "HomeNetworkIdentifier": {
+        "type": "object",
+        "properties": {
+          "homeNetworkNetID": {
+            "type": "string",
+            "pattern": "^[0-9A-F]{6}$",
+            "description": "LoRa Alliance NetID (hex)"
+          },
+          "homeNetworkTenantID": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Tenant within the NetID"
+          }
+        },
+        "required": ["homeNetworkNetID"]
       },
       "GatewayIdentifier": {
         "allOf": [
