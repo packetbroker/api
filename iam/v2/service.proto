@@ -18,9 +18,8 @@ package org.packetbroker.iam.v2;
 
 import "google/protobuf/empty.proto";
 import "google/protobuf/wrappers.proto";
-import "packetbroker/api/v3/enums.proto";
 import "packetbroker/api/v3/contact.proto";
-import "packetbroker/api/v3/cluster.proto";
+import "packetbroker/api/v3/enums.proto";
 import "packetbroker/api/v3/joinserver.proto";
 import "packetbroker/api/v3/network.proto";
 import "packetbroker/api/v3/target.proto";
@@ -47,10 +46,10 @@ message CreateNetworkAPIKeyRequest {
   string tenant_id = 2;
   // Cluster of the Member.
   string cluster_id = 3;
-  // Network rights.
-  repeated org.packetbroker.v3.Right rights = 4;
   // Secret key value. Leave empty to generate one.
   string key = 5;
+
+  reserved 4; // rights
 }
 
 message APIKeyRequest {
@@ -71,39 +70,6 @@ service NetworkAPIKeyVault {
   rpc ListAPIKeys(ListNetworkAPIKeysRequest) returns (ListNetworkAPIKeysResponse);
   // Create an API key.
   rpc CreateAPIKey(CreateNetworkAPIKeyRequest) returns (CreateNetworkAPIKeyResponse);
-  // Delete an API key.
-  rpc DeleteAPIKey(APIKeyRequest) returns (google.protobuf.Empty);
-  // Update API key state.
-  rpc UpdateAPIKeyState(UpdateAPIKeyStateRequest) returns (google.protobuf.Empty);
-}
-
-message ListClusterAPIKeysRequest {
-  // Cluster identifier.
-  google.protobuf.StringValue cluster_id = 3;
-}
-
-message ListClusterAPIKeysResponse {
-  repeated org.packetbroker.v3.ClusterAPIKey keys = 1;
-}
-
-message CreateClusterAPIKeyRequest {
-  // Cluster identifier.
-  string cluster_id = 1;
-  // Network rights.
-  repeated org.packetbroker.v3.Right rights = 2;
-  // Secret key value. Leave empty to generate one.
-  string key = 3;
-}
-
-message CreateClusterAPIKeyResponse {
-  org.packetbroker.v3.ClusterAPIKey key = 1;
-}
-
-service ClusterAPIKeyVault {
-  // List API keys.
-  rpc ListAPIKeys(ListClusterAPIKeysRequest) returns (ListClusterAPIKeysResponse);
-  // Create an API key.
-  rpc CreateAPIKey(CreateClusterAPIKeyRequest) returns (CreateClusterAPIKeyResponse);
   // Delete an API key.
   rpc DeleteAPIKey(APIKeyRequest) returns (google.protobuf.Empty);
   // Update API key state.

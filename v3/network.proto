@@ -100,14 +100,14 @@ message NetworkAPIKey {
   string tenant_id = 3;
   // Cluster of the Member.
   string cluster_id = 4;
-  // Network rights.
-  repeated Right rights = 7;
   // Last authentication timestamp.
   google.protobuf.Timestamp authenticated_at = 5;
   // Secret key value.
   string key = 6;
   // Key state.
   APIKeyState state = 8;
+
+  reserved 7; // rights
 }
 
 message NetworkTarget {
