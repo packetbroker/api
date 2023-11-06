@@ -22,9 +22,7 @@
   ],
   "security": [
     {
-      "OAuth2": [
-        "networks"
-      ]
+      "OAuth2": ["networks"]
     }
   ],
   "paths": {
@@ -59,11 +57,7 @@
                       "format": "double"
                     }
                   },
-                  "required": [
-                    "latitude",
-                    "longitude",
-                    "distance"
-                  ]
+                  "required": ["latitude", "longitude", "distance"]
                 }
               ]
             },
@@ -92,7 +86,7 @@
           {
             "name": "limit",
             "description": "Number of gateways to return",
-            "in":"query",
+            "in": "query",
             "required": false,
             "schema": {
               "type": "integer",
@@ -124,7 +118,7 @@
             "in": "query",
             "required": false,
             "schema": {
-              "allOf":[
+              "allOf": [
                 {
                   "$ref": "#/components/schemas/NetworkIdentifier"
                 },
@@ -146,7 +140,7 @@
                   "netID": "000013",
                   "tenantID": "ttn"
                 },
-                "summary": "The Things Stack Community Edition"
+                "summary": "The Things Stack Sandbox"
               },
               "the-things-network-eu": {
                 "value": {
@@ -154,7 +148,7 @@
                   "tenantID": "ttn",
                   "clusterID": "eu1.cloud.thethings.network"
                 },
-                "summary": "The Things Stack Community Edition (eu1)"
+                "summary": "The Things Stack Sandbox (eu1)"
               }
             }
           }
@@ -289,14 +283,8 @@
                       "frequencyPlan": {
                         "region": "EU_863_870",
                         "loraMultiSFChannels": [
-                          868100000,
-                          868300000,
-                          868500000,
-                          867100000,
-                          867300000,
-                          867500000,
-                          867700000,
-                          867900000
+                          868100000, 868300000, 868500000, 867100000, 867300000,
+                          867500000, 867700000, 867900000
                         ],
                         "fskChannel": 869525000
                       },
@@ -368,10 +356,7 @@
             "description": "The East-West position (degrees; -180 to +180), where 0 is the Prime Meridian (Greenwich), East is positive, West is negative"
           }
         },
-        "required": [
-          "latitude",
-          "longitude"
-        ]
+        "required": ["latitude", "longitude"]
       },
       "PointZ": {
         "allOf": [
@@ -438,10 +423,7 @@
                 "description": "Gateway ID"
               }
             },
-            "required": [
-              "netID",
-              "id"
-            ]
+            "required": ["netID", "id"]
           }
         ]
       },
@@ -468,11 +450,7 @@
             "minimum": 0
           }
         },
-        "required": [
-          "frequency",
-          "spreadingFactor",
-          "bandwidth"
-        ]
+        "required": ["frequency", "spreadingFactor", "bandwidth"]
       },
       "FrequencyPlan": {
         "type": "object",
@@ -512,9 +490,7 @@
             "$ref": "#/components/schemas/Frequency"
           }
         },
-        "required": [
-          "region"
-        ]
+        "required": ["region"]
       },
       "Gateway": {
         "allOf": [
@@ -542,11 +518,7 @@
                 "$ref": "#/components/schemas/Location"
               },
               "antennaPlacement": {
-                "enum": [
-                  "UNKNOWN_PLACEMENT",
-                  "INDOOR",
-                  "OUTDOOR"
-                ]
+                "enum": ["UNKNOWN_PLACEMENT", "INDOOR", "OUTDOOR"]
               },
               "antennaCount": {
                 "type": "integer",
