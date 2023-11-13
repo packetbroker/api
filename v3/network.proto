@@ -34,6 +34,8 @@ message Network {
   string name = 2;
   // DevAddr prefixes of the tenant.
   repeated DevAddrBlock dev_addr_blocks = 3;
+  // NSIDs of the clusters by ID.
+  map<string, fixed64> ns_ids = 11;
   // Administrative contact.
   ContactInfo administrative_contact = 4;
   // Technical contact.
@@ -60,6 +62,8 @@ message Tenant {
   string name = 4;
   // DevAddr prefixes of the tenant.
   repeated DevAddrBlock dev_addr_blocks = 5;
+  // NSIDs of the clusters by ID.
+  map<string, fixed64> ns_ids = 11;
   // Administrative contact.
   ContactInfo administrative_contact = 6;
   // Technical contact.
