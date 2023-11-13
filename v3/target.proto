@@ -66,15 +66,5 @@ message Target {
     PacketBrokerTLSClientAuth pb_tls_client_auth = 12;
   }
 
-  message Authentication {
-    oneof value {
-      BasicAuth basic_auth = 1;
-      CustomAuth custom_auth = 2;
-      CustomTLSClientAuth custom_tls_client_auth = 3;
-      PacketBrokerTokenAuth pb_token_auth = 4;
-      PacketBrokerTLSClientAuth pb_tls_client_auth = 5;
-    }
-  }
-  // Custom authentication per originating NetID.
-  map<uint32, Authentication> origin_net_id_authentication = 8;
+  reserved 8; // Deprecated: origin_net_id_authentication;
 }
