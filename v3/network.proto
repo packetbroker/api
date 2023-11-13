@@ -40,12 +40,12 @@ message Network {
   ContactInfo technical_contact = 5;
   // Indicates whether the network is publicly listed in the catalog.
   bool listed = 6;
-  // Optional target information.
-  Target target = 7;
   // Delegated network.
   google.protobuf.UInt32Value delegated_net_id = 8;
   // Networks that this network represents.
   repeated uint32 represents_net_ids = 9;
+
+  reserved 7; // Deprecated target;
 }
 
 message Tenant {
@@ -66,10 +66,9 @@ message Tenant {
   ContactInfo technical_contact = 7;
   // Indicates whether the tenant is listed in the catalog.
   bool listed = 8;
-  // Optional target information.
-  Target target = 9;
 
   reserved 3; // Deprecated dev_addr_prefixes;
+  reserved 9; // Deprecated target;
 }
 
 message NetworkOrTenant {
@@ -110,11 +109,14 @@ message NetworkAPIKey {
   reserved 7; // rights
 }
 
-message NetworkTarget {
-  // LoRa Alliance NetID of the Member.
-  uint32 net_id = 1;
-  // Tenant ID assigned by the Member (optional).
-  string tenant_id = 2;
+message NetworkServerCluster {
+  // Authority of the Network Server cluster.
+  // If empty, Packet Broker is the authority.
+  string authority = 1;
+  // Cluster of the Member.
+  string cluster_id = 2;
+  // NetIDs that are using this cluster.
+  repeated uint32 net_ids = 3;
   // Target information.
-  Target target = 3;
+  Target target = 4;
 }

@@ -20,7 +20,6 @@ import "google/protobuf/empty.proto";
 import "google/protobuf/wrappers.proto";
 import "packetbroker/api/v3/contact.proto";
 import "packetbroker/api/v3/network.proto";
-import "packetbroker/api/v3/target.proto";
 
 option go_package = "go.packetbroker.org/api/iam;iampb";
 
@@ -61,10 +60,6 @@ message NetworkRequest {
   uint32 net_id = 1;
 }
 
-message TargetValue {
-  org.packetbroker.v3.Target value = 1;
-}
-
 message UpdateNetworkRequest {
   // LoRa Alliance NetID of the Member.
   uint32 net_id = 1;
@@ -83,15 +78,14 @@ message UpdateNetworkRequest {
   // Indicates whether the network is listed in the catalog.
   // This field gets updated when a value is set.
   google.protobuf.BoolValue listed = 6;
-  // Target information.
-  // This field gets updated when a value is set.
-  TargetValue target = 7;
   // Delegated network.
   // This field gets updated when a value is set.
   message DelegatedNetID {
     google.protobuf.UInt32Value value = 1;
   }
   DelegatedNetID delegated_net_id = 8;
+
+  reserved 7; // Deprecated: target;
 }
 
 message UpdateNetworkListedRequest {
@@ -174,9 +168,8 @@ message UpdateTenantRequest {
   // Indicates whether the tenant is listed in the catalog.
   // This field gets updated when a value is set.
   google.protobuf.BoolValue listed = 7;
-  // Target information.
-  // This field gets updated when a value is set.
-  TargetValue target = 8;
+
+  reserved 8; // Deprecated: target;
 }
 
 message UpdateTenantListedRequest {

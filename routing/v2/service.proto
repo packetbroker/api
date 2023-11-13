@@ -51,7 +51,7 @@ message ListJoinRequestRoutesResponse {
   uint32 total = 2;
 }
 
-message ListNetworkTargetsRequest {
+message ListNetworkServerClustersRequest {
   // Number of items to skip.
   uint32 offset = 1;
   // Limit the number of items.
@@ -60,8 +60,8 @@ message ListNetworkTargetsRequest {
   uint32 limit = 2;
 }
 
-message ListNetworkTargetsResponse {
-  repeated org.packetbroker.v3.NetworkTarget targets = 1;
+message ListNetworkServerClustersResponse {
+  repeated org.packetbroker.v3.NetworkServerCluster clusters = 1;
   // Total number of targets.
   uint32 total = 2;
 }
@@ -71,8 +71,8 @@ service Routes {
   rpc ListUplinkRoutes(ListUplinkRoutesRequest) returns (ListUplinkRoutesResponse);
   // Returns the routes for join-requests.
   rpc ListJoinRequestRoutes(ListJoinRequestRoutesRequest) returns (ListJoinRequestRoutesResponse);
-  // Returns the network targets.
-  rpc ListNetworkTargets(ListNetworkTargetsRequest) returns (ListNetworkTargetsResponse);
+  // Returns the Network Server clusters.
+  rpc ListNetworkServerClusters(ListNetworkServerClustersRequest) returns (ListNetworkServerClustersResponse);
 }
 
 message TopicSubscription {

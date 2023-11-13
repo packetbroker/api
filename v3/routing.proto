@@ -19,10 +19,10 @@ package org.packetbroker.v3;
 import "google/protobuf/timestamp.proto";
 import "google/protobuf/wrappers.proto";
 import "packetbroker/api/v3/enums.proto";
-import "packetbroker/api/v3/messages.proto";
 import "packetbroker/api/v3/gateway.proto";
-import "packetbroker/api/v3/network.proto";
 import "packetbroker/api/v3/joinserver.proto";
+import "packetbroker/api/v3/messages.proto";
+import "packetbroker/api/v3/network.proto";
 import "packetbroker/api/v3/target.proto";
 
 option go_package = "go.packetbroker.org/api/v3;packetbroker";
@@ -38,8 +38,8 @@ message DevAddrPrefixRoute {
   google.protobuf.Timestamp created_at = 4;
   // Cluster of the Home Network Member (optional).
   string home_network_cluster_id = 5;
-  // Target information (optional).
-  Target target = 6;
+
+  reserved 6; // Deprecated: target;
 }
 
 // Routing policy between a Forwarder and a Home Network.
