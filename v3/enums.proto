@@ -156,8 +156,8 @@ enum Protocol {
   TS002_V1_1 = 1;
   // Packet Broker gRPC.
   GRPC = 2;
-  // NATS Streaming Server.
-  NATS_STREAMING_SERVER = 3;
+
+  reserved 3; // Deprecated: NATS_STREAMING_SERVER;
 }
 
 enum RegionalParametersVersion {
