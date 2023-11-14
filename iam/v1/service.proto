@@ -27,6 +27,10 @@ message DevAddrBlocksValue {
   repeated org.packetbroker.v3.DevAddrBlock value = 1;
 }
 
+message NSIDsValue {
+  map<string, fixed64> value = 1;
+}
+
 message ListNetworksRequest {
   // Number of items to skip.
   uint32 offset = 1;
@@ -69,6 +73,9 @@ message UpdateNetworkRequest {
   // DevAddr blocks of the tenant.
   // This field gets updated when a value is set.
   DevAddrBlocksValue dev_addr_blocks = 3;
+  // NSIDs of the clusters by ID.
+  // This field gets updated when a value is set.
+  NSIDsValue ns_ids = 9;
   // Administrative contact.
   // This field gets updated when a value is set.
   org.packetbroker.v3.ContactInfoValue administrative_contact = 4;
@@ -159,6 +166,9 @@ message UpdateTenantRequest {
   // DevAddr blocks of the tenant.
   // This field gets updated when a value is set.
   DevAddrBlocksValue dev_addr_blocks = 4;
+  // NSIDs of the clusters by ID.
+  // This field gets updated when a value is set.
+  NSIDsValue ns_ids = 11;
   // Administrative contact.
   // This field gets updated when a value is set.
   org.packetbroker.v3.ContactInfoValue administrative_contact = 5;
