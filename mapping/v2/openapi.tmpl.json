@@ -581,12 +581,12 @@
               },
               "rxRate": {
                 "type": "number",
-                "description": "Received message rate (messages per second)",
+                "description": "Received message rate (messages per hour)",
                 "minimum": 0
               },
               "txRate": {
                 "type": "number",
-                "description": "Transmitted message rate (messages per second)",
+                "description": "Transmitted message rate (messages per hour)",
                 "minimum": 0
               }
             }
