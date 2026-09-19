@@ -18,7 +18,7 @@ package org.packetbroker.v3;
 
 import "google/protobuf/timestamp.proto";
 
-option go_package = "go.packetbroker.org/api/v3;packetbroker";
+option go_package = "github.com/packetbroker/go-api/v3;packetbroker";
 
 message Location {
   // The North–South position (degrees; -90 to +90), where 0 is the equator, North pole is positive, South pole is negative.

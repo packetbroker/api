@@ -22,7 +22,7 @@ import "packetbroker/api/v3/contact.proto";
 import "packetbroker/api/v3/enums.proto";
 import "packetbroker/api/v3/target.proto";
 
-option go_package = "go.packetbroker.org/api/v3;packetbroker";
+option go_package = "github.com/packetbroker/go-api/v3;packetbroker";
 
 message Network {
   // Authority of the network.

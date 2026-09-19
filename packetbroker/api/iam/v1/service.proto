@@ -22,7 +22,7 @@ import "packetbroker/api/v3/contact.proto";
 import "packetbroker/api/v3/network.proto";
 import "packetbroker/api/v3/target.proto";
 
-option go_package = "go.packetbroker.org/api/iam;iampb";
+option go_package = "github.com/packetbroker/go-api/iam;iampb";
 
 message DevAddrBlocksValue {
   repeated org.packetbroker.v3.DevAddrBlock value = 1;

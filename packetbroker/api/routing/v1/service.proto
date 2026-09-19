@@ -23,7 +23,7 @@ import "packetbroker/api/v3/messages.proto";
 import "packetbroker/api/v3/network.proto";
 import "packetbroker/api/v3/routing.proto";
 
-option go_package = "go.packetbroker.org/api/routing;routingpb";
+option go_package = "github.com/packetbroker/go-api/routing;routingpb";
 
 message ListDefaultPoliciesRequest {
   // Timestamp to list from for pagination.

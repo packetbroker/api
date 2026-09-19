@@ -20,7 +20,7 @@ import "google/protobuf/timestamp.proto";
 import "google/protobuf/wrappers.proto";
 import "packetbroker/api/v3/enums.proto";
 
-option go_package = "go.packetbroker.org/api/reporting;reportingpb";
+option go_package = "github.com/packetbroker/go-api/reporting;reportingpb";
 
 message MonthYear {
   // Calendar month (1 tot 12).

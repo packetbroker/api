@@ -25,7 +25,7 @@ import "packetbroker/api/v3/joinserver.proto";
 import "packetbroker/api/v3/network.proto";
 import "packetbroker/api/v3/target.proto";
 
-option go_package = "go.packetbroker.org/api/iam/v2;iampb";
+option go_package = "github.com/packetbroker/go-api/iam/v2;iampb";
 
 message ListNetworkAPIKeysRequest {
   // LoRa Alliance NetID of the Member.

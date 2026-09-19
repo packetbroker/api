@@ -22,7 +22,7 @@ import "google/protobuf/wrappers.proto";
 import "packetbroker/api/v3/contact.proto";
 import "packetbroker/api/v3/gateway.proto";
 
-option go_package = "go.packetbroker.org/api/mapping/v2;mappingpb";
+option go_package = "github.com/packetbroker/go-api/mapping/v2;mappingpb";
 
 message GetDefaultGatewayVisibilityRequest {
   // LoRa Alliance NetID of the Forwarder Member.

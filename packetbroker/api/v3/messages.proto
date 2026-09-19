@@ -24,7 +24,7 @@ import "packetbroker/api/v3/gateway.proto";
 import "packetbroker/api/v3/keys.proto";
 import "packetbroker/api/v3/location.proto";
 
-option go_package = "go.packetbroker.org/api/v3;packetbroker";
+option go_package = "github.com/packetbroker/go-api/v3;packetbroker";
 
 // Teaser of PHYPayload.
 message PHYPayloadTeaser {

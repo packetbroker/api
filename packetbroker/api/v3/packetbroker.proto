@@ -16,4 +16,4 @@ syntax = "proto3";
 
 package org.packetbroker.v3;
 
-option go_package = "go.packetbroker.org/api/v3;packetbroker";
+option go_package = "github.com/packetbroker/go-api/v3;packetbroker";

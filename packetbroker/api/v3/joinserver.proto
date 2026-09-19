@@ -19,7 +19,7 @@ package org.packetbroker.v3;
 import "packetbroker/api/v3/contact.proto";
 import "packetbroker/api/v3/target.proto";
 
-option go_package = "go.packetbroker.org/api/v3;packetbroker";
+option go_package = "github.com/packetbroker/go-api/v3;packetbroker";
 
 message JoinServer {
   // Unique identifier of the Join Server.

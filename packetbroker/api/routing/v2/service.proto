@@ -19,7 +19,7 @@ package org.packetbroker.routing.v2;
 import "packetbroker/api/v3/network.proto";
 import "packetbroker/api/v3/routing.proto";
 
-option go_package = "go.packetbroker.org/api/routing/v2;routingpb";
+option go_package = "github.com/packetbroker/go-api/routing/v2;routingpb";
 
 message ListUplinkRoutesRequest {
   // Number of items to skip.
