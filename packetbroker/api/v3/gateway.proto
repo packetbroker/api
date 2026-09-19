@@ -18,8 +18,8 @@ package org.packetbroker.v3;
 
 import "google/protobuf/timestamp.proto";
 import "google/protobuf/wrappers.proto";
-import "packetbroker/api/v3/enums.proto";
 import "packetbroker/api/v3/contact.proto";
+import "packetbroker/api/v3/enums.proto";
 import "packetbroker/api/v3/location.proto";
 
 option go_package = "go.packetbroker.org/api/v3;packetbroker";
