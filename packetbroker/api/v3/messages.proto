@@ -71,8 +71,7 @@ message GatewayMetadataTeaser {
     // Indicates whether the metadata contains a fine timestamp.
     bool fine_timestamp = 2;
   }
-  message Satellite {
-  }
+  message Satellite {}
   oneof value {
     Terrestrial terrestrial = 1;
     Satellite satellite = 2;
@@ -102,8 +101,7 @@ message GatewayMetadataSignalQuality {
     }
     repeated Antenna antennas = 1;
   }
-  message Satellite {
-  }
+  message Satellite {}
   oneof value {
     Terrestrial terrestrial = 1;
     Satellite satellite = 2;

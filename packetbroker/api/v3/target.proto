@@ -55,8 +55,7 @@ message Target {
     // PEM encoded private key.
     bytes key = 2;
   }
-  message PacketBrokerTokenAuth {
-  }
+  message PacketBrokerTokenAuth {}
   // Default authentication when no custom authentication per NetID is set.
   oneof default_authentication {
     BasicAuth basic_auth = 3;

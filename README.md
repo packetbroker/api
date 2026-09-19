@@ -124,7 +124,7 @@ All Key Exchanges keep track of the usage of KEKs to decrypt DEKs on request by 
 
 ## Operations
 
-Packet Broker Router exposes the [routing services API](./routing/v1/service.proto). Clients can use gRPC directly, or use the [Packet Broker command-line interface (CLI)](https://github.com/packetbroker/pb).
+Packet Broker Router exposes the [routing services API](./packetbroker/api/routing/v1/service.proto). Clients can use gRPC directly, or use the [Packet Broker command-line interface (CLI)](https://github.com/packetbroker/pb).
 
 Packet Broker Router services are exposed on the following default ports:
 
@@ -140,6 +140,34 @@ Service | Component | Port
 `org.packetbroker.routing.v1.RouterData` | Data Plane | `443`
 
 Packet Broker Router uses token-based HTTP authentication and TLS mutual authentication. [Learn how to obtain a TLS client certificate](https://github.com/packetbroker/pb/tree/master/configs).
+
+## Repository layout
+
+The Protocol Buffers definitions live under `packetbroker/api`, which is the import root: protos import each other as `packetbroker/api/v3/enums.proto`, `packetbroker/api/routing/v1/service.proto`, etc. The repository root is the [buf](https://buf.build/) module (see `buf.yaml`), so `buf` resolves these imports without any extra include path.
+
+Directory | Package | Contents
+--- | --- | ---
+`packetbroker/api/v3` | `org.packetbroker.v3` | Shared messages and enums
+`packetbroker/api/routing/v1`, `packetbroker/api/routing/v2` | `org.packetbroker.routing.v1`, `org.packetbroker.routing.v2` | Router (control plane and data plane) services
+`packetbroker/api/iam/v1`, `packetbroker/api/iam/v2` | `org.packetbroker.iam.v1`, `org.packetbroker.iam.v2` | Identity and access management services
+`packetbroker/api/mapping/v2` | `org.packetbroker.mapping.v2` | Mapper service and its OpenAPI template
+`packetbroker/api/reporting/v1` | `org.packetbroker.reporting.v1` | Reporter service
+
+## Development
+
+Lint and format the protos with [buf](https://buf.build/docs/cli/installation/) from the repository root:
+
+```bash
+$ buf lint
+$ buf format --diff   # show formatting differences
+$ buf format -w       # apply formatting
+```
+
+CI runs both checks on every pull request and on pushes to `master`. Linting starts from buf's `STANDARD` rule set; the naming rules that this (pre-existing, public) API cannot follow without breaking clients are excluded in `buf.yaml`.
+
+### Go code generation
+
+The Go bindings are not in this repository: [go-api](https://github.com/packetbroker/go-api) generates them with buf from a pinned commit of this repository (`PBAPI_REF` in its `Makefile`). After merging changes to the protos, bump that pin in go-api and regenerate.
 
 ## License
 
