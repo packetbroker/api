@@ -1,0 +1,29 @@
+# Buf configuration for the Packet Broker API.
+#
+# The module root is the repository root, so imports resolve as
+# `packetbroker/api/<api>/<version>/<file>.proto`.
+version: v2
+modules:
+  - path: .
+lint:
+  use:
+    - STANDARD
+  # This is a public wire API that predates the buf style guide. Renaming
+  # packages, services, RPC request/response messages or enum values would
+  # break every client, so the naming rules that the existing definitions
+  # violate are excluded rather than fixed.
+  except:
+    # Packages are `org.packetbroker.<api>.<version>`, files live under `packetbroker/api/<api>/<version>`.
+    - PACKAGE_DIRECTORY_MATCH
+    # Services are named after their role (e.g. `NetworkRegistry`, `PolicyManager`), without `Service` suffix.
+    - SERVICE_SUFFIX
+    # RPCs share request messages and use `google.protobuf.Empty` responses.
+    - RPC_REQUEST_RESPONSE_UNIQUE
+    - RPC_REQUEST_STANDARD_NAME
+    - RPC_RESPONSE_STANDARD_NAME
+  ignore_only:
+    # Enum values are unprefixed (e.g. `EU_863_870`) and zero values are not `_UNSPECIFIED`.
+    ENUM_VALUE_PREFIX:
+      - packetbroker/api/v3/enums.proto
+    ENUM_ZERO_VALUE_SUFFIX:
+      - packetbroker/api/v3/enums.proto

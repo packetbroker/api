@@ -1,0 +1,27 @@
+name: Code Quality
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+
+jobs:
+  buf:
+    name: Buf
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - name: Lint and check formatting
+        uses: bufbuild/buf-action@v1
+        with:
+          version: 1.73.0
+          lint: true
+          format: true
+          breaking: false
+          push: false
+          archive: false
+          pr_comment: false
